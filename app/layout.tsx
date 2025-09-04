@@ -104,8 +104,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/images/logo.png" />
 
         {/* PWA 相关设置 */}
-        <meta name="theme-color" content="#d1d1d1ff" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a2e" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
+        <meta name="theme-color" content="#fff" />
+        <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)" />
 
         <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -125,7 +129,8 @@ export default function RootLayout({
 
         <Analytics />
       </head>
-      <body>
+      <body className="ios-optimized-theme">
+        <div className="ios-status-bar-bg"></div>
         <SoundProvider>
           <ThemeProvider>
             <PageTransition>{children}</PageTransition>
@@ -160,36 +165,84 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
 
-          function updateThemeColor(color) {
-              const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-              if (themeColorMeta) {
-                themeColorMeta.setAttribute('content', color);
-              }
-          }
-
-            // 监听主题变化
-          function initThemeColorSync() {
-              // 检测系统主题偏好
-              const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-              function updateThemeBasedOnPreference(e) {
-                if (e.matches) {
-                  updateThemeColor('#1a1a2e'); // 暗色主题
-                } else {
-                  updateThemeColor('#d1d1d1ff'); // 亮色主题
+            // iOS 14+ 专用状态栏主题处理
+            function initIOSThemeHandling() {
+              const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+              const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                  window.navigator.standalone === true;
+              
+              if (isIOS) {
+                console.log('iOS 设备检测到，初始化状态栏主题处理');
+                
+                // 动态更新 theme-color
+                function updateIOSThemeColor(color) {
+                  // 移除现有的 theme-color meta 标签
+                  const existingMetas = document.querySelectorAll('meta[name="theme-color"]');
+                  existingMetas.forEach(meta => meta.remove());
+                  
+                  // 添加新的 theme-color meta 标签
+                  const meta = document.createElement('meta');
+                  meta.name = 'theme-color';
+                  meta.content = color;
+                  document.head.appendChild(meta);
+                  
+                  // 强制重新渲染
+                  setTimeout(() => {
+                    if (window.location.reload) {
+                      // 在某些情况下需要强制刷新才能生效
+                      console.log('更新主题色为:', color);
+                    }
+                  }, 100);
                 }
+                
+                // 检测系统主题偏好
+                const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                function handleThemeChange(e) {
+                  const newColor = e.matches ? '#1a1a2e' : '#667eea';
+                  updateIOSThemeColor(newColor);
+                  document.body.className = e.matches ? 
+                    'ios-optimized-theme dark-theme' : 'ios-optimized-theme';
+                }
+                
+                darkModeQuery.addListener(handleThemeChange);
+                handleThemeChange(darkModeQuery);
+                
+                // 如果是在 PWA 模式下运行，强制设置状态栏样式
+                if (isStandalone) {
+                  console.log('PWA 模式，强制设置状态栏');
+                  
+                  // 创建全屏背景覆盖层
+                  const overlay = document.querySelector('.ios-status-bar-bg');
+                  if (overlay) {
+                    overlay.style.display = 'block';
+                    overlay.style.background = getComputedStyle(document.body).background;
+                  }
+                  
+                  // 监听页面可见性变化，确保主题色正确应用
+                  document.addEventListener('visibilitychange', function() {
+                    if (!document.hidden) {
+                      const currentColor = darkModeQuery.matches ? '#1a1a2e' : '#667eea';
+                      updateIOSThemeColor(currentColor);
+                    }
+                  });
+                }
+                
+                // 添加页面焦点事件监听
+                window.addEventListener('focus', function() {
+                  const currentColor = darkModeQuery.matches ? '#1a1a2e' : '#667eea';
+                  updateIOSThemeColor(currentColor);
+                });
+                
+                // PWA 安装后的处理
+                window.addEventListener('appinstalled', function(evt) {
+                  console.log('PWA 安装完成，重新设置主题');
+                  setTimeout(() => {
+                    const currentColor = darkModeQuery.matches ? '#1a1a2e' : '#667eea';
+                    updateIOSThemeColor(currentColor);
+                  }, 1000);
+                });
               }
-
-              darkModeMediaQuery.addListener(updateThemeBasedOnPreference);
-              updateThemeBasedOnPreference(darkModeMediaQuery);
-
-              // 如果你有自定义主题切换逻辑，也可以在这里处理
-              window.addEventListener('themeChange', function(e) {
-                updateThemeColor(e.detail.color);
-              });
-          }
-
-          initThemeColorSync();
+            }
 
           // 检测移动设备
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
