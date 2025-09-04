@@ -105,7 +105,6 @@ export default function RootLayout({
 
         {/* PWA 相关设置 */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
         <meta name="theme-color" content="#fff" />
         <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)" />
@@ -113,9 +112,7 @@ export default function RootLayout({
 
         <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
         <link rel="apple-touch-icon" href="/images/logo-192x192.png" />
         <link rel="apple-touch-startup-image" href="/images/splash-screen.png" />
         {/* 针对移动端搜索优化 */}
