@@ -2,7 +2,9 @@ import type React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import './seo-styles.css';
+import StructuredData from './structured-data';
 import Analytics from './analytics';
+import { PageTransition } from '@/components/PageTransition';
 import { SoundProvider } from '@/contexts/SoundContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
@@ -109,7 +111,7 @@ export default function RootLayout({
         <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
         <link rel="apple-touch-icon" href="/images/logo-192x192.png" />
         <link rel="apple-touch-startup-image" href="/images/splash-screen.png" />
@@ -127,7 +129,7 @@ export default function RootLayout({
       <body>
         <SoundProvider>
           <ThemeProvider>
-           {children}
+            <PageTransition>{children}</PageTransition>
           </ThemeProvider>
         </SoundProvider>
         {/* PWA 安装提示 */}
