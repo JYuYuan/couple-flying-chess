@@ -76,7 +76,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             width: '100%',
             height: 'auto',
             minHeight: '100%',
-            backgroundColor: '#ffffff',
             willChange: 'transform, opacity',
             overflowY: 'auto',
           }}
