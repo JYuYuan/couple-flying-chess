@@ -11,40 +11,6 @@ interface ThemeContextType {
   mounted: boolean;
 }
 
-const setBodyClass = (type:string)=>{
-   // 先清掉可能残留的主题类
-    document.body.classList.remove(
-      "bg-gradient-to-br",
-      "from-gray-900",
-      "via-slate-800",
-      "via-gray-900",
-      "to-slate-900",
-      "from-violet-50",
-      "via-indigo-50",
-      "via-blue-50",
-      "to-cyan-50"
-    );
-
-    // 再加新的
-    if (type === "dark") {
-      document.body.classList.add(
-        "bg-gradient-to-br",
-        "from-gray-900",
-        "via-slate-800",
-        "via-gray-900",
-        "to-slate-900"
-      );
-    } else {
-      document.body.classList.add(
-        "bg-gradient-to-br",
-        "from-violet-50",
-        "via-indigo-50",
-        "via-blue-50",
-        "to-cyan-50"
-      );
-    }
-}
-
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -61,7 +27,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         ? 'dark'
         : 'light';
       const initialTheme = savedTheme || systemTheme;
-      setBodyClass(initialTheme);
+
       setTheme(initialTheme);
       setMounted(true);
     } catch (error) {
@@ -85,14 +51,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [theme, mounted]);
 
-const toggleTheme = () => {
-  setTheme((prev) => {
-    const newTheme = prev === "light" ? "dark" : "light";
-    setBodyClass(newTheme);
-    return newTheme;
-  });
-};
-
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
 
   const contextValue = {
     theme,
