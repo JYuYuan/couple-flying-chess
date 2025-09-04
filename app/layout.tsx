@@ -127,11 +127,9 @@ export default function RootLayout({
         <Analytics />
       </head>
       <body>
-        <SoundProvider>
-          <ThemeProvider>
-            <PageTransition>{children}</PageTransition>
-          </ThemeProvider>
-        </SoundProvider>
+        <ThemeProvider>
+          <PageTransition>{children}</PageTransition>
+        </ThemeProvider>
         {/* PWA 安装提示 */}
         <div id="pwa-prompt" className="pwa-prompt">
           <div className="pwa-prompt-inner">
