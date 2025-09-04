@@ -49,7 +49,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       position: 'relative', 
       overflow: 'hidden',
       width: '100%',
-      minHeight: '100vh',
       top:0,
       left:0
     }}>
