@@ -45,19 +45,22 @@ export function useGameLogic(
 
       // 从任务描述中提取时间信息并转换为毫秒
       let durationMs: number | undefined;
-      const timeMatch = currentTaskDescription.match(/(\d+)\s*(秒|分钟|小时)/);
+      const timeMatch = currentTaskDescription.match(/(\d+)\s*(秒|分|小时|時|seconds|minutes|hours)/);
 
       if (timeMatch) {
         const value = parseInt(timeMatch[1], 10);
         const unit = timeMatch[2];
 
         switch (unit) {
+          case "seconds":
           case '秒':
             durationMs = value * 1000;
             break;
-          case '分钟':
+          case "minutes":
+          case '分':
             durationMs = value * 60 * 1000;
             break;
+          case "hours":
           case '小时':
             durationMs = value * 60 * 60 * 1000;
             break;
