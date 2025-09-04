@@ -1,5 +1,5 @@
-# 情侣飞行棋
+# Couple Flying Chess
 
-## 在线预览
+## Online Preview
 
 https://cpflying.top
