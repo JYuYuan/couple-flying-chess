@@ -88,11 +88,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-      const savedTheme = localStorage?.getItem('theme') as Theme | null;
-      const systemTheme = window?.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
-      const initialTheme = savedTheme || systemTheme;
   
   return (
     <html lang="zh-CN" className="h-full">
@@ -131,7 +126,7 @@ export default function RootLayout({
 
         <Analytics />
       </head>
-      <body className={initialTheme === `dark`?"transition-colors duration-500 bg-gradient-to-br from-gray-900 via-slate-800 via-gray-900 to-slate-900":"transition-colors duration-500 bg-gradient-to-br from-violet-50 via-indigo-50 via-blue-50 to-cyan-50"}>
+      <body className={"transition-colors duration-500"}>
         <SoundProvider>
           <ThemeProvider>
             <PageTransition>{children}</PageTransition>
