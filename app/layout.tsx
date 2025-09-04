@@ -97,14 +97,16 @@ export default function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
-
+     
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" href="/images/logo.png" />
         <link rel="shortcut icon" type="image/png" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/images/logo.png" />
 
         {/* PWA 相关设置 */}
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#d1d1d1ff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a2e" />
+
         <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -157,6 +159,38 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+
+          function updateThemeColor(color) {
+              const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+              if (themeColorMeta) {
+                themeColorMeta.setAttribute('content', color);
+              }
+          }
+
+            // 监听主题变化
+          function initThemeColorSync() {
+              // 检测系统主题偏好
+              const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+              function updateThemeBasedOnPreference(e) {
+                if (e.matches) {
+                  updateThemeColor('#1a1a2e'); // 暗色主题
+                } else {
+                  updateThemeColor('#d1d1d1ff'); // 亮色主题
+                }
+              }
+
+              darkModeMediaQuery.addListener(updateThemeBasedOnPreference);
+              updateThemeBasedOnPreference(darkModeMediaQuery);
+
+              // 如果你有自定义主题切换逻辑，也可以在这里处理
+              window.addEventListener('themeChange', function(e) {
+                updateThemeColor(e.detail.color);
+              });
+          }
+
+          initThemeColorSync();
+
           // 检测移动设备
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;

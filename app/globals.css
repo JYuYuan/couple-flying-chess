@@ -71,8 +71,8 @@ body.modal-open {
 
 /* 修复移动端安全区域 */
 body {
-    padding-top: calc(constant(safe-area-inset-top));
-    padding-top: calc(env(safe-area-inset-top));
+    /* padding-top: calc(constant(safe-area-inset-top));
+    padding-top: calc(env(safe-area-inset-top)); */
     padding-bottom: calc(constant(safe-area-inset-bottom));
     padding-bottom: calc(env(safe-area-inset-bottom));
 }
@@ -820,4 +820,43 @@ main#app::-webkit-scrollbar {
 /* 毛玻璃效果和径向渐变支持 */
 .bg-gradient-radial {
     background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* 为内容区域添加安全区域适配 */
+#__next {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    /* 关键：为内容添加顶部安全区域，而不是body */
+    padding-top: calc(constant(safe-area-inset-top));
+    padding-top: calc(env(safe-area-inset-top));
+}
+
+/* 主应用容器适配 */
+main#app {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    /* 确保背景色继承 */
+    background: inherit;
+}
+
+/* iOS 特殊处理 - 状态栏背景延伸 */
+@supports (-webkit-touch-callout: none) {
+    .ios-status-bar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: calc(constant(safe-area-inset-top));
+        height: calc(env(safe-area-inset-top));
+        background: inherit;
+        z-index: 9998;
+        pointer-events: none;
+    }
 }
