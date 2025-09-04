@@ -493,7 +493,7 @@ export function CustomModeCreator({
                           {translations.customMode.creator.selectedTasks}
                         </h4>
                         <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                          {newCustomMode.tasks.length} 个任务
+                          {newCustomMode.tasks.length}
                         </span>
                       </div>
                       <div className="space-y-2 max-h-60 overflow-y-auto">

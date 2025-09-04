@@ -556,7 +556,7 @@ export function GameModeSelector({
                     <span
                       className={`text-xs font-medium ${isDarkMode ? 'text-indigo-400' : 'text-indigo-500'}`}
                     >
-                      {mode.tasks.length} 个任务
+                      {mode.tasks.length}
                     </span>
                     <div className="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full"></div>
                   </div>

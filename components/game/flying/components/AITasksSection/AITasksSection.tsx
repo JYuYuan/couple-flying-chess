@@ -152,7 +152,7 @@ export function AITasksSection({
               {translations.customMode.ai.title}
             </h5>
             <span className="text-indigo-600 bg-indigo-100 px-2 py-1 rounded-full text-xs">
-              {deepSeekApi.tasks?.length || 0} 个任务
+              {deepSeekApi.tasks?.length || 0}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
