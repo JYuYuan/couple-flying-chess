@@ -49,8 +49,8 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       position: 'relative', 
       overflow: 'hidden',
       width: '100%',
-      top:0,
-      left:0
+      minHeight: '100vh',
+      backgroundColor: '#000'
     }}>
       <AnimatePresence mode="sync" custom={direction} onExitComplete={() => window.scrollTo(0, 0)}>
         <motion.div
@@ -75,6 +75,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             width: '100%',
             height: 'auto',
             minHeight: '100%',
+            backgroundColor: '#000'
             willChange: 'transform, opacity',
             overflowY: 'auto',
           }}

@@ -81,7 +81,7 @@ export default function Home() {
 
   return (
     <main
-      className={`transition-colors duration-300 ${
+      className={`flex min-h-screen flex-col items-center justify-center transition-colors duration-300 ${
         isDarkMode
           ? 'bg-gradient-to-b from-gray-900 to-gray-800'
           : 'bg-gradient-to-b from-pink-50 to-purple-50'
@@ -89,7 +89,7 @@ export default function Home() {
     >
       <div className="text-center max-w-4xl mx-auto px-4">
         {/* Logo and Title */}
-        <div className="mb-8 pt-8">
+        <div className="mb-8 pt-6">
           <h1
             className={`text-4xl font-bold mb-2 transition-colors duration-300 ${
               isDarkMode ? 'text-pink-400' : 'text-pink-600'
