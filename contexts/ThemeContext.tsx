@@ -51,33 +51,49 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [theme, mounted]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => {
-      const newTheme = prev === 'light' ? 'dark' : 'light';
-      document.body.removeAttribute("class");
-      if(newTheme ==="dark"){
-        document.body.classList.add(
-  "transition-colors",
-  "duration-500",
-  "bg-gradient-to-br",
-  "from-gray-900",
-  "via-slate-800",
-  "via-gray-900",
-  "to-slate-900"
-);
-      }else{
-        document.body.classList.add(
-  "transition-colors",
-  "duration-500",
-  "bg-gradient-to-br",
-  "from-violet-50",
-  "via-indigo-50",
-  "via-blue-50",
-  "to-cyan-50" // 注意这里应该写 50，Tailwind 没有 to-cyan-5
-);}
-      return newTheme;
-    });
-  };
+const toggleTheme = () => {
+  setTheme((prev) => {
+    const newTheme = prev === "light" ? "dark" : "light";
+
+    // 通用的过渡类常驻
+    document.body.classList.add("transition-colors", "duration-500");
+
+    // 先清掉可能残留的主题类
+    document.body.classList.remove(
+      "bg-gradient-to-br",
+      "from-gray-900",
+      "via-slate-800",
+      "via-gray-900",
+      "to-slate-900",
+      "from-violet-50",
+      "via-indigo-50",
+      "via-blue-50",
+      "to-cyan-50"
+    );
+
+    // 再加新的
+    if (newTheme === "dark") {
+      document.body.classList.add(
+        "bg-gradient-to-br",
+        "from-gray-900",
+        "via-slate-800",
+        "via-gray-900",
+        "to-slate-900"
+      );
+    } else {
+      document.body.classList.add(
+        "bg-gradient-to-br",
+        "from-violet-50",
+        "via-indigo-50",
+        "via-blue-50",
+        "to-cyan-50"
+      );
+    }
+
+    return newTheme;
+  });
+};
+
 
   const contextValue = {
     theme,
