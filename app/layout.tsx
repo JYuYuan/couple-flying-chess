@@ -126,7 +126,7 @@ export default function RootLayout({
 
         <Analytics />
       </head>
-      <body className={"transition-colors duration-500"}>
+      <body>
         <SoundProvider>
           <ThemeProvider>
             <PageTransition>{children}</PageTransition>
