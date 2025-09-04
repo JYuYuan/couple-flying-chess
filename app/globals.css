@@ -792,7 +792,3 @@ main#app {
   width: 100%;
   min-height: 100%;
 }
-
-body{
-    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
-}
