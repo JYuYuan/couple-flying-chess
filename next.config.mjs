@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 import withPWA from 'next-pwa';
-import runtimeCaching from 'next-pwa/cache.js';
 
 // 自定义缓存策略
 const customRuntimeCaching = [
@@ -20,7 +19,7 @@ const customRuntimeCaching = [
 const nextConfig = withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
-  runtimeCaching: [...runtimeCaching, ...customRuntimeCaching],
+  runtimeCaching: customRuntimeCaching,
 })({
   output: 'standalone',
   eslint: {
