@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://cpflying.vercel.app</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja" />
+  </url>
+  <url>
+    <loc>https://cpflying.vercel.app/en</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja" />
+  </url>
+  <url>
+    <loc>https://cpflying.vercel.app/ja</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja" />
+  </url>
+  <url>
+    <loc>https://cpflying.vercel.app/how-to-play</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app/how-to-play" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en/how-to-play" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja/how-to-play" />
+  </url>
+  <url>
+    <loc>https://cpflying.vercel.app/game-modes</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app/game-modes" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en/game-modes" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja/game-modes" />
+  </url>
+  <url>
+    <loc>https://cpflying.vercel.app/faq</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://cpflying.vercel.app/faq" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://cpflying.vercel.app/en/faq" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://cpflying.vercel.app/ja/faq" />
+  </url>
+</urlset>

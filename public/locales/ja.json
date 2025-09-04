@@ -1,0 +1,219 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "start": "開始",
+    "restart": "再開始",
+    "completed": "完了",
+    "failed": "失敗",
+    "rollDice": "サイコロを振る",
+    "rolling": "振っています...",
+    "moving": "移動中...",
+    "preparing": "準備中...",
+    "skipToHome": "ホームに戻る"
+  },
+  "game": {
+    "title": "飛行チェス",
+    "subtitle": "Love Flight Chess",
+    "selectMode": "ゲームモードを選択",
+    "modeDescription": "各モードで異なるインタラクティブ体験",
+    "redTurn": " 赤プレイヤーのターン (飛行機 ✈️)",
+    "blueTurn": " 青プレイヤーのターン (ヘリコプター 🚁)",
+    "redWin": "🎉 赤プレイヤーの勝利！",
+    "blueWin": "🎉 青プレイヤーの勝利！",
+    "backToHome": "ホームに戻る",
+    "continueGameTitle": "ゲームを続ける",
+    "continueGameMessage": "未完了のゲームがあります。続きますか？",
+    "newGame": "新しいゲーム",
+    "continueGame": "ゲームを続ける",
+    "selectWinTask": "勝利タスクを選んでお祝いしましょう！",
+    "winTasksTitle": "勝利タスク選択",
+    "winTaskExecution": "勝利タスク実行",
+    "celebrationMessage": "このタスクを完了して勝利をお祝いしましょう！",
+    "findLocalGame": "前回のゲーム進行を見つけました",
+    "red": "赤側（飛行機 ✈️）",
+    "blue": "青側（ヘリコプター 🚁）",
+    "positions": "位置",
+    "gameMode": "ゲームモード",
+    "currentPlayer": "現在のプレイヤー",
+    "lastLocation": "前回の位置から再開"
+  },
+  "modes": {
+    "normal": {
+      "name": "ノーマル",
+      "description": "友達や初回プレイヤーに最適"
+    },
+    "love": {
+      "name": "ロマンス",
+      "description": "恋愛中のカップルに最適"
+    },
+    "couple": {
+      "name": "カップル",
+      "description": "安定した関係のカップルに最適"
+    },
+    "advanced": {
+      "name": "アドバンス",
+      "description": "より刺激を求めるカップルに"
+    },
+    "intimate": {
+      "name": "プライベート",
+      "description": "プライベート空間のみ"
+    },
+    "mixed": {
+      "name": "ミックス",
+      "description": "全モードのランダム組み合わせ"
+    },
+    "hetero": {
+      "name": "異性向け",
+      "description": "異性カップルのための特別モード"
+    },
+    "daily": {
+      "name": "日常版",
+      "description": "温かい日常生活のふれあい"
+    },
+    "food": {
+      "name": "グルメ版",
+      "description": "美食タイムの甘いふれあい"
+    },
+    "fitness": {
+      "name": "アクティブ版",
+      "description": "一緒に運動、一緒に健康"
+    },
+    "creative": {
+      "name": "クリエイティブ版",
+      "description": "創造力を活かした芸術的ふれあい"
+    },
+    "romantic": {
+      "name": "ロマンティック版",
+      "description": "ロマンチックなデートタイム"
+    },
+    "game": {
+      "name": "エンターテインメント版",
+      "description": "楽しくリラックスできるゲームふれあい"
+    },
+    "adult": {
+      "name": "大人版",
+      "description": "大人のカップル限定の親密なふれあい"
+    }
+  },
+  "home": {
+    "title": "カップル飛行チェス",
+    "subtitle": "ゲームで愛を深めよう",
+    "features": {
+      "title": "ゲームの特徴",
+      "classic": {
+        "title": "クラシックな遊び方",
+        "description": "伝統的な飛行チェスのルールで、簡単に遊べます"
+      },
+      "interaction": {
+        "title": "カップル向けインタラクション",
+        "description": "特別にデザインされたインタラクティブなタスクで、絆を深めましょう"
+      },
+      "modes": {
+        "title": "様々なモード",
+        "description": "複数のゲームモードで何度でも楽しめます"
+      }
+    },
+    "cta": {
+      "startGame": "ゲームを始める",
+      "subtext": "クリックして、大切な人と楽しい時間を過ごしましょう"
+    }
+  },
+  "modeCategories": {
+    "basic": "クラシックモード",
+    "lifestyle": "ライフスタイルモード",
+    "adult": "アダルトモード"
+  },
+  "customMode": {
+    "title": "カスタムモード",
+    "description": "あなた専用のゲームモードを作成",
+    "create": "モード作成",
+    "edit": "編集",
+    "delete": "削除",
+    "deleteConfirm": "このカスタムモードを削除してもよろしいですか？",
+    "creatorType": {
+      "ai": "AIタスク",
+      "type": "タスクタイプ",
+      "custom": "カスタム"
+    },
+    "ai": {
+      "link": "キーを取得",
+      "role": "実行者の関係を入力してください：カップル、友達、兄弟",
+      "title": "AIタスク",
+      "keyword": "タスクのキーワードを入力してください：甘い、交流、面白い",
+      "number": "生成するAIタスクの数を入力してください",
+      "deepSeekKey": "DeepSeekキーを入力してください",
+      "loadTasks": "AIタスクを読み込む",
+      "fromExistingModes": "AIからタスクを生成",
+      "apiKeyRequired": "DeepSeek APIキーを入力してください",
+      "invalidTaskNumber": "1から10の間の数字を入力してください",
+      "tasksGenerated": "タスクの生成に成功しました",
+      "generationFailed": "タスクの生成に失敗しました。もう一度お試しください",
+      "defaultKeyword": "甘い、面白い、チャレンジ、交流、いたずら",
+      "template": "ランダムに${role}用のすごろくタスクプールを生成します。また、${keyword}によって生成することもできます。すべてのタスクは道具不要で完了可能です。タスク数は${count}件。すべての時間と単位はアラビア数字で統一してください（例：10秒、1分）。返すのは内容のみで、フォーマットは[\"甘い:xx\",\"交流:xx\"]のようなJSON形式で返してください"
+    },
+    "creator": {
+      "title": "カスタムモード作成",
+      "close": "閉じる",
+      "basicInfo": "基本情報",
+      "modeName": "モード名",
+      "modeDescription": "モード説明",
+      "modeNamePlaceholder": "モード名を入力",
+      "modeDescriptionPlaceholder": "このモードの特徴を説明してください",
+      "taskSelection": "タスク追加",
+      "fromExistingModes": "既存モードから選択",
+      "loadTasks": "全モードのタスクを読み込み",
+      "loading": "読み込み中...",
+      "manualAdd": "カスタムタスク追加",
+      "manualAddPlaceholder": "カスタムタスクを入力",
+      "selectedTasks": "選択済みタスク",
+      "taskCount": "個のタスク",
+      "createButton": "モード作成",
+      "cancel": "キャンセル",
+      "nameRequired": "モード名を入力してください",
+      "tasksRequired": "少なくとも1つのタスクを追加してください",
+      "subTitle": "自分専用のゲームモードを作成",
+      "baseInfo": "基本情報"
+    },
+    "messages": {
+      "createSuccess": "カスタムモードが作成されました！",
+      "deleteSuccess": "カスタムモードが削除されました",
+      "loadTasksError": "タスクの読み込みに失敗しました。再試行してください"
+    }
+  },
+  "board": {
+    "start": "スタート",
+    "end": "ゴール",
+    "star": "ラッキー",
+    "trap": "トラップ"
+  },
+  "tasks": {
+    "challenge": "タスクチャレンジ",
+    "starTask": "⭐ ラッキースタータスク",
+    "trapTask": "💣 トラップタスク",
+    "collisionTask": "💥 衝突タスク",
+    "redExecute": " 赤プレイヤーが実行",
+    "blueExecute": " 青プレイヤーが実行",
+    "completedReward": " 完了報酬：実行者が0-3マス前進",
+    "failedPenalty": "失敗ペナルティ：実行者が3-6マス後退",
+    "collisionCompletedReward": " 完了報酬：実行者がその場に留まる",
+    "collisionFailedPenalty": "失敗ペナルティ：実行者がスタートに戻る",
+    "emptyQueue": "タスクキューが空です！休憩しましょう！"
+  },
+  "tips": {
+    "twoPlayers": "二人で交互に操作",
+    "faceToFace": "対面でのインタラクション",
+    "improveRelation": "関係を深める"
+  },
+  "toast": {
+    "redForward": "赤が{steps}マス前進！",
+    "blueForward": "青が{steps}マス前進！",
+    "redBackward": "赤が{steps}マス後退！",
+    "blueBackward": "青が{steps}マス後退！",
+    "redStay": "赤がタスクを完了しましたが、その場に留まります。",
+    "blueStay": "青がタスクを完了しましたが、その場に留まります。",
+    "redFailedToStart": " 赤がタスクに失敗、スタートに戻ります！",
+    "blueFailedToStart": " 青がタスクに失敗、スタートに戻ります！",
+    "redCompleted": " 赤がタスクを完了、その場に留まります！",
+    "blueCompleted": " 青がタスクを完了、その場に留まります！"
+  }
+}

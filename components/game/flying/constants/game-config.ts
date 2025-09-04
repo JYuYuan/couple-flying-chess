@@ -1,0 +1,77 @@
+import { Users, Heart, Sparkles, Flame, Lock, Shuffle, Plus, HeartPulse, Calendar, UtensilsCrossed, Dumbbell, Palette, Coffee, Gamepad2, ShieldX, Crown } from 'lucide-react';
+import type { GameMode } from '@/components/game/flying/types/game';
+
+export const gameModeIcons = {
+  normal: Users,
+  love: Heart,
+  couple: Sparkles,
+  advanced: Flame,
+  intimate: Lock,
+  mixed: Shuffle,
+  hetero: HeartPulse,
+  daily: Calendar,
+  food: UtensilsCrossed,
+  fitness: Dumbbell,
+  creative: Palette,
+  romantic: Coffee,
+  game: Gamepad2,
+  adult: ShieldX,
+  'master-slave-sex': Crown,
+  custom: Plus,
+};
+
+export const gameModeColors = {
+  normal: 'from-blue-400 to-blue-600',
+  love: 'from-pink-400 to-pink-600',
+  couple: 'from-purple-400 to-purple-600',
+  advanced: 'from-red-400 to-red-600',
+  intimate: 'from-gray-700 to-gray-900',
+  mixed: 'from-indigo-400 via-purple-500 to-pink-500',
+  hetero: 'from-rose-400 to-rose-600',
+  daily: 'from-sky-400 to-sky-600',
+  food: 'from-orange-400 to-orange-600',
+  fitness: 'from-emerald-400 to-emerald-600',
+  creative: 'from-violet-400 to-violet-600',
+  romantic: 'from-pink-400 via-rose-400 to-red-400',
+  game: 'from-cyan-400 to-cyan-600',
+  adult: 'from-red-600 to-red-800',
+  'master-slave-sex': 'from-purple-800 to-purple-900',
+  custom: 'from-green-400 to-green-600',
+};
+
+export const gameModeEmojis = {
+  normal: '😊',
+  love: '💕',
+  couple: '💖',
+  advanced: '🔥',
+  intimate: '🔒',
+  mixed: '🎲',
+  hetero: '💑',
+  daily: '📅',
+  food: '🍽️',
+  fitness: '💪',
+  creative: '🎨',
+  romantic: '💐',
+  game: '🎮',
+  adult: '🔞',
+  'master-slave-sex': '👑',
+  custom: '🎨',
+};
+
+export const gameModes: GameMode[] = [
+  'normal',
+  'love',
+  'couple',
+  'advanced',
+  'intimate',
+  'mixed',
+  'hetero',
+  'daily',
+  'food',
+  'fitness',
+  'creative',
+  'romantic',
+  'game',
+  'adult',
+  'master-slave-sex',
+];
