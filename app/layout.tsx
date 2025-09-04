@@ -2,9 +2,7 @@ import type React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import './seo-styles.css';
-import StructuredData from './structured-data';
 import Analytics from './analytics';
-import { PageTransition } from '@/components/PageTransition';
 import { SoundProvider } from '@/contexts/SoundContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 
@@ -127,9 +125,11 @@ export default function RootLayout({
         <Analytics />
       </head>
       <body>
-        <ThemeProvider>
-          <PageTransition>{children}</PageTransition>
-        </ThemeProvider>
+        <SoundProvider>
+          <ThemeProvider>
+           {children}
+          </ThemeProvider>
+        </SoundProvider>
         {/* PWA 安装提示 */}
         <div id="pwa-prompt" className="pwa-prompt">
           <div className="pwa-prompt-inner">
