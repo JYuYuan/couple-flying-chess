@@ -108,8 +108,9 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        onClick={() => onComplete()}
         style={{ pointerEvents: 'none' }}
+        className="fixed inset-0 z-50 flex items-center justify-center"
       >
         {/* 背景遮罩 */}
         <motion.div
