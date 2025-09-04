@@ -790,5 +790,5 @@ main#app::-webkit-scrollbar {
 /* 主应用容器适配 */
 main#app {
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
 }
