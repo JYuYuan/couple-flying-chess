@@ -88,8 +88,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-      const savedTheme = localStorage.getItem('theme') as Theme | null;
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const savedTheme = localStorage?.getItem('theme') as Theme | null;
+      const systemTheme = window?.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light';
       const initialTheme = savedTheme || systemTheme;
