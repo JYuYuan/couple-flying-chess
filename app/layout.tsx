@@ -104,15 +104,14 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/images/logo.png" />
 
         {/* PWA 相关设置 */}
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
-        <meta name="theme-color" content="#fff" />
-        <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#d1d1d1ff" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a2e" />
 
         <meta httpEquiv="Permissions-Policy" content="interest-cohort=()" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
         <link rel="apple-touch-icon" href="/images/logo-192x192.png" />
         <link rel="apple-touch-startup-image" href="/images/splash-screen.png" />
         {/* 针对移动端搜索优化 */}
@@ -126,14 +125,134 @@ export default function RootLayout({
 
         <Analytics />
       </head>
-      <body className="ios-optimized-theme">
-        <div className="ios-status-bar-bg"></div>
-        <main>
-	<h1>js13kGames A-Frame entries</h1>
-	<p className="description">List of games submitted to the <a href="http://js13kgames.com/aframe">A-Frame category</a> in the <a href="http://2017.js13kgames.com">js13kGames 2017</a> competition. You can <a href="https://github.com/mdn/pwa-examples/blob/master/js13kpwa">fork js13kPWA on GitHub</a> to check its source code.</p>
-	<button id="notifications">Request dummy notifications</button>
-	<section id="content"></section>
-</main>
+      <body>
+        <SoundProvider>
+          <ThemeProvider>
+            <PageTransition>{children}</PageTransition>
+          </ThemeProvider>
+        </SoundProvider>
+        {/* PWA 安装提示 */}
+        <div id="pwa-prompt" className="pwa-prompt">
+          <div className="pwa-prompt-inner">
+            <div className="pwa-prompt-icon">📱</div>
+            <div className="pwa-prompt-content">
+              <h3>添加到主屏幕</h3>
+              <p>获得更好的游戏体验</p>
+              <div className="pwa-prompt-instructions">
+                <span className="ios-instruction">
+                  点击分享按钮 <span className="share-icon">⬆️</span> 然后选择"添加到主屏幕"
+                </span>
+                <span className="android-instruction">点击菜单，选择"添加到主屏幕"</span>
+              </div>
+            </div>
+            <button id="close-pwa-prompt" className="close-pwa-prompt">
+              ×
+            </button>
+          </div>
+        </div>
+
+        {/* PWA 小图标 */}
+        <div id="pwa-mini-icon" className="pwa-mini-icon" title="添加到主屏幕">
+          <span>📱</span>
+        </div>
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+
+          function updateThemeColor(color) {
+              const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+              if (themeColorMeta) {
+                themeColorMeta.setAttribute('content', color);
+              }
+          }
+
+            // 监听主题变化
+          function initThemeColorSync() {
+              // 检测系统主题偏好
+              const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+              function updateThemeBasedOnPreference(e) {
+                if (e.matches) {
+                  updateThemeColor('#1a1a2e'); // 暗色主题
+                } else {
+                  updateThemeColor('#d1d1d1ff'); // 亮色主题
+                }
+              }
+
+              darkModeMediaQuery.addListener(updateThemeBasedOnPreference);
+              updateThemeBasedOnPreference(darkModeMediaQuery);
+
+              // 如果你有自定义主题切换逻辑，也可以在这里处理
+              window.addEventListener('themeChange', function(e) {
+                updateThemeColor(e.detail.color);
+              });
+          }
+
+          initThemeColorSync();
+
+          // 检测移动设备
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          const isAndroid = /Android/i.test(navigator.userAgent);
+          const isInStandaloneMode = ('standalone' in window.navigator && window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
+          
+          // 只在移动端且未添加到主屏幕时处理
+          if (isMobile && !isInStandaloneMode) {
+            const prompt = document.getElementById('pwa-prompt');
+            const miniIcon = document.getElementById('pwa-mini-icon');
+            const closeBtn = document.getElementById('close-pwa-prompt');
+            const promptShownKey = 'pwaPromptShown';
+            
+            // 显示对应平台的说明文字
+            if (isIos) {
+              document.querySelector('.ios-instruction').style.display = 'block';
+              document.querySelector('.android-instruction').style.display = 'none';
+            } else if (isAndroid) {
+              document.querySelector('.ios-instruction').style.display = 'none';
+              document.querySelector('.android-instruction').style.display = 'block';
+            }
+            
+            // 检查是否第一次访问
+            const hasShownPrompt = localStorage.getItem(promptShownKey);
+            
+            if (!hasShownPrompt) {
+              // 第一次访问，显示完整提示
+              setTimeout(() => {
+                prompt.style.display = 'flex';
+              }, 1500); // 延迟1.5秒显示，避免打断游戏
+            } else {
+              // 非第一次访问，显示小图标
+              miniIcon.style.display = 'flex';
+            }
+            
+            // 关闭提示事件
+            closeBtn.addEventListener('click', () => {
+              prompt.style.display = 'none';
+              miniIcon.style.display = 'flex';
+              localStorage.setItem(promptShownKey, 'true');
+            });
+            
+            // 点击小图标重新显示提示
+            miniIcon.addEventListener('click', () => {
+              miniIcon.style.display = 'none';
+              prompt.style.display = 'flex';
+            });
+            
+            // 自动隐藏提示（10秒后）
+            if (!hasShownPrompt) {
+              setTimeout(() => {
+                if (prompt.style.display === 'flex') {
+                  prompt.style.display = 'none';
+                  miniIcon.style.display = 'flex';
+                  localStorage.setItem(promptShownKey, 'true');
+                }
+              }, 10000);
+            }
+          }
+        `,
+          }}
+        />
       </body>
     </html>
   );

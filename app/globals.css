@@ -828,3 +828,8 @@ main#app {
     /* 确保背景色继承 */
     background: inherit;
 }
+
+header {
+	border-top: 0.2em solid #a52730;
+	border-bottom: 0.2em solid #fff;
+}
