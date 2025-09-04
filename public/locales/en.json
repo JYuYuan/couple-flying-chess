@@ -36,7 +36,20 @@
     "positions": "Positions",
     "gameMode": "Game Mode",
     "currentPlayer": "Current Player",
-    "lastLocation": "Resume from last position"
+    "lastLocation": "Resume from last position",
+    "star": {
+      "title": "🌟 Lucky Star",
+      "subtitle": "Good fortune arrives!"
+    },
+    "collision": {
+      "title": "⚡ Collision",
+      "subtitle": "An unexpected encounter!"
+    },
+    "trap": {
+      "title": "💥 Trap",
+      "subtitle": "Watch out for challenges!"
+    }
+
   },
   "modeCategories": {
     "basic": "Classic Mode",

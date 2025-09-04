@@ -35,7 +35,19 @@
     "positions": "位置",
     "gameMode": "游戏模式",
     "currentPlayer": "当前玩家",
-    "lastLocation": "从上次位置开始"
+    "lastLocation": "从上次位置开始",
+    "star": {
+      "title": "🌟 幸运星",
+      "subtitle": "好运降临！"
+    },
+    "collision": {
+      "title": "⚡ 碰撞",
+      "subtitle": "意外相遇！"
+    },
+    "trap": {
+      "title": "💥 陷阱",
+      "subtitle": "小心挑战！"
+    }
   },
   "modeCategories": {
     "basic": "经典模式",

@@ -66,8 +66,20 @@ export interface Translations {
     positions: string;
     red: string;
     blue: string;
-    lastLocation:string;
-    findLocalGame:string;
+    lastLocation: string;
+    findLocalGame: string;
+    star: {
+      title: string;
+      subtitle: string;
+    };
+    collision: {
+      title: string;
+      subtitle: string;
+    };
+    trap: {
+      title: string;
+      subtitle: string;
+    };
   };
   modes: Record<GameMode, modeContent>;
   modeCategories: {
@@ -105,7 +117,7 @@ export interface Translations {
     };
     creator: {
       title: string;
-      subTitle:string;
+      subTitle: string;
       close: string;
       basicInfo: string;
       modeName: string;
@@ -124,7 +136,7 @@ export interface Translations {
       cancel: string;
       nameRequired: string;
       tasksRequired: string;
-      baseInfo:string;
+      baseInfo: string;
     };
     messages: {
       createSuccess: string;

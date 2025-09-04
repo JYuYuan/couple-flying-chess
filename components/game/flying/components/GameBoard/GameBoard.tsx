@@ -204,33 +204,21 @@ export function GameBoard({
             {pathCell.type === 'start' && (
               <>
                 <Rocket size={18} className={getIconColor('start')} />
-                <span className={`text-xs font-bold ${getIconColor('start')}`}>
-                  {translations.board.start}
-                </span>
               </>
             )}
             {pathCell.type === 'end' && (
               <>
                 <Trophy size={18} className={getIconColor('end')} />
-                <span className={`text-xs font-bold ${getIconColor('end')}`}>
-                  {translations.board.end}
-                </span>
               </>
             )}
             {pathCell.type === 'star' && (
               <>
                 <Star size={16} className={getIconColor('star')} />
-                <span className={`text-xs font-bold ${getIconColor('star')}`}>
-                  {translations.board.star}
-                </span>
               </>
             )}
             {pathCell.type === 'trap' && (
               <>
                 <Bomb size={16} className={getIconColor('trap')} />
-                <span className={`text-xs font-bold ${getIconColor('trap')}`}>
-                  {translations.board.trap}
-                </span>
               </>
             )}
             {pathCell.type === 'path' && (

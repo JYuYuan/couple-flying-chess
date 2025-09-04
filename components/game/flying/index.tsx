@@ -955,6 +955,7 @@ export default function CoupleLudoGame() {
 
       {/* 特效组件 */}
       <SpecialEffects
+        translations={translations}
         effectType={currentEffect}
         onComplete={() => setCurrentEffect(null)}
         duration={2000}
