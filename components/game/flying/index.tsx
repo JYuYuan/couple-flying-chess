@@ -5,7 +5,7 @@ import { useSound } from '@/contexts/SoundContext';
 import { createBoardPath, PathCell } from '@/lib/game-config';
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 import { type Language, loadTranslations, type Translations } from '@/lib/i18n';
-import { closeModal, openModal, shuffleArray } from '@/components/game/flying/utils/game-utils';
+import { shuffleArray } from '@/components/game/flying/utils/game-utils';
 import { useGameState } from '@/components/game/flying/hooks/useGameState';
 import { useTaskManagement } from '@/components/game/flying/hooks/useTaskManagement';
 import { useCustomModes } from '@/components/game/flying/hooks/useCustomModes';
@@ -444,7 +444,7 @@ export default function CoupleLudoGame() {
     customModes.setCurrentCustomMode(null);
     customModes.setShowCustomModeCreator(false);
     setToast(null);
-    closeModal();
+
   };
 
   const handleWinTaskSelect = useCallback(
@@ -637,7 +637,6 @@ export default function CoupleLudoGame() {
                 startGame('custom', mode);
               }}
               onCreateCustomMode={() => {
-                openModal();
                 customModes.setShowCustomModeCreator(true);
               }}
               onDeleteCustomMode={customModes.deleteCustomMode}
@@ -655,7 +654,7 @@ export default function CoupleLudoGame() {
               isLoadingTasks={taskManagement.isLoadingTasks}
               translations={translations}
               onClose={() => {
-                closeModal();
+               
                 customModes.setShowCustomModeCreator(false);
                 customModes.setNewCustomMode({
                   name: '',
@@ -673,7 +672,7 @@ export default function CoupleLudoGame() {
                   );
                 });
                 if (success) {
-                  closeModal();
+                 
                   setManualTask('');
                 }
               }}
