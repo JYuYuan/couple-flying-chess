@@ -794,5 +794,5 @@ main#app {
 }
 
 body{
-    background: #000;
+    background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
