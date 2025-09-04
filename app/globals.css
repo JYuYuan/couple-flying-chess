@@ -822,8 +822,6 @@ main#app {
     min-height: 100vh;
     /* 确保背景色继承 */
     background: inherit;
-    padding-top: calc(constant(safe-area-inset-top));
-    padding-top: calc(env(safe-area-inset-top));
 }
 
 header {
