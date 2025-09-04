@@ -232,7 +232,7 @@ export function CustomModeCreator({
                   <Tabs
                     value={newCustomMode.type}
                     defaultValue={newCustomMode.type}
-                    onValueChange={(value) =>
+                    onValueChange={(value:any) =>
                       setNewCustomMode({ ...newCustomMode, type: value as NewCustomMode['type'] })
                     }
                   >
