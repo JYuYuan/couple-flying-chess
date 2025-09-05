@@ -305,7 +305,7 @@ export function GameModeSelector({
   const isDarkMode = document.documentElement.classList.contains('dark');
   // 展开/折叠状态
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
-    basic: true,
+    basic: false,
     lifestyle: false,
     adult: false,
   });
@@ -330,15 +330,15 @@ export function GameModeSelector({
       <AnimatePresence initial={false}>
         {/* 分类模式展示 */}
         {Object.entries(modeCategories).map(([categoryKey, category], categoryIndex) => (
-          <motion.div 
-            key={categoryKey} 
+          <motion.div
+            key={categoryKey}
             className="mb-8"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ 
-              duration: 0.5, 
-              ease: "easeOut", 
-              delay: categoryIndex * 0.1 
+            transition={{
+              duration: 0.5,
+              ease: 'easeOut',
+              delay: categoryIndex * 0.1,
             }}
           >
             {/* 分类标题和折叠按钮 */}
@@ -365,10 +365,10 @@ export function GameModeSelector({
                 className={`transition-transform duration-500 ease-out ${
                   expandedCategories[categoryKey] ? 'rotate-180' : ''
                 }`}
-                animate={{ 
-                  rotate: expandedCategories[categoryKey] ? 180 : 0 
+                animate={{
+                  rotate: expandedCategories[categoryKey] ? 180 : 0,
                 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
               >
                 <ChevronDown size={20} className="text-gray-600 dark:text-gray-400" />
               </motion.div>
@@ -379,7 +379,7 @@ export function GameModeSelector({
               {expandedCategories[categoryKey] && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                   className="overflow-hidden"
@@ -388,85 +388,85 @@ export function GameModeSelector({
                     initial={{ y: -20 }}
                     animate={{ y: 0 }}
                     exit={{ y: -20 }}
-                    transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}
+                    transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 }}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
                   >
-                {category.map((modeKey, index) => {
-                  const mode = translations.modes[modeKey];
-                  if (!mode) return null;
+                    {category.map((modeKey, index) => {
+                      const mode = translations.modes[modeKey];
+                      if (!mode) return null;
 
-                  const IconComponent = gameModeIcons[modeKey as GameMode];
-                  const isLoading = isLoadingTasks && gameMode === modeKey;
-                  const styles = getCardStyles(modeKey);
+                      const IconComponent = gameModeIcons[modeKey as GameMode];
+                      const isLoading = isLoadingTasks && gameMode === modeKey;
+                      const styles = getCardStyles(modeKey);
 
-                  return (
-                    <motion.div
-                      key={modeKey}
-                      initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                      transition={{ 
-                        duration: 0.3, 
-                        ease: "easeOut", 
-                        delay: 0.15 + index * 0.05 
-                      }}
-                      onClick={() => !isLoadingTasks && onStartGame(modeKey as GameMode)}
-                      className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${styles.bg} ${
-                        isLoading ? 'pointer-events-none' : ''
-                      } border-white/50 dark:border-gray-700/50`}
-                    >
-                      {/* 装饰性背景 - 更柔和的效果 */}
-                      <div className="absolute inset-0 opacity-5">
-                        <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-current to-transparent rounded-full blur-2xl"></div>
-                        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-current to-transparent rounded-full blur-xl"></div>
-                      </div>
-
-                      <div className="relative p-6 h-full flex flex-col">
-                        {/* 图标和emoji区域 */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div
-                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${styles.iconBg}`}
-                          >
-                            <IconComponent
-                              size={24}
-                              className={`transition-all duration-300 ${styles.iconColor}`}
-                            />
+                      return (
+                        <motion.div
+                          key={modeKey}
+                          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                          transition={{
+                            duration: 0.3,
+                            ease: 'easeOut',
+                            delay: 0.15 + index * 0.05,
+                          }}
+                          onClick={() => !isLoadingTasks && onStartGame(modeKey as GameMode)}
+                          className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${styles.bg} ${
+                            isLoading ? 'pointer-events-none' : ''
+                          } border-white/50 dark:border-gray-700/50`}
+                        >
+                          {/* 装饰性背景 - 更柔和的效果 */}
+                          <div className="absolute inset-0 opacity-5">
+                            <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-current to-transparent rounded-full blur-2xl"></div>
+                            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-current to-transparent rounded-full blur-xl"></div>
                           </div>
-                          <div className={`text-2xl animate-bounce`}>
-                            {gameModeEmojis[modeKey as GameMode]}
+
+                          <div className="relative p-6 h-full flex flex-col">
+                            {/* 图标和emoji区域 */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div
+                                className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${styles.iconBg}`}
+                              >
+                                <IconComponent
+                                  size={24}
+                                  className={`transition-all duration-300 ${styles.iconColor}`}
+                                />
+                              </div>
+                              <div className={`text-2xl animate-bounce`}>
+                                {gameModeEmojis[modeKey as GameMode]}
+                              </div>
+                            </div>
+
+                            {/* 标题和描述 */}
+                            <div className="flex-1">
+                              <h3
+                                className={`text-lg font-bold mb-2 transition-colors duration-300 ${styles.textColor}`}
+                              >
+                                {mode.name}
+                              </h3>
+                              <p className={`text-sm leading-relaxed ${styles.descColor}`}>
+                                {mode.description}
+                              </p>
+                            </div>
+
+                            {/* 加载指示器 */}
+                            {isLoading && (
+                              <div className="mt-4 flex items-center justify-center space-x-2">
+                                <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                                <span className="text-sm font-medium">
+                                  {translations.common.loading}
+                                </span>
+                              </div>
+                            )}
+
+                            {/* 选中指示器 */}
+                            {isLoading && (
+                              <div className="absolute inset-0 bg-current/10 backdrop-blur-sm rounded-2xl"></div>
+                            )}
                           </div>
-                        </div>
-
-                        {/* 标题和描述 */}
-                        <div className="flex-1">
-                          <h3
-                            className={`text-lg font-bold mb-2 transition-colors duration-300 ${styles.textColor}`}
-                          >
-                            {mode.name}
-                          </h3>
-                          <p className={`text-sm leading-relaxed ${styles.descColor}`}>
-                            {mode.description}
-                          </p>
-                        </div>
-
-                        {/* 加载指示器 */}
-                        {isLoading && (
-                          <div className="mt-4 flex items-center justify-center space-x-2">
-                            <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                            <span className="text-sm font-medium">
-                              {translations.common.loading}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* 选中指示器 */}
-                        {isLoading && (
-                          <div className="absolute inset-0 bg-current/10 backdrop-blur-sm rounded-2xl"></div>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                        </motion.div>
+                      );
+                    })}
                   </motion.div>
                 </motion.div>
               )}
@@ -476,14 +476,14 @@ export function GameModeSelector({
 
         {/* 自定义模式区域 */}
         {(customModes.length > 0 || true) && (
-          <motion.div 
+          <motion.div
             className="space-y-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.5, 
-              ease: "easeOut", 
-              delay: Object.keys(modeCategories).length * 0.1 + 0.2
+            transition={{
+              duration: 0.5,
+              ease: 'easeOut',
+              delay: Object.keys(modeCategories).length * 0.1 + 0.2,
             }}
           >
             <div className="flex items-center justify-center space-x-2">
@@ -498,11 +498,11 @@ export function GameModeSelector({
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600"></div>
             </div>
 
-            <motion.div 
+            <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {/* 已创建的自定义模式卡片 */}
               {customModes.map((mode, index) => (
@@ -510,15 +510,15 @@ export function GameModeSelector({
                   key={mode.id}
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ 
-                    duration: 0.3, 
-                    ease: "easeOut", 
-                    delay: index * 0.05 
+                  transition={{
+                    duration: 0.3,
+                    ease: 'easeOut',
+                    delay: index * 0.05,
                   }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.03,
                     y: -8,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   onClick={() => onStartCustomGame(mode)}
                   className="group relative overflow-hidden rounded-2xl border cursor-pointer shadow-lg hover:shadow-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50 hover:from-indigo-100 hover:to-purple-100 border-indigo-100/50 dark:from-indigo-900/60 dark:via-gray-800 dark:to-purple-900/60 dark:hover:from-indigo-800/70 dark:hover:to-purple-800/70 dark:border-indigo-700/50"
@@ -578,15 +578,15 @@ export function GameModeSelector({
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ 
-                  duration: 0.3, 
-                  ease: "easeOut", 
-                  delay: customModes.length * 0.05 + 0.1 
+                transition={{
+                  duration: 0.3,
+                  ease: 'easeOut',
+                  delay: customModes.length * 0.05 + 0.1,
                 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.03,
                   y: -8,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 onClick={onCreateCustomMode}
                 className="group relative overflow-hidden rounded-2xl border-2 border-dashed cursor-pointer shadow-lg hover:shadow-2xl bg-gradient-to-br from-slate-50 via-white to-gray-50 hover:from-slate-100 hover:to-gray-100 border-slate-300 hover:border-slate-400 dark:from-slate-800 dark:via-gray-800 dark:to-gray-800 dark:hover:from-slate-700 dark:hover:to-gray-700 dark:border-slate-600 dark:hover:border-slate-500"
