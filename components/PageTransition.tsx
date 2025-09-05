@@ -45,14 +45,24 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div style={{ 
-      position: 'relative', 
-      overflow: 'hidden',
-      width: '100%',
-      minHeight: '100vh',
-      backgroundColor: '#000'
-    }}
-    >
+    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950 relative">
+      {/* 动态背景叠加层 */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.03), transparent 50%), radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.03), transparent 50%)'
+        }}
+      />
+      
+      <div
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          width: '100%',
+          minHeight: '100vh',
+          zIndex: 1
+        }}
+      >
       <AnimatePresence mode="sync" custom={direction} onExitComplete={() => window.scrollTo(0, 0)}>
         <motion.div
           key={pathname}
@@ -76,7 +86,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
             width: '100%',
             height: 'auto',
             minHeight: '100%',
-            backgroundColor: '#000',
             willChange: 'transform, opacity',
             overflowY: 'auto',
           }}
@@ -84,6 +93,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
           {children}
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
   );
 }

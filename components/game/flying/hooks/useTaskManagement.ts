@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type { GameMode } from '../types/game';
 import { shuffleArray } from '../utils/game-utils';
 import { Language, Translations } from '@/lib/i18n';

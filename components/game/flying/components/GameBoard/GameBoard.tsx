@@ -1,8 +1,6 @@
 import React from 'react';
-import { Rocket, Trophy, Star, Bomb, Plane } from 'lucide-react';
-import { BirdIcon as Helicopter } from 'lucide-react';
+import { BirdIcon as Helicopter, Bomb, Plane, Rocket, Star, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
 import type { PlayerColor } from '@/components/game/flying/types/game';
 import { Translations } from '@/lib/i18n';
 import { PathCell } from '@/lib/game-config';
@@ -22,59 +20,42 @@ export function GameBoard({
   bluePosition,
   currentPlayer,
   isMoving,
-  translations,
 }: GameBoardProps) {
-  const { theme, mounted } = useTheme();
-
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // 获取单元格样式
+  // 获取 iOS 16 风格单元格样式
   const getCellStyle = (pathCell: PathCell, isRedOnCell: boolean, isBlueOnCell: boolean) => {
-    const baseClasses = `relative flex flex-col items-center justify-center aspect-square rounded-xl transition-all duration-300 transform hover:scale-105 ${
-      theme === 'dark' ? 'shadow-lg' : 'shadow-md'
-    }`;
+    const baseClasses = `relative z-[999] flex flex-col items-center justify-center aspect-square rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray-200/40 dark:shadow-black/30`;
 
     switch (pathCell.type) {
       case 'start':
-        return `${baseClasses} bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 border-2 border-orange-300 shadow-orange-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
+        return `${baseClasses} bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 border-2 border-orange-300/60 shadow-orange-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
       case 'end':
-        return `${baseClasses} bg-gradient-to-br from-emerald-400 via-green-500 to-green-600 border-2 border-green-300 shadow-green-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
+        return `${baseClasses} bg-gradient-to-br from-emerald-400 via-green-500 to-green-600 border-2 border-green-300/60 shadow-green-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
       case 'star':
-        return `${baseClasses} bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 border-2 border-yellow-300 shadow-yellow-300/50`;
+        return `${baseClasses} bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 border-2 border-yellow-300/60 shadow-yellow-300/50 backdrop-blur-sm`;
       case 'trap':
-        return `${baseClasses} bg-gradient-to-br from-red-400 via-rose-500 to-red-600 border-2 border-red-300 shadow-red-300/50`;
+        return `${baseClasses} bg-gradient-to-br from-red-400 via-rose-500 to-red-600 border-2 border-red-300/60 shadow-red-300/50 backdrop-blur-sm`;
       case 'path':
-        return `${baseClasses} ${
-          theme === 'dark'
-            ? 'bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 border border-slate-500/30'
-            : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 border border-blue-200/50'
-        } ${isRedOnCell || isBlueOnCell ? 'ring-2 ring-blue-400/50' : ''}`;
+        return `${baseClasses} bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 border border-blue-200/50 dark:bg-gradient-to-br dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 dark:border dark:border-slate-600/40 ${
+          isRedOnCell || isBlueOnCell ? 'ring-2 ring-blue-400/60 dark:ring-blue-500/60' : ''
+        }`;
       default:
         return 'transparent';
     }
   };
 
-  // 获取图标颜色
+  // 获取 iOS 16 风格图标颜色
   const getIconColor = (type: string) => {
     switch (type) {
       case 'start':
-        return 'text-orange-800';
+        return 'text-orange-800 drop-shadow-sm';
       case 'end':
-        return 'text-white';
+        return 'text-white drop-shadow-sm';
       case 'star':
-        return 'text-amber-800';
+        return 'text-amber-800 drop-shadow-sm';
       case 'trap':
-        return 'text-white';
+        return 'text-white drop-shadow-sm';
       case 'path':
-        return theme === 'dark' ? 'text-slate-300' : 'text-blue-600';
+        return 'text-blue-600 dark:text-slate-300 drop-shadow-sm';
       default:
         return 'text-gray-500';
     }
@@ -89,11 +70,9 @@ export function GameBoard({
     if (currentIndex === -1) return null;
 
     const connections = [];
-    const lineClass = `absolute -z-10 rounded-sm shadow-sm ${
-      theme === 'dark'
-        ? 'bg-gradient-to-r from-cyan-400 to-blue-500'
-        : 'bg-gradient-to-r from-blue-500 to-indigo-600'
-    } opacity-70`;
+    const lineClass = `absolute -z-10 rounded-sm shadow-sm dark:bg-gradient-to-r dark:from-cyan-400 to-blue-500
+        bg-gradient-to-r from-blue-500 to-indigo-600
+     opacity-70`;
 
     // 连接到前一个cell
     if (currentIndex > 0) {
@@ -223,11 +202,7 @@ export function GameBoard({
             )}
             {pathCell.type === 'path' && (
               <>
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    theme === 'dark' ? 'bg-slate-400' : 'bg-blue-400'
-                  }`}
-                ></div>
+                <div className={`w-2 h-2 rounded-full dark:bg-slate-400 bg-blue-400`}></div>
               </>
             )}
           </div>
@@ -235,19 +210,19 @@ export function GameBoard({
           {/* 连接线 */}
           {getConnectionLines(pathCell)}
 
-          {/* 玩家棋子 */}
+          {/* 玩家棋子 - iOS 16 风格 */}
           {isRedOnCell && (
             <motion.div
               key="red-player"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className={`absolute z-20 flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-red-600 border-2 border-white shadow-lg ${
-                currentPlayer === 'red' ? 'ring-2 ring-yellow-400 animate-pulse' : ''
-              } ${areBothOnCell ? 'transform -translate-x-2 -translate-y-2' : ''} ${
+              className={`absolute z-20 flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 border-2 border-white/80 shadow-2xl backdrop-blur-sm ${
+                currentPlayer === 'red' ? 'ring-4 ring-yellow-400/60 animate-pulse' : ''
+              } ${areBothOnCell ? 'transform -translate-x-3 -translate-y-3' : ''} ${
                 isMoving && currentPlayer === 'red' ? 'animate-bounce' : ''
               }`}
             >
-              <Plane size={playerIconSize} className="text-white" />
+              <Plane size={playerIconSize} className="text-white drop-shadow-sm" />
             </motion.div>
           )}
           {isBlueOnCell && (
@@ -255,13 +230,13 @@ export function GameBoard({
               key="blue-player"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className={`absolute z-20 flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-white shadow-lg ${
-                currentPlayer === 'blue' ? 'ring-2 ring-yellow-400 animate-pulse' : ''
-              } ${areBothOnCell ? 'transform translate-x-2 translate-y-2' : ''} ${
+              className={`absolute z-20 flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-white/80 shadow-2xl backdrop-blur-sm ${
+                currentPlayer === 'blue' ? 'ring-4 ring-yellow-400/60 animate-pulse' : ''
+              } ${areBothOnCell ? 'transform translate-x-3 translate-y-3' : ''} ${
                 isMoving && currentPlayer === 'blue' ? 'animate-bounce' : ''
               }`}
             >
-              <Helicopter size={playerIconSize} className="text-white" />
+              <Helicopter size={playerIconSize} className="text-white drop-shadow-sm" />
             </motion.div>
           )}
 
@@ -312,30 +287,28 @@ export function GameBoard({
 
   return (
     <div className="relative w-full aspect-square">
-      {/* 棋盘背景 */}
-      <div
-        className={`relative w-full h-full p-2 rounded-2xl shadow-2xl border transition-colors duration-500 ${
-          theme === 'dark'
-            ? 'bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900 border-gray-700/20'
-            : 'bg-gradient-to-br from-white via-slate-50 to-indigo-50 border-white/20'
-        }`}
-      >
-        {/* 装饰性背景效果 */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+      {/* iOS 16 风格棋盘背景 */}
+      <div className="relative w-full h-full p-3 rounded-3xl shadow-2xl border transition-all duration-500 backdrop-blur-xl bg-gradient-to-br from-white/90 via-slate-50/80 to-indigo-50/90 border-white/30 shadow-gray-300/40 dark:bg-gradient-to-br dark:from-slate-900/90 dark:via-gray-800/80 dark:to-slate-900/90 dark:border-gray-700/30 dark:shadow-black/40">
+        {/* iOS 16 风格装饰性背景效果 */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
           <div
-            className={`absolute -top-4 -right-4 w-16 h-16 rounded-full blur-xl opacity-20 ${
-              currentPlayer === 'red' ? 'bg-red-500' : 'bg-blue-500'
-            } animate-pulse`}
+            className="absolute -top-6 -right-6 w-20 h-20 rounded-full blur-2xl opacity-15 animate-pulse shadow-lg"
+            style={{
+              background:
+                currentPlayer === 'red' ? 'rgba(239, 68, 68, 0.6)' : 'rgba(59, 130, 246, 0.6)',
+            }}
           ></div>
           <div
-            className={`absolute -bottom-4 -left-4 w-20 h-20 rounded-full blur-xl opacity-20 ${
-              currentPlayer === 'red' ? 'bg-pink-500' : 'bg-cyan-500'
-            } animate-pulse delay-1000`}
+            className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full blur-2xl opacity-15 animate-pulse delay-1000 shadow-lg"
+            style={{
+              background:
+                currentPlayer === 'red' ? 'rgba(236, 72, 153, 0.6)' : 'rgba(14, 165, 233, 0.6)',
+            }}
           ></div>
         </div>
 
-        {/* 棋盘网格 */}
-        <div className="relative z-10 grid grid-cols-7 grid-rows-7 gap-2 w-full h-full p-3">
+        {/* iOS 16 风格棋盘网格 */}
+        <div className="relative z-10 grid grid-cols-7 grid-rows-7 gap-2 w-full h-full p-4">
           {renderBoard()}
         </div>
       </div>

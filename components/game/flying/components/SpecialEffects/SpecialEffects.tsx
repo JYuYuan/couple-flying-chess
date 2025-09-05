@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Zap, AlertTriangle, Heart, Sparkles, Bomb } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertTriangle, Bomb, Sparkles, Star, Zap } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
 
 export type EffectType = 'star' | 'trap' | 'collision' | null;
@@ -19,7 +18,6 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
   duration = 2000,
   translations,
 }) => {
-  const { theme, mounted } = useTheme();
   const [particles, setParticles] = useState<number[]>([]);
 
   useEffect(() => {
@@ -43,42 +41,30 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
         return {
           icon: Star,
           color:
-            theme === 'dark'
-              ? 'from-yellow-400 via-amber-500 to-orange-500'
-              : 'from-yellow-300 via-yellow-400 to-amber-500',
+            'from-yellow-300 via-yellow-400 to-amber-500 dark:from-yellow-400 dark:via-amber-500 dark:to-orange-500',
           bgColor:
-            theme === 'dark'
-              ? 'from-yellow-900/30 via-amber-900/40 to-orange-900/30'
-              : 'from-yellow-100/80 via-amber-100/90 to-orange-100/80',
-          particleColor: theme === 'dark' ? 'bg-yellow-400' : 'bg-yellow-500',
+            'from-yellow-100/80 via-amber-100/90 to-orange-100/80 dark:from-yellow-900/30 dark:via-amber-900/40 dark:to-orange-900/30',
+          particleColor: 'bg-yellow-500 dark:bg-yellow-400',
           ...translations.game[effectType],
         };
       case 'trap':
         return {
           icon: Bomb,
           color:
-            theme === 'dark'
-              ? 'from-red-500 via-rose-600 to-pink-600'
-              : 'from-red-400 via-rose-500 to-pink-500',
+            'from-red-400 via-rose-500 to-pink-500 dark:from-red-500 dark:via-rose-600 dark:to-pink-600',
           bgColor:
-            theme === 'dark'
-              ? 'from-red-900/30 via-rose-900/40 to-pink-900/30'
-              : 'from-red-100/80 via-rose-100/90 to-pink-100/80',
-          particleColor: theme === 'dark' ? 'bg-red-400' : 'bg-red-500',
+            'from-red-100/80 via-rose-100/90 to-pink-100/80 dark:from-red-900/30 dark:via-rose-900/40 dark:to-pink-900/30',
+          particleColor: 'bg-red-500 dark:bg-red-400',
           ...translations.game[effectType],
         };
       case 'collision':
         return {
           icon: Zap,
           color:
-            theme === 'dark'
-              ? 'from-purple-500 via-indigo-600 to-blue-600'
-              : 'from-purple-400 via-indigo-500 to-blue-500',
+            'from-purple-400 via-indigo-500 to-blue-500 dark:from-purple-500 dark:via-indigo-600 dark:to-blue-600',
           bgColor:
-            theme === 'dark'
-              ? 'from-purple-900/30 via-indigo-900/40 to-blue-900/30'
-              : 'from-purple-100/80 via-indigo-100/90 to-blue-100/80',
-          particleColor: theme === 'dark' ? 'bg-purple-400' : 'bg-purple-500',
+            'from-purple-100/80 via-indigo-100/90 to-blue-100/80 dark:from-purple-900/30 dark:via-indigo-900/40 dark:to-blue-900/30',
+          particleColor: 'bg-purple-500 dark:bg-purple-400',
           ...translations.game[effectType],
         };
       default:
@@ -91,16 +77,6 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
   if (!effectType || !config) return null;
 
   const IconComponent = config.icon;
-
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <AnimatePresence>
@@ -168,9 +144,7 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
             >
               {config.title}
             </h2>
-            <p
-              className={`text-lg font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
-            >
+            <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
               {config.subtitle}
             </p>
           </motion.div>

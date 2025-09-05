@@ -24,7 +24,6 @@ import { useGamePersistence } from '@/components/game/flying/hooks/useGamePersis
 import { GameMode, PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
 import LanguageSelector from '@/components/language-selector';
 import { useAudio } from '@/hooks/use-audio';
-import { useTheme } from '@/contexts/ThemeContext';
 import SpecialEffects, {
   EffectType,
 } from '@/components/game/flying/components/SpecialEffects/SpecialEffects';
@@ -37,7 +36,6 @@ export default function CoupleLudoGame() {
     loop: false,
   });
   const persistence = useGamePersistence();
-  const { theme, mounted } = useTheme();
 
   // 游戏状态
   const gameState = useGameState();
@@ -444,7 +442,6 @@ export default function CoupleLudoGame() {
     customModes.setCurrentCustomMode(null);
     customModes.setShowCustomModeCreator(false);
     setToast(null);
-
   };
 
   const handleWinTaskSelect = useCallback(
@@ -474,16 +471,6 @@ export default function CoupleLudoGame() {
     gameState.setWinTaskOptions([]);
   }, [gameState, persistence]);
 
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
   // 渲染函数
   if (!translations) {
     return (
@@ -498,77 +485,41 @@ export default function CoupleLudoGame() {
 
   if (gameState.gameState === 'start') {
     return (
-      <div
-        className={`min-h-screen relative overflow-hidden transition-colors duration-500 ${
-          theme === 'dark'
-            ? 'bg-gradient-to-br from-gray-900 via-slate-800 via-gray-900 to-slate-900'
-            : 'bg-gradient-to-br from-violet-50 via-indigo-50 via-blue-50 to-cyan-50'
-        }`}
-      >
-        {/* 动态背景装饰 */}
+      <div className="min-h-screen relative overflow-hidden transition-colors duration-500 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
+        {/* iOS 16 风格背景装饰 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div
-            className={`absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl animate-pulse transition-colors duration-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-br from-blue-600/20 to-indigo-700/20'
-                : 'bg-gradient-to-br from-blue-200/40 to-indigo-300/40'
-            }`}
-          ></div>
-          <div
-            className={`absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000 transition-colors duration-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-br from-purple-600/20 to-pink-700/20'
-                : 'bg-gradient-to-br from-purple-200/40 to-pink-300/40'
-            }`}
-          ></div>
-          <div
-            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-2xl animate-pulse delay-500 transition-colors duration-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-br from-cyan-600/15 to-blue-700/15'
-                : 'bg-gradient-to-br from-cyan-200/30 to-blue-300/30'
-            }`}
-          ></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl animate-pulse transition-all duration-700 bg-gradient-to-br from-blue-200/20 to-indigo-300/30 dark:bg-gradient-to-br dark:from-blue-600/10 dark:to-indigo-700/15"></div>
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000 transition-all duration-700 bg-gradient-to-br from-purple-200/25 to-pink-300/35 dark:bg-gradient-to-br dark:from-purple-600/12 dark:to-pink-700/18"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-2xl animate-pulse delay-500 transition-all duration-700 bg-gradient-to-br from-cyan-200/20 to-blue-300/30 dark:bg-gradient-to-br dark:from-cyan-600/8 dark:to-blue-700/12"></div>
         </div>
 
-        {/* 头部区域 */}
+        {/* iOS 16 风格头部区域 */}
         <div className="relative z-10">
-          <div
-            className={`backdrop-blur-xl shadow-2xl transition-colors duration-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-br from-gray-900/90 via-slate-800/80 to-gray-900/70'
-                : 'bg-gradient-to-br from-white/90 via-white/80 to-white/70'
-            }`}
-          >
+          <div className="backdrop-blur-2xl shadow-2xl transition-all duration-500 border-b bg-gradient-to-br from-white/85 via-white/75 to-white/65 border-white/20 dark:bg-gradient-to-br dark:from-gray-900/85 dark:via-slate-800/75 dark:to-gray-900/65 dark:border-gray-700/20">
             <div className="w-full sm:px-6 lg:px-12 xl:px-16 py-8 sm:py-12 lg:py-16">
               <div className="text-center space-y-6">
-                {/* 主标题 */}
+                {/* iOS 16 风格主标题 */}
                 <div className="space-y-4">
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight tracking-tight">
                     {translations.game.title}
                   </h1>
-                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 font-medium leading-relaxed px-4 sm:px-8 lg:px-16 xl:px-24">
+                  <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed px-4 sm:px-8 lg:px-16 xl:px-24 text-gray-700 dark:text-gray-300">
                     {translations.game.subtitle}
                   </p>
                 </div>
 
-                {/* 装饰性分割线 */}
-                <div className="flex items-center justify-center space-x-4 py-4">
-                  <div className="w-12 sm:w-16 h-0.5 bg-gradient-to-r from-transparent to-indigo-300"></div>
-                  <div className="w-3 h-3 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full"></div>
-                  <div className="w-2 h-2 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full"></div>
-                  <div className="w-1.5 h-1.5 bg-gradient-to-br from-pink-400 to-red-500 rounded-full"></div>
-                  <div className="w-12 sm:w-16 h-0.5 bg-gradient-to-l from-transparent to-pink-300"></div>
+                {/* iOS 16 风格装饰性分割线 */}
+                <div className="flex items-center justify-center space-x-4 py-6">
+                  <div className="w-12 sm:w-20 h-0.5 bg-gradient-to-r from-transparent to-blue-300/60"></div>
+                  <div className="w-3 h-3 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full shadow-lg"></div>
+                  <div className="w-2.5 h-2.5 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-full shadow-md"></div>
+                  <div className="w-2 h-2 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full shadow-sm"></div>
+                  <div className="w-12 sm:w-20 h-0.5 bg-gradient-to-l from-transparent to-indigo-300/60"></div>
                 </div>
 
-                {/* 控制器区域 */}
+                {/* iOS 16 风格控制器区域 */}
                 <div className="flex justify-center">
-                  <div
-                    className={`backdrop-blur-sm rounded-2xl p-2 shadow-lg border transition-colors duration-500 ${
-                      theme === 'dark'
-                        ? 'bg-gray-800/60 border-gray-700/40'
-                        : 'bg-white/60 border-white/40'
-                    }`}
-                  >
+                  <div className="backdrop-blur-xl rounded-3xl p-3 shadow-xl border transition-all duration-500 hover:shadow-2xl bg-white/80 border-white/40 shadow-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/40 dark:shadow-black/20">
                     <div className="flex items-center gap-2">
                       <LanguageSelector
                         currentLanguage={language}
@@ -582,36 +533,20 @@ export default function CoupleLudoGame() {
           </div>
         </div>
 
-        {/* 主要内容区域 */}
+        {/* iOS 16 风格主要内容区域 */}
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-8 sm:py-12">
           <div
             className={`text-center mb-8 sm:mb-12 transition-opacity duration-500 ${
               customModes.showCustomModeCreator ? 'opacity-0 pointer-events-none' : 'opacity-100'
             }`}
           >
-            {/* 欢迎区域 */}
-            <div
-              className={`backdrop-blur-sm rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border mx-auto lg:mx-8 xl:mx-16 transition-colors duration-500 ${
-                theme === 'dark'
-                  ? 'bg-gray-800/50 border-gray-700/30'
-                  : 'bg-white/50 border-white/30'
-              }`}
-            >
-              <div className="space-y-4">
-                <h2
-                  className={`text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${
-                    theme === 'dark'
-                      ? 'from-gray-200 via-white to-gray-100'
-                      : 'from-gray-800 via-gray-700 to-gray-900'
-                  }`}
-                >
+            {/* iOS 16 风格欢迎区域 */}
+            <div className="backdrop-blur-xl rounded-3xl p-8 sm:p-10 lg:p-12 shadow-2xl border mx-auto lg:mx-8 xl:mx-16 transition-all duration-500 hover:shadow-3xl bg-white/70 border-white/30 shadow-gray-300/30 dark:bg-gray-900/70 dark:border-gray-700/30 dark:shadow-black/30">
+              <div className="space-y-6">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black bg-gradient-to-r bg-clip-text text-transparent from-gray-900 via-gray-800 to-gray-700 dark:from-gray-100 dark:via-white dark:to-gray-200">
                   {translations.game.selectMode}
                 </h2>
-                <p
-                  className={`text-base sm:text-lg lg:text-xl leading-relaxed px-4 sm:px-8 lg:px-12 xl:px-16 transition-colors duration-500 ${
-                    theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                  }`}
-                >
+                <p className="text-base sm:text-lg lg:text-xl leading-relaxed px-4 sm:px-8 lg:px-12 xl:px-16 transition-colors duration-500 text-gray-700 dark:text-gray-300">
                   {translations.game.modeDescription}
                 </p>
               </div>
@@ -654,7 +589,6 @@ export default function CoupleLudoGame() {
               isLoadingTasks={taskManagement.isLoadingTasks}
               translations={translations}
               onClose={() => {
-               
                 customModes.setShowCustomModeCreator(false);
                 customModes.setNewCustomMode({
                   name: '',
@@ -672,7 +606,6 @@ export default function CoupleLudoGame() {
                   );
                 });
                 if (success) {
-                 
                   setManualTask('');
                 }
               }}
@@ -762,22 +695,28 @@ export default function CoupleLudoGame() {
   }
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-500 ${
-        theme === 'dark'
-          ? `bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 ${gameState.currentPlayer === 'red' ? 'from-red-900/30 via-pink-900/20 to-rose-900/30' : 'from-blue-900/30 via-indigo-900/20 to-cyan-900/30'}`
-          : `bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 ${gameState.currentPlayer === 'red' ? 'from-red-50 via-pink-50 to-rose-100' : 'from-blue-50 via-indigo-50 to-cyan-100'}`
-      }`}
-    >
-      {/* 头部导航 */}
-      <div
-        className={`sticky top-0 z-10 backdrop-blur-md border-b shadow-lg transition-all duration-500 ${
-          theme === 'dark'
-            ? `bg-gray-900/80 border-gray-700/20 ${gameState.currentPlayer === 'red' ? 'bg-gradient-to-r from-red-900/10 to-pink-900/10' : 'bg-gradient-to-r from-blue-900/10 to-indigo-900/10'}`
-            : `bg-white/80 border-white/20 ${gameState.currentPlayer === 'red' ? 'bg-gradient-to-r from-red-500/10 to-pink-500/10' : 'bg-gradient-to-r from-blue-500/10 to-indigo-500/10'}`
-        }`}
-      >
-        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
+    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950 relative">
+      {/* 动态背景叠加层 */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: gameState.currentPlayer === 'red'
+            ? 'radial-gradient(ellipse at top right, rgba(239, 68, 68, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.05), transparent 50%)'
+            : 'radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.05), transparent 50%)'
+        }}
+      />
+      {/* iOS 16 风格头部导航 */}
+      <div className="sticky top-0 z-10 backdrop-blur-2xl border-b shadow-2xl transition-all duration-500 bg-white/70 border-white/20 shadow-gray-200/30 dark:bg-gray-900/70 dark:border-gray-700/20 dark:shadow-black/30 relative">
+        {/* 动态渐变叠加层 */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: gameState.currentPlayer === 'red'
+              ? 'linear-gradient(to right, rgba(239, 68, 68, 0.05), rgba(236, 72, 153, 0.05))'
+              : 'linear-gradient(to right, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05))'
+          }}
+        />
+        <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 relative z-10">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* 返回按钮 */}
             <button
@@ -794,19 +733,14 @@ export default function CoupleLudoGame() {
 
             {/* 标题 */}
             <div className="flex-1 text-center">
-              <h1
-                className={`text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-500 ${
-                  theme === 'dark'
-                    ? 'from-gray-100 via-white to-gray-200'
-                    : 'from-gray-800 via-gray-700 to-gray-900'
-                }`}
-              >
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r bg-clip-text text-transparent from-gray-900 via-gray-800 to-gray-700 dark:from-gray-100 dark:via-white dark:to-gray-200">
                 {translations.game.title}
               </h1>
               <p
-                className={`text-sm sm:text-base font-medium transition-colors duration-300 ${
-                  gameState.currentPlayer === 'red' ? 'text-red-600' : 'text-blue-600'
-                }`}
+                className="text-sm sm:text-base font-semibold transition-colors duration-300"
+                style={{
+                  color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                }}
               >
                 {gameState.gameMode === 'custom'
                   ? customModes.currentCustomMode?.name || '自定义模式'
@@ -825,23 +759,21 @@ export default function CoupleLudoGame() {
         </div>
       </div>
 
-      {/* 主要内容区域 */}
-      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-6 space-y-6">
-        {/* 回合指示器 */}
+      {/* iOS 16 风格主要内容区域 */}
+      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-8 space-y-8 relative z-10">
+        {/* iOS 16 风格回合指示器 */}
         <div className="text-center">
           <div
-            className={`inline-flex items-center justify-center px-6 py-3 rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 ${
-              gameState.currentPlayer === 'red'
-                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-red-300'
-                : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-blue-300'
-            }`}
+            className="inline-flex items-center justify-center px-8 py-4 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/80 border-white/40 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/40 dark:shadow-black/40"
+            style={{
+              background:
+                gameState.currentPlayer === 'red'
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(236, 72, 153, 0.9))'
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(99, 102, 241, 0.9))',
+            }}
           >
-            <div
-              className={`w-3 h-3 rounded-full mr-3 animate-pulse ${
-                gameState.currentPlayer === 'red' ? 'bg-white' : 'bg-white'
-              }`}
-            ></div>
-            <span className="text-lg sm:text-xl font-bold">
+            <div className="w-3 h-3 rounded-full mr-3 bg-white animate-pulse shadow-lg"></div>
+            <span className="text-lg sm:text-xl font-black text-white tracking-wide">
               {gameState.currentPlayer === 'red'
                 ? translations.game.redTurn
                 : translations.game.blueTurn}
@@ -849,26 +781,35 @@ export default function CoupleLudoGame() {
           </div>
         </div>
 
-        {/* 骰子区域 */}
-        <div className="flex flex-col items-center space-y-4">
-          {/* 骰子显示 */}
+        {/* iOS 16 风格骰子区域 */}
+        <div className="flex flex-col items-center space-y-6">
+          {/* iOS 16 风格骰子显示 */}
           <div
-            className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 ${
-              gameState.currentPlayer === 'red'
-                ? 'bg-gradient-to-br from-red-400 to-red-600 shadow-red-300'
-                : 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-blue-300'
-            } ${gameState.isRolling ? 'animate-spin' : ''}`}
+            className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
+            style={{
+              background:
+                gameState.currentPlayer === 'red'
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1))'
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))',
+              animation: gameState.isRolling ? 'spin 0.1s linear infinite' : 'none',
+            }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-2xl sm:text-3xl font-bold text-white">
+              <span
+                className="text-3xl sm:text-4xl font-black tracking-wider"
+                style={{
+                  color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                }}
+              >
                 {gameState.diceValue ?? '?'}
               </span>
             </div>
-            {/* 装饰性光泽效果 */}
-            <div className="absolute top-2 left-2 w-4 h-4 bg-white/30 rounded-full blur-sm"></div>
+            {/* iOS 16 风格装饰性光泽效果 */}
+            <div className="absolute top-3 left-3 w-4 h-4 bg-white/40 rounded-full blur-sm"></div>
+            <div className="absolute bottom-3 right-3 w-2 h-2 bg-white/20 rounded-full blur-sm"></div>
           </div>
 
-          {/* 掷骰子按钮 */}
+          {/* iOS 16 风格掷骰子按钮 */}
           <button
             onClick={rollDice}
             disabled={
@@ -877,11 +818,17 @@ export default function CoupleLudoGame() {
               gameState.gameState === 'task' ||
               taskManagement.isLoadingTasks
             }
-            className={`px-8 py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg hover:shadow-xl ${
-              gameState.currentPlayer === 'red'
-                ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-red-300'
-                : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white shadow-blue-300'
-            }`}
+            className="px-10 py-5 rounded-3xl font-black text-lg tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white"
+            style={{
+              background:
+                gameState.currentPlayer === 'red'
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(236, 72, 153, 0.95))'
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(99, 102, 241, 0.95))',
+              borderColor:
+                gameState.currentPlayer === 'red'
+                  ? 'rgba(239, 68, 68, 0.3)'
+                  : 'rgba(59, 130, 246, 0.3)',
+            }}
           >
             <span className="flex items-center justify-center gap-2">
               {gameState.isRolling && (
@@ -898,12 +845,8 @@ export default function CoupleLudoGame() {
           </button>
         </div>
 
-        {/* 游戏棋盘 */}
-        <div
-          className={`backdrop-blur-sm rounded-3xl p-4 sm:p-6 shadow-xl border transition-colors duration-500 max-w-2xl mx-auto ${
-            theme === 'dark' ? 'bg-gray-800/50 border-gray-700/20' : 'bg-white/50 border-white/20'
-          }`}
-        >
+        {/* iOS 16 风格游戏棋盘 */}
+        <div className="backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border transition-all duration-500 max-w-2xl mx-auto hover:shadow-3xl bg-white/80 border-white/30 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/30 dark:shadow-black/40">
           <GameBoard
             boardPath={boardPath}
             translations={translations}

@@ -1,4 +1,21 @@
-import { Users, Heart, Sparkles, Flame, Lock, Shuffle, Plus, HeartPulse, Calendar, UtensilsCrossed, Dumbbell, Palette, Coffee, Gamepad2, ShieldX, Crown } from 'lucide-react';
+import {
+  Calendar,
+  Coffee,
+  Crown,
+  Dumbbell,
+  Flame,
+  Gamepad2,
+  Heart,
+  HeartPulse,
+  Lock,
+  Palette,
+  Plus,
+  ShieldX,
+  Shuffle,
+  Sparkles,
+  Users,
+  UtensilsCrossed,
+} from 'lucide-react';
 import type { GameMode } from '@/components/game/flying/types/game';
 
 export const gameModeIcons = {

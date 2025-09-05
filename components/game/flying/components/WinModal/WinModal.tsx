@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { Trophy, Sparkles, ArrowLeft, Crown, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Crown, Sparkles, Trophy, Zap } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
-import { useTheme } from '@/contexts/ThemeContext';
 import type { PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
 import { Translations } from '@/lib/i18n';
 
@@ -21,8 +20,6 @@ export function WinModal({
   onWinTaskSelect,
   onRestartFromWin,
 }: WinModalProps) {
-  const { theme, mounted } = useTheme();
-
   // 禁用外层滚动
   useEffect(() => {
     // 保存当前的 overflow 样式
@@ -68,16 +65,6 @@ export function WinModal({
     />
   ));
 
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <Portal>
       <AnimatePresence>
@@ -85,20 +72,23 @@ export function WinModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`fixed inset-0 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 transition-colors duration-500 ${
-            theme === 'dark' ? 'bg-black/80' : 'bg-black/60'
-          }`}
+          className="
+        fixed inset-0 backdrop-blur-sm z-[9999] flex items-center justify-center p-4
+        transition-colors duration-500
+        bg-black/60 dark:bg-black/80
+      "
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-            className={`rounded-3xl overflow-x-hidden shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border transition-colors duration-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 border-gray-700/20'
-                : 'bg-gradient-to-br from-white via-slate-50 to-indigo-50 border-white/20'
-            }`}
+            className="
+          rounded-3xl overflow-x-hidden shadow-2xl w-full max-w-2xl max-h-[90vh]
+          overflow-y-auto relative border transition-colors duration-500
+          bg-gradient-to-br from-white via-slate-50 to-indigo-50 border-white/20
+          dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 dark:border-gray-700/20
+        "
           >
             {/* 彩带动画背景 */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -158,9 +148,7 @@ export function WinModal({
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className={`text-3xl sm:text-4xl font-black mb-4 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-800'
-                }`}
+                className="text-3xl sm:text-4xl font-black mb-4 text-gray-800 dark:text-white"
               >
                 🎉 {winner === 'red' ? translations.game.redWin : translations.game.blueWin} 🎉
               </motion.h1>
@@ -169,9 +157,7 @@ export function WinModal({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className={`text-lg mb-8 transition-colors duration-500 ${
-                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                }`}
+                className="text-lg mb-8 transition-colors duration-500 text-gray-600 dark:text-gray-300"
               >
                 {translations.game.selectWinTask || '选择一个胜利任务来庆祝吧！'}
               </motion.p>
@@ -183,22 +169,18 @@ export function WinModal({
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9 }}
-                className={`p-6 rounded-2xl border transition-colors duration-500 ${
-                  theme === 'dark'
-                    ? 'bg-gray-800/30 border-gray-700/30'
-                    : 'bg-white/60 border-gray-200/30'
-                }`}
+                className="
+              p-6 rounded-2xl border transition-colors duration-500
+              bg-white/60 border-gray-200/30
+              dark:bg-gray-800/30 dark:border-gray-700/30
+            "
               >
                 <div className="flex items-center justify-center space-x-2 mb-6">
                   <Trophy
                     size={24}
                     className={winner === 'red' ? 'text-red-500' : 'text-blue-500'}
                   />
-                  <h3
-                    className={`text-xl font-bold transition-colors duration-500 ${
-                      theme === 'dark' ? 'text-white' : 'text-gray-800'
-                    }`}
-                  >
+                  <h3 className="text-xl font-bold transition-colors duration-500 text-gray-800 dark:text-white">
                     {translations.game.winTasksTitle || '胜利任务选择'}
                   </h3>
                   <Trophy
@@ -217,17 +199,15 @@ export function WinModal({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => onWinTaskSelect(task)}
-                      className={`relative z-10 p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
-                        winner === 'red'
-                          ? 'border-red-200 bg-gradient-to-br from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 hover:border-red-300'
-                          : 'border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 hover:border-blue-300'
-                      } shadow-lg hover:shadow-xl ${
-                        theme === 'dark'
-                          ? winner === 'red'
-                            ? 'dark:border-red-700/50 dark:from-red-900/20 dark:to-pink-900/20 dark:hover:from-red-800/30 dark:hover:to-pink-800/30'
-                            : 'dark:border-blue-700/50 dark:from-blue-900/20 dark:to-cyan-900/20 dark:hover:from-blue-800/30 dark:hover:to-cyan-800/30'
-                          : ''
-                      }`}
+                      className={`
+                    relative z-10 p-4 rounded-xl border-2 cursor-pointer
+                    transition-all duration-300 shadow-lg hover:shadow-xl
+                    ${
+                      winner === 'red'
+                        ? 'border-red-200 bg-gradient-to-br from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 hover:border-red-300 dark:border-red-700/50 dark:from-red-900/20 dark:to-pink-900/20 dark:hover:from-red-800/30 dark:hover:to-pink-800/30'
+                        : 'border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 hover:border-blue-300 dark:border-blue-700/50 dark:from-blue-900/20 dark:to-cyan-900/20 dark:hover:from-blue-800/30 dark:hover:to-cyan-800/30'
+                    }
+                  `}
                     >
                       {/* 任务编号 */}
                       <div
@@ -250,11 +230,7 @@ export function WinModal({
                             className={winner === 'red' ? 'text-red-500' : 'text-blue-500'}
                           />
                         </motion.div>
-                        <p
-                          className={`text-sm leading-relaxed transition-colors duration-500 ${
-                            theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                          }`}
-                        >
+                        <p className="text-sm leading-relaxed transition-colors duration-500 text-gray-700 dark:text-gray-200">
                           {task.description}
                         </p>
                       </div>
@@ -265,11 +241,7 @@ export function WinModal({
             </motion.div>
 
             {/* 底部按钮 */}
-            <div
-              className={`relative z-10 p-8 border-t transition-colors duration-500 ${
-                theme === 'dark' ? 'border-gray-700/30' : 'border-gray-200/30'
-              }`}
-            >
+            <div className="relative z-10 p-8 border-t transition-colors duration-500 border-gray-200/30 dark:border-gray-700/30">
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -277,11 +249,12 @@ export function WinModal({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onRestartFromWin}
-                className={`relative z-10 w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
-                  theme === 'dark'
-                    ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white'
-                    : 'bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 text-gray-700'
-                }`}
+                className="
+              relative z-10 w-full py-4 px-6 rounded-xl font-bold text-lg
+              transition-all duration-200 shadow-lg hover:shadow-xl
+              bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 hover:from-gray-300 hover:to-gray-400
+              dark:from-gray-700 dark:to-gray-800 dark:text-white dark:hover:from-gray-600 dark:hover:to-gray-700
+            "
               >
                 <div className="flex items-center justify-center space-x-2">
                   <ArrowLeft size={20} />

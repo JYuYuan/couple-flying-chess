@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Clock, Play, RotateCcw, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
+import { Play, RotateCcw, Zap } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface TimerProps {
   initialTimeLeft: number; // in milliseconds
@@ -22,7 +21,6 @@ const Timer: React.FC<TimerProps> = ({
   size = 'medium',
   variant = 'default',
 }) => {
-  const { theme, mounted } = useTheme();
   const startRef = useRef<HTMLAudioElement | null>(null);
   const stopRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -81,10 +79,8 @@ const Timer: React.FC<TimerProps> = ({
   const getVariantStyles = () => {
     const baseClasses = {
       background:
-        theme === 'dark'
-          ? 'bg-gradient-to-r from-gray-800/80 to-gray-700/80 backdrop-blur-sm border border-gray-600/40'
-          : 'bg-gradient-to-r from-white/80 to-gray-50/80 backdrop-blur-sm border border-gray-200/40',
-      text: theme === 'dark' ? 'text-gray-200' : 'text-gray-700',
+        'bg-gradient-to-r from-white/80 to-gray-50/80 backdrop-blur-sm border border-gray-200/40 dark:bg-gradient-to-r dark:from-gray-800/80 dark:to-gray-700/80 dark:border-gray-600/40',
+      text: 'text-gray-700 dark:text-gray-200',
       shadow: 'shadow-lg hover:shadow-xl',
     };
 
@@ -93,50 +89,32 @@ const Timer: React.FC<TimerProps> = ({
         return {
           ...baseClasses,
           accent: isRunning
-            ? theme === 'dark'
-              ? 'from-orange-600/20 to-red-600/20 border-orange-500/30'
-              : 'from-orange-100 to-red-100 border-orange-300'
-            : theme === 'dark'
-              ? 'from-blue-600/20 to-indigo-600/20 border-blue-500/30'
-              : 'from-blue-100 to-indigo-100 border-blue-300',
+            ? 'from-orange-100 to-red-100 border-orange-300 dark:from-orange-600/20 dark:to-red-600/20 dark:border-orange-500/30'
+            : 'from-blue-100 to-indigo-100 border-blue-300 dark:from-blue-600/20 dark:to-indigo-600/20 dark:border-blue-500/30',
           textColor: isCompleted
             ? 'text-red-500'
             : isRunning
-              ? theme === 'dark'
-                ? 'text-orange-400'
-                : 'text-orange-600'
-              : theme === 'dark'
-                ? 'text-blue-400'
-                : 'text-blue-600',
+              ? 'text-orange-600 dark:text-orange-400'
+              : 'text-blue-600 dark:text-blue-400',
         };
       case 'win':
         return {
           ...baseClasses,
           accent:
-            theme === 'dark'
-              ? 'from-purple-600/20 to-pink-600/20 border-purple-500/30'
-              : 'from-purple-100 to-pink-100 border-purple-300',
-          textColor: theme === 'dark' ? 'text-purple-400' : 'text-purple-600',
+            'from-purple-100 to-pink-100 border-purple-300 dark:from-purple-600/20 dark:to-pink-600/20 dark:border-purple-500/30',
+          textColor: 'text-purple-600 dark:text-purple-400',
         };
       default:
         return {
           ...baseClasses,
           accent: isRunning
-            ? theme === 'dark'
-              ? 'from-green-600/20 to-emerald-600/20 border-green-500/30'
-              : 'from-green-100 to-emerald-100 border-green-300'
-            : theme === 'dark'
-              ? 'from-gray-600/20 to-slate-600/20 border-gray-500/30'
-              : 'from-gray-100 to-slate-100 border-gray-300',
+            ? 'from-green-100 to-emerald-100 border-green-300 dark:from-green-600/20 dark:to-emerald-600/20 dark:border-green-500/30'
+            : 'from-gray-100 to-slate-100 border-gray-300 dark:from-gray-600/20 dark:to-slate-600/20 dark:border-gray-500/30',
           textColor: isCompleted
             ? 'text-red-500'
             : isRunning
-              ? theme === 'dark'
-                ? 'text-green-400'
-                : 'text-green-600'
-              : theme === 'dark'
-                ? 'text-gray-400'
-                : 'text-gray-600',
+              ? 'text-green-600 dark:text-green-400'
+              : 'text-gray-600 dark:text-gray-400',
         };
     }
   };
@@ -259,16 +237,6 @@ const Timer: React.FC<TimerProps> = ({
       startTimer();
     }
   };
-
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <motion.div

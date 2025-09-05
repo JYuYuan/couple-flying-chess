@@ -1,5 +1,12 @@
 import { useCallback, useEffect } from 'react';
-import type { GameState, GameMode, PlayerColor, CurrentTask, TaskType, WinTaskOption } from '../types/game';
+import type {
+  CurrentTask,
+  GameMode,
+  GameState,
+  PlayerColor,
+  TaskType,
+  WinTaskOption,
+} from '../types/game';
 
 export interface GameSaveData {
   gameState: GameState;
@@ -25,97 +32,109 @@ export function useGamePersistence() {
     return `couple-flying-chess-save-${gameMode}`;
   }, []);
 
-  const saveGame = useCallback((
-    gameMode: GameMode,
-    gameState: GameState,
-    currentPlayer: PlayerColor,
-    redPosition: number,
-    bluePosition: number,
-    diceValue: number | null,
-    currentTask: CurrentTask | null,
-    taskType: TaskType | null,
-    winner: PlayerColor | null,
-    winTaskOptions: WinTaskOption[],
-    selectedWinTask: WinTaskOption | null,
-    customModeId?: string
-  ) => {
-    if (typeof window === 'undefined') return;
-    
-    // 只保存进行中的游戏状态
-    if (gameState === 'start') return;
+  const saveGame = useCallback(
+    (
+      gameMode: GameMode,
+      gameState: GameState,
+      currentPlayer: PlayerColor,
+      redPosition: number,
+      bluePosition: number,
+      diceValue: number | null,
+      currentTask: CurrentTask | null,
+      taskType: TaskType | null,
+      winner: PlayerColor | null,
+      winTaskOptions: WinTaskOption[],
+      selectedWinTask: WinTaskOption | null,
+      customModeId?: string,
+    ) => {
+      if (typeof window === 'undefined') return;
 
-    const saveData: GameSaveData = {
-      gameState,
-      gameMode,
-      currentPlayer,
-      redPosition,
-      bluePosition,
-      diceValue,
-      currentTask,
-      taskType,
-      winner,
-      winTaskOptions,
-      selectedWinTask,
-      timestamp: Date.now(),
-      customModeId
-    };
+      // 只保存进行中的游戏状态
+      if (gameState === 'start') return;
 
-    const key = getSaveKey(gameMode, customModeId);
-    try {
-      localStorage.setItem(key, JSON.stringify(saveData));
-    } catch (error) {
-      console.error('Failed to save game:', error);
-    }
-  }, [getSaveKey]);
+      const saveData: GameSaveData = {
+        gameState,
+        gameMode,
+        currentPlayer,
+        redPosition,
+        bluePosition,
+        diceValue,
+        currentTask,
+        taskType,
+        winner,
+        winTaskOptions,
+        selectedWinTask,
+        timestamp: Date.now(),
+        customModeId,
+      };
 
-  const loadGame = useCallback((gameMode: GameMode, customModeId?: string): GameSaveData | null => {
-    if (typeof window === 'undefined') return null;
+      const key = getSaveKey(gameMode, customModeId);
+      try {
+        localStorage.setItem(key, JSON.stringify(saveData));
+      } catch (error) {
+        console.error('Failed to save game:', error);
+      }
+    },
+    [getSaveKey],
+  );
 
-    const key = getSaveKey(gameMode, customModeId);
-    try {
-      const savedData = localStorage.getItem(key);
-      if (!savedData) return null;
+  const loadGame = useCallback(
+    (gameMode: GameMode, customModeId?: string): GameSaveData | null => {
+      if (typeof window === 'undefined') return null;
 
-      const gameData: GameSaveData = JSON.parse(savedData);
-      
-      // 检查存档是否过期（24小时）
-      const now = Date.now();
-      const dayInMs = 24 * 60 * 60 * 1000;
-      if (now - gameData.timestamp > dayInMs) {
-        localStorage.removeItem(key);
+      const key = getSaveKey(gameMode, customModeId);
+      try {
+        const savedData = localStorage.getItem(key);
+        if (!savedData) return null;
+
+        const gameData: GameSaveData = JSON.parse(savedData);
+
+        // 检查存档是否过期（24小时）
+        const now = Date.now();
+        const dayInMs = 24 * 60 * 60 * 1000;
+        if (now - gameData.timestamp > dayInMs) {
+          localStorage.removeItem(key);
+          return null;
+        }
+
+        return gameData;
+      } catch (error) {
+        console.error('Failed to load game:', error);
         return null;
       }
+    },
+    [getSaveKey],
+  );
 
-      return gameData;
-    } catch (error) {
-      console.error('Failed to load game:', error);
-      return null;
-    }
-  }, [getSaveKey]);
+  const clearGame = useCallback(
+    (gameMode: GameMode, customModeId?: string) => {
+      if (typeof window === 'undefined') return;
 
-  const clearGame = useCallback((gameMode: GameMode, customModeId?: string) => {
-    if (typeof window === 'undefined') return;
+      const key = getSaveKey(gameMode, customModeId);
+      try {
+        localStorage.removeItem(key);
+      } catch (error) {
+        console.error('Failed to clear game:', error);
+      }
+    },
+    [getSaveKey],
+  );
 
-    const key = getSaveKey(gameMode, customModeId);
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.error('Failed to clear game:', error);
-    }
-  }, [getSaveKey]);
+  const hasGameSave = useCallback(
+    (gameMode: GameMode, customModeId?: string): boolean => {
+      if (typeof window === 'undefined') return false;
 
-  const hasGameSave = useCallback((gameMode: GameMode, customModeId?: string): boolean => {
-    if (typeof window === 'undefined') return false;
+      const saveData = loadGame(gameMode, customModeId);
+      return saveData !== null;
+    },
+    [loadGame],
+  );
 
-    const saveData = loadGame(gameMode, customModeId);
-    return saveData !== null;
-  }, [loadGame]);
-
-  const getAllGameSaves = useCallback((): Array<{key: string, data: GameSaveData}> => {
+  const getAllGameSaves = useCallback((): Array<{ key: string; data: GameSaveData }> => {
     if (typeof window === 'undefined') return [];
 
-    const saves: Array<{key: string, data: GameSaveData}> = [];
-    
+    const saves: Array<{ key: string; data: GameSaveData }> = [];
+
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -159,10 +178,10 @@ export function useGamePersistence() {
   // 定期清理过期存档
   useEffect(() => {
     cleanupOldSaves();
-    
+
     // 每小时清理一次
     const interval = setInterval(cleanupOldSaves, 60 * 60 * 1000);
-    
+
     return () => clearInterval(interval);
   }, [cleanupOldSaves]);
 
@@ -172,6 +191,6 @@ export function useGamePersistence() {
     clearGame,
     hasGameSave,
     getAllGameSaves,
-    cleanupOldSaves
+    cleanupOldSaves,
   };
 }

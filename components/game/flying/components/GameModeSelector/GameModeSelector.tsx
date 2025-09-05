@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Edit, Plus, X, Sparkles, ChevronDown } from 'lucide-react';
-import type { GameMode, CustomMode } from '@/components/game/flying/types/game';
-import { gameModeIcons, gameModeEmojis } from '@/components/game/flying/constants/game-config';
+import { ChevronDown, Edit, Plus, Sparkles, X } from 'lucide-react';
+import type { CustomMode, GameMode } from '@/components/game/flying/types/game';
+import { gameModeEmojis, gameModeIcons } from '@/components/game/flying/constants/game-config';
 import { Translations } from '@/lib/i18n';
-import { useTheme } from '@/contexts/ThemeContext';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface GameModeSelectorProps {
   translations: Translations;
@@ -302,26 +302,13 @@ export function GameModeSelector({
   onCreateCustomMode,
   onDeleteCustomMode,
 }: GameModeSelectorProps) {
-  const { theme, mounted } = useTheme();
-  const isDarkMode = theme === 'dark';
-
+  const isDarkMode = document.documentElement.classList.contains('dark');
   // 展开/折叠状态
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
     basic: true,
     lifestyle: false,
     adult: false,
   });
-
-  // 防止hydration不匹配，在客户端挂载之前显示加载状态
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
 
   // 游戏模式分类
 
@@ -340,292 +327,302 @@ export function GameModeSelector({
 
   return (
     <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-      {/* 分类模式展示 */}
-      {Object.entries(modeCategories).map(([categoryKey, category]) => (
-        <div key={categoryKey} className="mb-8">
-          {/* 分类标题和折叠按钮 */}
-          <div
-            className={`flex items-center justify-between p-4 rounded-xl mb-4 cursor-pointer transition-colors duration-300 ${
-              isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-            onClick={() => toggleCategory(categoryKey)}
+      <AnimatePresence initial={false}>
+        {/* 分类模式展示 */}
+        {Object.entries(modeCategories).map(([categoryKey, category], categoryIndex) => (
+          <motion.div 
+            key={categoryKey} 
+            className="mb-8"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ 
+              duration: 0.5, 
+              ease: "easeOut", 
+              delay: categoryIndex * 0.1 
+            }}
           >
-            <div className="flex items-center space-x-3">
-              <div className="text-2xl">
-                {categoryKey === 'basic' && '🎯'}
-                {categoryKey === 'lifestyle' && '🌈'}
-                {categoryKey === 'adult' && '❤️‍🔥'}
-              </div>
-              <h3
-                className={`text-lg font-semibold ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-800'
-                }`}
-              >
-                {translations.modeCategories[categoryKey as keyof Translations['modeCategories']]}
-              </h3>
-              <span
-                className={`text-xs px-2.5 py-1 rounded-full shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md ${
-                  isDarkMode 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/20' 
-                    : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-blue-500/30'
-                }`}
-              >
-                {category.length}
-              </span>
-            </div>
-            <div
-              className={`transition-transform duration-300 ${
-                expandedCategories[categoryKey] ? 'rotate-180' : ''
-              }`}
+            {/* 分类标题和折叠按钮 */}
+            <motion.div
+              className="flex items-center justify-between p-4 rounded-xl mb-4 cursor-pointer transition-colors duration-300 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+              onClick={() => toggleCategory(categoryKey)}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
             >
-              <ChevronDown size={20} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-            </div>
-          </div>
+              <div className="flex items-center space-x-3">
+                <div className="text-2xl">
+                  {categoryKey === 'basic' && '🎯'}
+                  {categoryKey === 'lifestyle' && '🌈'}
+                  {categoryKey === 'adult' && '❤️‍🔥'}
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                  {translations.modeCategories[categoryKey as keyof Translations['modeCategories']]}
+                </h3>
+                <span className="text-xs px-2.5 py-1 rounded-full shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-blue-500/30 dark:from-blue-600 dark:to-purple-600 dark:shadow-blue-500/20">
+                  {category.length}
+                </span>
+              </div>
+              <motion.div
+                className={`transition-transform duration-500 ease-out ${
+                  expandedCategories[categoryKey] ? 'rotate-180' : ''
+                }`}
+                animate={{ 
+                  rotate: expandedCategories[categoryKey] ? 180 : 0 
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <ChevronDown size={20} className="text-gray-600 dark:text-gray-400" />
+              </motion.div>
+            </motion.div>
 
-          {/* 可折叠的游戏模式网格 */}
-          <div
-            className={`overflow-hidden transition-all duration-300 ${
-              expandedCategories[categoryKey] ? 'max-h-none opacity-100' : 'max-h-0 opacity-0'
-            }`}
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6">
-              {category.map((modeKey) => {
-                const mode = translations.modes[modeKey];
-                if (!mode) return null;
-
-                const IconComponent = gameModeIcons[modeKey as GameMode];
-                const isLoading = isLoadingTasks && gameMode === modeKey;
-                const styles = getCardStyles(modeKey);
-
-                return (
-                  <div
-                    key={modeKey}
-                    onClick={() => !isLoadingTasks && onStartGame(modeKey as GameMode)}
-                    className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${isDarkMode ? 'border-gray-700/50' : 'border-white/50'} ${styles.bg} ${isLoading ? 'pointer-events-none' : ''}`}
+            {/* 可折叠的游戏模式网格 */}
+            <AnimatePresence>
+              {expandedCategories[categoryKey] && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                  className="overflow-hidden"
+                >
+                  <motion.div
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    exit={{ y: -20 }}
+                    transition={{ duration: 0.3, ease: "easeOut", delay: 0.1 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
                   >
-                    {/* 装饰性背景 - 更柔和的效果 */}
-                    <div className="absolute inset-0 opacity-5">
-                      <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-current to-transparent rounded-full blur-2xl"></div>
-                      <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-current to-transparent rounded-full blur-xl"></div>
+                {category.map((modeKey, index) => {
+                  const mode = translations.modes[modeKey];
+                  if (!mode) return null;
+
+                  const IconComponent = gameModeIcons[modeKey as GameMode];
+                  const isLoading = isLoadingTasks && gameMode === modeKey;
+                  const styles = getCardStyles(modeKey);
+
+                  return (
+                    <motion.div
+                      key={modeKey}
+                      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                      transition={{ 
+                        duration: 0.3, 
+                        ease: "easeOut", 
+                        delay: 0.15 + index * 0.05 
+                      }}
+                      onClick={() => !isLoadingTasks && onStartGame(modeKey as GameMode)}
+                      className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${styles.bg} ${
+                        isLoading ? 'pointer-events-none' : ''
+                      } border-white/50 dark:border-gray-700/50`}
+                    >
+                      {/* 装饰性背景 - 更柔和的效果 */}
+                      <div className="absolute inset-0 opacity-5">
+                        <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-current to-transparent rounded-full blur-2xl"></div>
+                        <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-current to-transparent rounded-full blur-xl"></div>
+                      </div>
+
+                      <div className="relative p-6 h-full flex flex-col">
+                        {/* 图标和emoji区域 */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div
+                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${styles.iconBg}`}
+                          >
+                            <IconComponent
+                              size={24}
+                              className={`transition-all duration-300 ${styles.iconColor}`}
+                            />
+                          </div>
+                          <div className={`text-2xl animate-bounce`}>
+                            {gameModeEmojis[modeKey as GameMode]}
+                          </div>
+                        </div>
+
+                        {/* 标题和描述 */}
+                        <div className="flex-1">
+                          <h3
+                            className={`text-lg font-bold mb-2 transition-colors duration-300 ${styles.textColor}`}
+                          >
+                            {mode.name}
+                          </h3>
+                          <p className={`text-sm leading-relaxed ${styles.descColor}`}>
+                            {mode.description}
+                          </p>
+                        </div>
+
+                        {/* 加载指示器 */}
+                        {isLoading && (
+                          <div className="mt-4 flex items-center justify-center space-x-2">
+                            <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                            <span className="text-sm font-medium">
+                              {translations.common.loading}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* 选中指示器 */}
+                        {isLoading && (
+                          <div className="absolute inset-0 bg-current/10 backdrop-blur-sm rounded-2xl"></div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+
+        {/* 自定义模式区域 */}
+        {(customModes.length > 0 || true) && (
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              duration: 0.5, 
+              ease: "easeOut", 
+              delay: Object.keys(modeCategories).length * 0.1 + 0.2
+            }}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600"></div>
+              <div className="flex items-center space-x-2 px-4 py-2 rounded-full shadow-lg bg-white dark:bg-gray-800">
+                <Sparkles size={16} className="text-purple-500" />
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                  自定义模式
+                </span>
+                <Sparkles size={16} className="text-purple-500" />
+              </div>
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-600"></div>
+            </div>
+
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              {/* 已创建的自定义模式卡片 */}
+              {customModes.map((mode, index) => (
+                <motion.div
+                  key={mode.id}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    ease: "easeOut", 
+                    delay: index * 0.05 
+                  }}
+                  whileHover={{ 
+                    scale: 1.03,
+                    y: -8,
+                    transition: { duration: 0.2 }
+                  }}
+                  onClick={() => onStartCustomGame(mode)}
+                  className="group relative overflow-hidden rounded-2xl border cursor-pointer shadow-lg hover:shadow-2xl bg-gradient-to-br from-indigo-50 via-white to-purple-50 hover:from-indigo-100 hover:to-purple-100 border-indigo-100/50 dark:from-indigo-900/60 dark:via-gray-800 dark:to-purple-900/60 dark:hover:from-indigo-800/70 dark:hover:to-purple-800/70 dark:border-indigo-700/50"
+                >
+                  {/* 装饰性背景 */}
+                  <div className="absolute inset-0 opacity-5">
+                    <div className="absolute -top-2 -right-2 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-lg"></div>
+                    <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full blur-md"></div>
+                  </div>
+
+                  <div className="relative p-6 h-full flex flex-col">
+                    {/* 图标和删除按钮 */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br from-indigo-100 to-purple-200 group-hover:from-indigo-200 group-hover:to-purple-300 dark:from-indigo-800/50 dark:to-purple-700/50 dark:group-hover:from-indigo-700/60 dark:group-hover:to-purple-600/60">
+                        <Edit
+                          size={24}
+                          className="transition-colors duration-300 text-indigo-600 dark:text-indigo-400"
+                        />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="text-2xl">🎨</div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteCustomMode(mode.id);
+                          }}
+                          className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 text-red-500 hover:text-red-600 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
+                          title={translations.customMode.delete}
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="relative p-6 h-full flex flex-col">
-                      {/* 图标和emoji区域 */}
-                      <div className="flex items-center justify-between mb-4">
-                        <div
-                          className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${styles.iconBg}`}
-                        >
-                          <IconComponent
-                            size={24}
-                            className={`transition-all duration-300 ${styles.iconColor}`}
-                          />
-                        </div>
-                        <div className="text-2xl animate-bounce">
-                          {gameModeEmojis[modeKey as GameMode]}
-                        </div>
-                      </div>
+                    {/* 标题和描述 */}
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold mb-2 transition-colors duration-300 text-gray-800 group-hover:text-indigo-700 dark:text-gray-100 dark:group-hover:text-indigo-300">
+                        {mode.name}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300">
+                        {mode.description}
+                      </p>
+                    </div>
 
-                      {/* 标题和描述 */}
-                      <div className="flex-1">
-                        <h3
-                          className={`text-lg font-bold mb-2 transition-colors duration-300 ${styles.textColor}`}
-                        >
-                          {mode.name}
-                        </h3>
-                        <p className={`text-sm leading-relaxed ${styles.descColor}`}>
-                          {mode.description}
-                        </p>
-                      </div>
-
-                      {/* 加载指示器 */}
-                      {isLoading && (
-                        <div className="mt-4 flex items-center justify-center space-x-2">
-                          <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                          <span className="text-sm font-medium">{translations.common.loading}</span>
-                        </div>
-                      )}
-
-                      {/* 选中指示器 */}
-                      {isLoading && (
-                        <div className="absolute inset-0 bg-current/10 backdrop-blur-sm rounded-2xl"></div>
-                      )}
+                    {/* 任务数量标识 */}
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-xs font-medium text-indigo-500 dark:text-indigo-400">
+                        {mode.tasks.length}
+                      </span>
+                      <div className="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full"></div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ))}
+                </motion.div>
+              ))}
 
-      {/* 自定义模式区域 */}
-      {(customModes.length > 0 || true) && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-center space-x-2">
-            <div
-              className={`flex-1 h-px bg-gradient-to-r from-transparent ${isDarkMode ? 'via-gray-600' : 'via-gray-300'} to-transparent`}
-            ></div>
-            <div
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
-            >
-              <Sparkles size={16} className="text-purple-500" />
-              <span
-                className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
-              >
-                自定义模式
-              </span>
-              <Sparkles size={16} className="text-purple-500" />
-            </div>
-            <div
-              className={`flex-1 h-px bg-gradient-to-r from-transparent ${isDarkMode ? 'via-gray-600' : 'via-gray-300'} to-transparent`}
-            ></div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6">
-            {/* 已创建的自定义模式卡片 */}
-            {customModes.map((mode) => (
-              <div
-                key={mode.id}
-                onClick={() => onStartCustomGame(mode)}
-                className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl ${
-                  isDarkMode
-                    ? 'bg-gradient-to-br from-indigo-900/60 via-gray-800 to-purple-900/60 hover:from-indigo-800/70 hover:to-purple-800/70 border-indigo-700/50'
-                    : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50 hover:from-indigo-100 hover:to-purple-100 border-indigo-100/50'
-                }`}
+              {/* 创建自定义模式卡片 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.3, 
+                  ease: "easeOut", 
+                  delay: customModes.length * 0.05 + 0.1 
+                }}
+                whileHover={{ 
+                  scale: 1.03,
+                  y: -8,
+                  transition: { duration: 0.2 }
+                }}
+                onClick={onCreateCustomMode}
+                className="group relative overflow-hidden rounded-2xl border-2 border-dashed cursor-pointer shadow-lg hover:shadow-2xl bg-gradient-to-br from-slate-50 via-white to-gray-50 hover:from-slate-100 hover:to-gray-100 border-slate-300 hover:border-slate-400 dark:from-slate-800 dark:via-gray-800 dark:to-gray-800 dark:hover:from-slate-700 dark:hover:to-gray-700 dark:border-slate-600 dark:hover:border-slate-500"
               >
                 {/* 装饰性背景 */}
                 <div className="absolute inset-0 opacity-5">
-                  <div className="absolute -top-2 -right-2 w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-lg"></div>
-                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full blur-md"></div>
+                  <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-gradient-to-br from-slate-400 to-gray-400 rounded-full blur-xl transform -translate-x-1/2 -translate-y-1/2"></div>
                 </div>
 
-                <div className="relative p-6 h-full flex flex-col">
-                  {/* 图标和删除按钮 */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div
-                      className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                        isDarkMode
-                          ? 'bg-gradient-to-br from-indigo-800/50 to-purple-700/50 group-hover:from-indigo-700/60 group-hover:to-purple-600/60'
-                          : 'bg-gradient-to-br from-indigo-100 to-purple-200 group-hover:from-indigo-200 group-hover:to-purple-300'
-                      }`}
-                    >
-                      <Edit
-                        size={24}
-                        className={`transition-colors duration-300 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
-                      />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="text-2xl">🎨</div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteCustomMode(mode.id);
-                        }}
-                        className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 text-red-500 hover:text-red-600 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
-                        title={translations.customMode.delete}
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
+                <div className="relative p-6 h-full flex flex-col items-center justify-center text-center">
+                  {/* 图标区域 */}
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 bg-gradient-to-br from-slate-100 to-gray-200 group-hover:from-slate-200 group-hover:to-gray-300 dark:from-slate-700 dark:to-gray-700 dark:group-hover:from-slate-600 dark:group-hover:to-gray-600">
+                    <Plus
+                      size={28}
+                      className="transition-all duration-300 text-slate-600 group-hover:text-gray-600 dark:text-slate-400 dark:group-hover:text-gray-400"
+                    />
+                  </div>
+
+                  {/* emoji */}
+                  <div className={`text-3xl mb-3 group-hover:animate-bounce`}>
+                    {gameModeEmojis.custom}
                   </div>
 
                   {/* 标题和描述 */}
-                  <div className="flex-1">
-                    <h3
-                      className={`text-lg font-bold mb-2 transition-colors duration-300 ${
-                        isDarkMode
-                          ? 'text-gray-100 group-hover:text-indigo-300'
-                          : 'text-gray-800 group-hover:text-indigo-700'
-                      }`}
-                    >
-                      {mode.name}
-                    </h3>
-                    <p
-                      className={`text-sm leading-relaxed ${
-                        isDarkMode
-                          ? 'text-gray-400 group-hover:text-gray-300'
-                          : 'text-gray-600 group-hover:text-gray-700'
-                      }`}
-                    >
-                      {mode.description}
-                    </p>
-                  </div>
-
-                  {/* 任务数量标识 */}
-                  <div className="mt-4 flex items-center justify-between">
-                    <span
-                      className={`text-xs font-medium ${isDarkMode ? 'text-indigo-400' : 'text-indigo-500'}`}
-                    >
-                      {mode.tasks.length}
-                    </span>
-                    <div className="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full"></div>
-                  </div>
+                  <h3 className="text-lg font-bold mb-2 transition-colors duration-300 text-gray-800 group-hover:text-slate-700 dark:text-gray-100 dark:group-hover:text-slate-300">
+                    {translations.customMode.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300">
+                    {translations.customMode.description}
+                  </p>
                 </div>
-              </div>
-            ))}
-
-            {/* 创建自定义模式卡片 */}
-            <div
-              onClick={onCreateCustomMode}
-              className={`group relative overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-slate-800 via-gray-800 to-gray-800 hover:from-slate-700 hover:to-gray-700 border-slate-600 hover:border-slate-500'
-                  : 'bg-gradient-to-br from-slate-50 via-white to-gray-50 hover:from-slate-100 hover:to-gray-100 border-slate-300 hover:border-slate-400'
-              }`}
-            >
-              {/* 装饰性背景 */}
-              <div className="absolute inset-0 opacity-5">
-                <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-gradient-to-br from-slate-400 to-gray-400 rounded-full blur-xl transform -translate-x-1/2 -translate-y-1/2"></div>
-              </div>
-
-              <div className="relative p-6 h-full flex flex-col items-center justify-center text-center">
-                {/* 图标区域 */}
-                <div
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gradient-to-br from-slate-700 to-gray-700 group-hover:from-slate-600 group-hover:to-gray-600'
-                      : 'bg-gradient-to-br from-slate-100 to-gray-200 group-hover:from-slate-200 group-hover:to-gray-300'
-                  }`}
-                >
-                  <Plus
-                    size={28}
-                    className={`transition-all duration-300 ${
-                      isDarkMode
-                        ? 'text-slate-400 group-hover:text-gray-400'
-                        : 'text-slate-600 group-hover:text-gray-600'
-                    }`}
-                  />
-                </div>
-
-                {/* emoji */}
-                <div className="text-3xl mb-3 group-hover:animate-bounce">
-                  {gameModeEmojis.custom}
-                </div>
-
-                {/* 标题和描述 */}
-                <h3
-                  className={`text-lg font-bold mb-2 transition-colors duration-300 ${
-                    isDarkMode
-                      ? 'text-gray-100 group-hover:text-slate-300'
-                      : 'text-gray-800 group-hover:text-slate-700'
-                  }`}
-                >
-                  {translations.customMode.title}
-                </h3>
-                <p
-                  className={`text-sm leading-relaxed ${
-                    isDarkMode
-                      ? 'text-gray-400 group-hover:text-gray-300'
-                      : 'text-gray-600 group-hover:text-gray-700'
-                  }`}
-                >
-                  {translations.customMode.description}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

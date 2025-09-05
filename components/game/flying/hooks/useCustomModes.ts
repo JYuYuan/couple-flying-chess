@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type { CustomMode, NewCustomMode } from '../types/game';
 
 export function useCustomModes() {

@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type {
-  GameState,
-  GameMode,
-  PlayerColor,
   CurrentTask,
+  GameMode,
+  GameState,
+  PlayerColor,
   TaskType,
   WinTaskOption,
 } from '../types/game';
@@ -41,7 +41,7 @@ export function useGameState() {
         winner,
         winTaskOptions,
         selectedWinTask,
-        customModeId
+        customModeId,
       );
     }
   }, [
@@ -57,7 +57,7 @@ export function useGameState() {
     winTaskOptions,
     selectedWinTask,
     customModeId,
-    persistence
+    persistence,
   ]);
 
   const switchTurn = useCallback(() => {
@@ -88,40 +88,49 @@ export function useGameState() {
     setCustomModeId(undefined);
   }, []);
 
-  const loadGameState = useCallback((
-    mode: GameMode,
-    customId?: string
-  ) => {
-    const savedData = persistence.loadGame(mode, customId);
-    if (savedData) {
-      setGameState(savedData.gameState);
-      setGameMode(savedData.gameMode);
-      setCurrentPlayer(savedData.currentPlayer);
-      setRedPosition(savedData.redPosition);
-      setBluePosition(savedData.bluePosition);
-      setDiceValue(savedData.diceValue);
-      setCurrentTask(savedData.currentTask);
-      setTaskType(savedData.taskType);
-      setWinner(savedData.winner);
-      setWinTaskOptions(savedData.winTaskOptions);
-      setSelectedWinTask(savedData.selectedWinTask);
-      setCustomModeId(savedData.customModeId);
-      return true;
-    }
-    return false;
-  }, [persistence]);
+  const loadGameState = useCallback(
+    (mode: GameMode, customId?: string) => {
+      const savedData = persistence.loadGame(mode, customId);
+      if (savedData) {
+        setGameState(savedData.gameState);
+        setGameMode(savedData.gameMode);
+        setCurrentPlayer(savedData.currentPlayer);
+        setRedPosition(savedData.redPosition);
+        setBluePosition(savedData.bluePosition);
+        setDiceValue(savedData.diceValue);
+        setCurrentTask(savedData.currentTask);
+        setTaskType(savedData.taskType);
+        setWinner(savedData.winner);
+        setWinTaskOptions(savedData.winTaskOptions);
+        setSelectedWinTask(savedData.selectedWinTask);
+        setCustomModeId(savedData.customModeId);
+        return true;
+      }
+      return false;
+    },
+    [persistence],
+  );
 
-  const clearGameSave = useCallback((mode: GameMode, customId?: string) => {
-    persistence.clearGame(mode, customId);
-  }, [persistence]);
+  const clearGameSave = useCallback(
+    (mode: GameMode, customId?: string) => {
+      persistence.clearGame(mode, customId);
+    },
+    [persistence],
+  );
 
-  const hasGameSave = useCallback((mode: GameMode, customId?: string) => {
-    return persistence.hasGameSave(mode, customId);
-  }, [persistence]);
+  const hasGameSave = useCallback(
+    (mode: GameMode, customId?: string) => {
+      return persistence.hasGameSave(mode, customId);
+    },
+    [persistence],
+  );
 
-  const getSavedGameData = useCallback((mode: GameMode, customId?: string) => {
-    return persistence.loadGame(mode, customId);
-  }, [persistence]);
+  const getSavedGameData = useCallback(
+    (mode: GameMode, customId?: string) => {
+      return persistence.loadGame(mode, customId);
+    },
+    [persistence],
+  );
 
   return {
     // State

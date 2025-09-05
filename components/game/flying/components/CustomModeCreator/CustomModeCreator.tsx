@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import {
-  X,
-  Plus,
-  Save,
   Check,
-  Sparkles,
-  Palette,
-  Wand2,
   ChevronDown,
   ChevronUp,
+  Palette,
+  Plus,
+  Save,
+  Sparkles,
+  Wand2,
+  X,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { NewCustomMode, GameMode } from '@/components/game/flying/types/game';
+import type { GameMode, NewCustomMode } from '@/components/game/flying/types/game';
 import { Translations } from '@/lib/i18n';
-import { gameModes } from '@/components/game/flying/constants/game-config';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
-import { useTheme } from '@/contexts/ThemeContext';
+import { gameModes } from '@/components/game/flying/constants/game-config';
 
 interface CustomModeCreatorProps {
   newCustomMode: NewCustomMode;
@@ -51,7 +50,6 @@ export function CustomModeCreator({
 }: CustomModeCreatorProps) {
   const loading = isLoadingTasks || (isLoadingTasks && !Object.keys(availableModeTasks).length);
 
-  const { theme, mounted } = useTheme();
   const [expandedModes, setExpandedModes] = useState<Record<string, boolean>>({});
 
   const toggleModeExpansion = (mode: string) => {
@@ -83,16 +81,6 @@ export function CustomModeCreator({
     };
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <Portal>
       <AnimatePresence>
@@ -100,9 +88,7 @@ export function CustomModeCreator({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className={`fixed inset-0 backdrop-blur-sm z-[9999] flex items-center justify-center transition-colors duration-500 ${
-            theme === 'dark' ? 'bg-black/80' : 'bg-black/60'
-          }`}
+          className="fixed inset-0 backdrop-blur-sm z-[9999] flex items-center justify-center transition-colors duration-500 bg-black/60 dark:bg-black/80"
           style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <div className="w-full flex items-center justify-center p-4">
@@ -111,11 +97,9 @@ export function CustomModeCreator({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className={`shadow-2xl w-full max-w-4xl border max-h-[90vh] flex flex-col transition-colors duration-500 rounded-3xl ${
-                theme === 'dark'
-                  ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 border-gray-700/50'
-                  : 'bg-gradient-to-br from-white via-slate-50 to-indigo-50 border-white/20'
-              }`}
+              className="shadow-2xl w-full max-w-4xl border max-h-[90vh] flex flex-col transition-colors duration-500 rounded-3xl
+                bg-gradient-to-br from-white via-slate-50 to-indigo-50 border-white/20
+                dark:bg-gradient-to-br dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 dark:border-gray-700/50"
             >
               {/* 头部 */}
               <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-6 sm:p-8 rounded-t-3xl">
@@ -150,22 +134,14 @@ export function CustomModeCreator({
                 <div className="space-y-6">
                   <div className="flex items-center space-x-2 mb-4">
                     <Palette size={20} className="text-indigo-600" />
-                    <h3
-                      className={`text-lg font-semibold ${
-                        theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
-                      }`}
-                    >
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                       {translations.customMode.creator.baseInfo}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label
-                        className={`text-sm font-medium ${
-                          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                      >
+                      <label className={`text-sm font-medium text-gray-700 dark:text-gray-200`}>
                         {translations.customMode.creator.modeName}
                       </label>
                       <input
@@ -179,20 +155,12 @@ export function CustomModeCreator({
                         }
                         placeholder={translations.customMode.creator.modeNamePlaceholder}
                         maxLength={20}
-                        className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 ${
-                          theme === 'dark'
-                            ? 'bg-gray-700/70 border-gray-600 text-gray-100 placeholder-gray-400'
-                            : 'bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500'
-                        }`}
+                        className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700/70 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500`}
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label
-                        className={`text-sm font-medium ${
-                          theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                      >
+                      <label className={`text-sm font-medium text-gray-700 dark:text-gray-200`}>
                         {translations.customMode.creator.modeDescription}
                       </label>
                       <input
@@ -206,11 +174,7 @@ export function CustomModeCreator({
                         }
                         placeholder={translations.customMode.creator.modeDescriptionPlaceholder}
                         maxLength={50}
-                        className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 ${
-                          theme === 'dark'
-                            ? 'bg-gray-700/70 border-gray-600 text-gray-100 placeholder-gray-400'
-                            : 'bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500'
-                        }`}
+                        className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700/70 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500`}
                       />
                     </div>
                   </div>
@@ -220,11 +184,7 @@ export function CustomModeCreator({
                 <div className="space-y-6">
                   <div className="flex items-center space-x-2">
                     <Wand2 size={20} className="text-purple-600" />
-                    <h3
-                      className={`text-lg font-semibold ${
-                        theme === 'dark' ? 'text-gray-100' : 'text-gray-800'
-                      }`}
-                    >
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                       {translations.customMode.creator.taskSelection}
                     </h3>
                   </div>
@@ -232,32 +192,20 @@ export function CustomModeCreator({
                   <Tabs
                     value={newCustomMode.type}
                     defaultValue={newCustomMode.type}
-                    onValueChange={(value:any) =>
+                    onValueChange={(value: any) =>
                       setNewCustomMode({ ...newCustomMode, type: value as NewCustomMode['type'] })
                     }
                   >
-                    <TabsList
-                      className={`grid w-full grid-cols-2 mb-6 backdrop-blur-sm p-1 rounded-xl ${
-                        theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-100/50'
-                      }`}
-                    >
+                    <TabsList className="grid w-full grid-cols-2 mb-6 backdrop-blur-sm p-1 rounded-xl bg-gray-100/50 dark:bg-gray-700/50">
                       <TabsTrigger
                         value="custom"
-                        className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                          theme === 'dark'
-                            ? 'text-gray-300 data-[state=active]:bg-gray-600 data-[state=active]:shadow-sm data-[state=active]:text-gray-100'
-                            : 'text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800'
-                        }`}
+                        className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:shadow-sm dark:data-[state=active]:text-gray-100 text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800`}
                       >
                         {translations.customMode.creatorType.custom}
                       </TabsTrigger>
                       <TabsTrigger
                         value="ai"
-                        className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                          theme === 'dark'
-                            ? 'text-gray-300 data-[state=active]:bg-gray-600 data-[state=active]:shadow-sm data-[state=active]:text-gray-100'
-                            : 'text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800'
-                        }`}
+                        className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:shadow-sm dark:data-[state=active]:text-gray-100 text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800'`}
                       >
                         {translations.customMode.creatorType.ai}
                       </TabsTrigger>
@@ -265,17 +213,9 @@ export function CustomModeCreator({
 
                     <TabsContent value="custom" className="space-y-6">
                       <div
-                        className={`backdrop-blur-sm rounded-2xl p-6 border ${
-                          theme === 'dark'
-                            ? 'bg-gray-800/50 border-gray-700/50'
-                            : 'bg-white/50 border-gray-200/50'
-                        }`}
+                        className={`backdrop-blur-sm rounded-2xl p-6 border dark:bg-gray-800/50 dark:border-gray-700/50 bg-white/50 border-gray-200/50`}
                       >
-                        <h4
-                          className={`font-semibold mb-4 ${
-                            theme === 'dark' ? 'text-gray-100' : 'text-gray-800'
-                          }`}
-                        >
+                        <h4 className="font-semibold mb-4 text-gray-800 dark:text-gray-100">
                           {translations.customMode.creator.fromExistingModes}
                         </h4>
                         <motion.button
@@ -302,26 +242,16 @@ export function CustomModeCreator({
                             {[...gameModes].map((mode) => (
                               <div
                                 key={mode}
-                                className={`border rounded-xl overflow-hidden ${
-                                  theme === 'dark'
-                                    ? 'border-gray-600 bg-gray-800/20'
-                                    : 'border-gray-200 bg-gray-50/50'
-                                }`}
+                                className="border rounded-xl overflow-hidden border-gray-200 bg-gray-50/50
+                                  dark:border-gray-600 dark:bg-gray-800/20"
                               >
                                 <div
-                                  className={`flex items-center justify-between p-4 cursor-pointer transition-colors duration-200 ${
-                                    theme === 'dark'
-                                      ? 'hover:bg-gray-700/30'
-                                      : 'hover:bg-gray-100/70'
-                                  }`}
+                                  className="flex items-center justify-between p-4 cursor-pointer transition-colors duration-200
+                                    hover:bg-gray-100/70 dark:hover:bg-gray-700/30"
                                   onClick={() => toggleModeExpansion(mode)}
                                 >
                                   <div className="flex items-center space-x-3">
-                                    <h6
-                                      className={`text-sm font-semibold ${
-                                        theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                                      }`}
-                                    >
+                                    <h6 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                                       {(translations.modes as any)[mode]?.name || mode}
                                     </h6>
                                     <span className="text-indigo-600 bg-indigo-100 px-2 py-1 rounded-full text-xs">
@@ -329,26 +259,18 @@ export function CustomModeCreator({
                                     </span>
                                   </div>
                                   <div className="flex items-center space-x-2">
-                                    <span
-                                      className={`text-xs ${
-                                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                                      }`}
-                                    >
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
                                       {expandedModes[mode] ? '收起' : '展开'}
                                     </span>
                                     {expandedModes[mode] ? (
                                       <ChevronUp
                                         size={16}
-                                        className={
-                                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                                        }
+                                        className={` text-gray-500 dark:text-gray-400`}
                                       />
                                     ) : (
                                       <ChevronDown
                                         size={16}
-                                        className={
-                                          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                                        }
+                                        className={` text-gray-500 dark:text-gray-400`}
                                       />
                                     )}
                                   </div>
@@ -362,9 +284,7 @@ export function CustomModeCreator({
                                   }`}
                                 >
                                   <div
-                                    className={`max-h-64 overflow-y-auto p-4 pt-0 custom-scrollbar ${
-                                      theme === 'dark' ? 'bg-gray-800/10' : 'bg-white/30'
-                                    }`}
+                                    className={`max-h-64 overflow-y-auto p-4 pt-0 custom-scrollbar dark:bg-gray-800/10 bg-white/30`}
                                   >
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                       {availableModeTasks[mode]?.map((task, index) => (
@@ -374,12 +294,8 @@ export function CustomModeCreator({
                                           whileTap={{ scale: 0.98 }}
                                           className={`p-3 mt-1 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
                                             newCustomMode.tasks.includes(task)
-                                              ? theme === 'dark'
-                                                ? 'border-indigo-400 bg-indigo-900/30 text-indigo-300'
-                                                : 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                              : theme === 'dark'
-                                                ? 'border-gray-600 bg-gray-700/30 hover:border-gray-500 text-gray-200'
-                                                : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700'
+                                              ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:border-indigo-400 dark:bg-indigo-900/30 dark:text-indigo-300'
+                                              : 'border-gray-200 bg-white hover:border-gray-300 text-gray-700 dark:border-gray-600 dark:bg-gray-700/30 dark:hover:border-gray-500 dark:text-gray-200'
                                           }`}
                                           onClick={() => {
                                             if (newCustomMode.tasks.includes(task)) {
@@ -417,11 +333,7 @@ export function CustomModeCreator({
 
                     <TabsContent value="ai" className="space-y-6">
                       <div
-                        className={`backdrop-blur-sm rounded-2xl p-6 border ${
-                          theme === 'dark'
-                            ? 'bg-gray-800/50 border-gray-700/50'
-                            : 'bg-white/50 border-gray-200/50'
-                        }`}
+                        className={`backdrop-blur-sm rounded-2xl p-6 border bg-white/50 border-gray-200/50 dark:bg-gray-800/50 dark:border-gray-700/50`}
                       >
                         {aiTasksSection}
                       </div>
@@ -430,17 +342,9 @@ export function CustomModeCreator({
 
                   {/* 手动添加任务 */}
                   <div
-                    className={`backdrop-blur-sm rounded-2xl p-6 border ${
-                      theme === 'dark'
-                        ? 'bg-gray-800/50 border-gray-700/50'
-                        : 'bg-white/50 border-gray-200/50'
-                    }`}
+                    className={`backdrop-blur-sm rounded-2xl p-6 border dark:bg-gray-800/50 dark:border-gray-700/50 bg-white/50 border-gray-200/50`}
                   >
-                    <h4
-                      className={`font-semibold mb-4 ${
-                        theme === 'dark' ? 'text-gray-100' : 'text-gray-800'
-                      }`}
-                    >
+                    <h4 className={`font-semibold mb-4 text-gray-800 dark:text-gray-100`}>
                       {translations.customMode.creator.manualAdd}
                     </h4>
                     <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
@@ -455,11 +359,7 @@ export function CustomModeCreator({
                             onAddManualTask();
                           }
                         }}
-                        className={`flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 ${
-                          theme === 'dark'
-                            ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400'
-                            : 'bg-white border-gray-200 text-gray-800 placeholder-gray-500'
-                        }`}
+                        className={`flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 bg-white border-gray-200 text-gray-800 placeholder-gray-500`}
                       />
                       <motion.button
                         whileHover={{ scale: 1.05 }}
@@ -478,18 +378,10 @@ export function CustomModeCreator({
                   {/* 已选择的任务列表 */}
                   {newCustomMode.tasks.length > 0 && (
                     <div
-                      className={`backdrop-blur-sm rounded-2xl p-6 border ${
-                        theme === 'dark'
-                          ? 'bg-gray-800/50 border-gray-700/50'
-                          : 'bg-white/50 border-gray-200/50'
-                      }`}
+                      className={`backdrop-blur-sm rounded-2xl p-6 border dark:bg-gray-800/50 dark:border-gray-700/50 bg-white/50 border-gray-200/50`}
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <h4
-                          className={`font-semibold ${
-                            theme === 'dark' ? 'text-gray-100' : 'text-gray-800'
-                          }`}
-                        >
+                        <h4 className={`font-semibold text-gray-800 dark:text-gray-100`}>
                           {translations.customMode.creator.selectedTasks}
                         </h4>
                         <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -503,20 +395,16 @@ export function CustomModeCreator({
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className={`flex items-center justify-between p-3 rounded-xl border ${
-                              theme === 'dark'
-                                ? 'bg-gray-700/30 border-gray-600'
-                                : 'bg-white border-gray-200'
-                            }`}
+                            className={`flex items-center justify-between p-3 rounded-xl border dark:bg-gray-700/30 dark:border-gray-600 bg-white border-gray-200`}
                           >
                             <div className="flex items-center space-x-3 flex-1">
-                              <span className="w-6 h-6 bg-indigo-100 text-indigo-600 text-xs font-medium rounded-full flex items-center justify-center">
+                              <span
+                                className={`w-6 h-6 bg-indigo-100 text-indigo-600 text-xs font-medium rounded-full flex items-center justify-center dark:bg-indigo-900/50 dark:text-indigo-300`}
+                              >
                                 {index + 1}
                               </span>
                               <span
-                                className={`text-sm flex-1 ${
-                                  theme === 'dark' ? 'text-gray-200' : 'text-gray-700'
-                                }`}
+                                className={`text-sm font-semibold text-gray-700 dark:text-gray-200`}
                               >
                                 {task}
                               </span>
@@ -539,11 +427,7 @@ export function CustomModeCreator({
 
               {/* 底部操作栏 */}
               <div
-                className={`backdrop-blur-sm border-t p-6 sm:p-8 rounded-b-3xl ${
-                  theme === 'dark'
-                    ? 'bg-gray-800/80 border-gray-700/50'
-                    : 'bg-white/80 border-gray-200/50'
-                }`}
+                className={`backdrop-blur-sm border-t p-6 sm:p-8 rounded-b-3xl dark:bg-gray-800/80 dark:border-gray-700/50 bg-white/80 border-gray-200/50`}
               >
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <motion.button
@@ -561,11 +445,7 @@ export function CustomModeCreator({
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`sm:w-32 font-medium py-4 px-6 rounded-xl transition-all duration-200 ${
-                      theme === 'dark'
-                        ? 'bg-gray-600 hover:bg-gray-500 text-gray-200'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                    }`}
+                    className={`sm:w-32 font-medium py-4 px-6 rounded-xl transition-all duration-200 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 bg-gray-200 hover:bg-gray-300 text-gray-700`}
                     onClick={onClose}
                   >
                     {translations.customMode.creator.cancel}

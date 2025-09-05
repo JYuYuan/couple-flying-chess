@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import type { CurrentTask, GameState, PlayerColor, TaskType } from '../types/game';
 import { PathCell } from '@/lib/game-config';
 import { Translations } from '@/lib/i18n';
+import { randomMs } from '@/lib/utils';
 
 export function useGameLogic(
   boardPath: PathCell[],
@@ -45,33 +46,14 @@ export function useGameLogic(
 
       // 从任务描述中提取时间信息并转换为毫秒
       let durationMs: number | undefined;
-      const timeMatch = currentTaskDescription.match(/(\d+)\s*(秒|分|小时|時|seconds|minutes|hours)/);
-
-      if (timeMatch) {
-        const value = parseInt(timeMatch[1], 10);
-        const unit = timeMatch[2];
-
-        switch (unit) {
-          case "seconds":
-          case '秒':
-            durationMs = value * 1000;
-            break;
-          case "minutes":
-          case '分':
-            durationMs = value * 60 * 1000;
-            break;
-          case "hours":
-          case '小时':
-            durationMs = value * 60 * 60 * 1000;
-            break;
-        }
-      }
+      if (currentTaskDescription.indexOf('$time') > -1)
+        durationMs = randomMs(30 * 1000, 3 * 60 * 1000);
 
       setCurrentTask({
-        description: currentTaskDescription,
         executor,
-        target: playerOnCell,
         durationMs,
+        target: playerOnCell,
+        description: currentTaskDescription.replace('$time', ''),
       });
       setGameState('task');
     },
@@ -84,7 +66,7 @@ export function useGameLogic(
 
       // 检查碰撞：双方不在起点或终点，且位置相同
       if (
-        newPosition > 0 && 
+        newPosition > 0 &&
         newPosition < boardPath.length - 1 &&
         newPosition === otherPlayerPosition
       ) {

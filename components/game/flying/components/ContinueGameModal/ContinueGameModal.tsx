@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { RotateCcw, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
-import { useTheme } from '@/contexts/ThemeContext';
 import { Translations } from '@/lib/i18n';
 import { GameMode } from '@/components/game/flying/types/game';
 
@@ -31,8 +30,6 @@ export function ContinueGameModal({
   translations,
   isVisible = true,
 }: ContinueGameModalProps) {
-  const { theme, mounted } = useTheme();
-
   // 禁用外层滚动
   useEffect(() => {
     if (!isVisible) return;
@@ -57,16 +54,6 @@ export function ContinueGameModal({
     };
   }, [isVisible]);
 
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <Portal>
       <AnimatePresence mode="wait">
@@ -76,9 +63,7 @@ export function ContinueGameModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={`fixed inset-0 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm overflow-y-auto transition-colors duration-500 ${
-              theme === 'dark' ? 'bg-black bg-opacity-80' : 'bg-black bg-opacity-60'
-            }`}
+            className={`fixed inset-0 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm overflow-y-auto transition-colors duration-500 dark:bg-black dark:bg-opacity-80 bg-black bg-opacity-60`}
             style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
           >
             <motion.div
@@ -103,11 +88,7 @@ export function ContinueGameModal({
                 damping: 25,
                 duration: 0.3,
               }}
-              className={`rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full relative overflow-hidden border my-auto transition-colors duration-500 ${
-                theme === 'dark'
-                  ? 'bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 border-gray-700/20'
-                  : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50 border-white/20'
-              }`}
+              className={`rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full relative overflow-hidden border my-auto transition-colors duration-500 dark:bg-gradient-to-br dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 dark:border-gray-700/20 bg-gradient-to-br from-indigo-50 via-white to-purple-50 border-white/20`}
             >
               {/* 装饰性背景图案 */}
               <div className="absolute inset-0 opacity-5">

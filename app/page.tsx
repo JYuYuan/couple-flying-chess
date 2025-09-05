@@ -4,25 +4,19 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { type Language, loadTranslations, Translations } from '@/lib/i18n';
 import LanguageSelector from '@/components/language-selector';
-import { useTheme } from '@/contexts/ThemeContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const [translations, setTranslations] = useState<Translations['home']>();
-
   const [isLoading, setIsLoading] = useState(true);
-
   const [language, setLanguage] = useState<Language>(() => {
-    // 从 localStorage 读取语言设置，如果没有则默认为 'zh'
     if (typeof window !== 'undefined') {
       const savedLang = localStorage.getItem('language') as Language | null;
       return savedLang || 'zh';
     }
     return 'zh';
   });
-
-  const { theme, mounted } = useTheme();
-  const isDarkMode = theme === 'dark';
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -49,164 +43,168 @@ export default function Home() {
     setLanguage(newLanguage);
   };
 
-  if (!mounted) {
-    return (
-      <div className="w-full px-0 sm:px-4 lg:px-8 xl:px-12 py-8">
-        <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
-        </div>
-      </div>
-    );
-  }
-
   if (isLoading) {
     return (
-      <div
-        className={`flex min-h-screen items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
-      >
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
+        <div className="backdrop-blur-xl rounded-3xl p-8 shadow-2xl border bg-white/80 border-white/40 shadow-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/40 dark:shadow-black/20">
+          <div className="flex items-center space-x-3">
+            <div className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+            <p className="text-gray-600 dark:text-gray-300 font-medium">Loading...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!translations) {
     return (
-      <div
-        className={`flex min-h-screen items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}
-      >
-        <p className="text-red-500">Failed to load translations</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
+        <div className="backdrop-blur-xl rounded-3xl p-8 shadow-2xl border bg-white/80 border-white/40 shadow-gray-200/50 dark:bg-gray-800/80 dark:border-gray-700/40 dark:shadow-black/20">
+          <p className="text-red-500 dark:text-red-400 font-medium">Failed to load translations</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-center transition-colors duration-300 ${
-        isDarkMode
-          ? 'bg-gradient-to-b from-gray-900 to-gray-800'
-          : 'bg-gradient-to-b from-pink-50 to-purple-50'
-      }`}
-    >
-      <div className="text-center max-w-4xl mx-auto px-4">
-        {/* Logo and Title */}
-        <div className="mb-8 pt-6">
-          <h1
-            className={`text-4xl font-bold mb-2 transition-colors duration-300 ${
-              isDarkMode ? 'text-pink-400' : 'text-pink-600'
-            }`}
-          >
-            {translations.title}
-          </h1>
-          <p
-            className={`text-lg mb-4 transition-colors duration-300 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}
-          >
-            {translations.subtitle}
-          </p>
-          <div className="flex justify-center">
-            <div
-              className={`backdrop-blur-sm rounded-2xl p-2 shadow-lg border transition-colors duration-500 ${
-                theme === 'dark'
-                  ? 'bg-gray-800/60 border-gray-700/40'
-                  : 'bg-white/60 border-white/40'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <LanguageSelector
-                  currentLanguage={language}
-                  onLanguageChange={handleLanguageChange}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen overflow-hidden relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
+      {/* iOS 16 风格背景装饰 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          className="absolute -top-20 -right-20 w-80 h-80 rounded-full blur-3xl bg-gradient-to-br from-blue-200/30 to-indigo-300/40 dark:from-blue-600/15 dark:to-indigo-700/20"
+          animate={{ 
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ 
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full blur-3xl bg-gradient-to-br from-purple-200/35 to-pink-300/45 dark:from-purple-600/18 dark:to-pink-700/23"
+          animate={{ 
+            scale: [1.1, 1, 1.1],
+            opacity: [0.4, 0.6, 0.4]
+          }}
+          transition={{ 
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-2xl bg-gradient-to-br from-cyan-200/25 to-blue-300/35 dark:from-cyan-600/12 dark:to-blue-700/18"
+          animate={{ 
+            x: [-50, 50, -50],
+            y: [-30, 30, -30],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ 
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
 
-        {/* Game Features */}
-        <div
-          className={`p-6 rounded-xl shadow-lg mb-8 transition-colors duration-300 ${
-            isDarkMode ? 'bg-gray-800' : 'bg-white'
-          }`}
+      {/* 主要内容容器 */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* iOS 16 风格顶部控制区 */}
+        <motion.div 
+          className="flex justify-end p-6 sm:p-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h2
-            className={`text-2xl font-semibold mb-4 transition-colors duration-300 ${
-              isDarkMode ? 'text-gray-100' : 'text-gray-800'
-            }`}
-          >
-            {translations.features.title}
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-4">
-              <div className="text-pink-500 text-3xl mb-2">🎲</div>
-              <h3
-                className={`font-medium text-lg mb-2 transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                }`}
-              >
-                {translations.features.classic.title}
-              </h3>
-              <p
-                className={`transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
-              >
-                {translations.features.classic.description}
-              </p>
-            </div>
-            <div className="p-4">
-              <div className="text-pink-500 text-3xl mb-2">💖</div>
-              <h3
-                className={`font-medium text-lg mb-2 transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                }`}
-              >
-                {translations.features.interaction.title}
-              </h3>
-              <p
-                className={`transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
-              >
-                {translations.features.interaction.description}
-              </p>
-            </div>
-            <div className="p-4">
-              <div className="text-pink-500 text-3xl mb-2">🎯</div>
-              <h3
-                className={`font-medium text-lg mb-2 transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                }`}
-              >
-                {translations.features.modes.title}
-              </h3>
-              <p
-                className={`transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}
-              >
-                {translations.features.modes.description}
-              </p>
+          <div className="backdrop-blur-xl rounded-2xl p-3 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20">
+            <div className="flex items-center gap-3">
+              <LanguageSelector
+                currentLanguage={language}
+                onLanguageChange={handleLanguageChange}
+              />
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Call to Action */}
-        <div className="space-y-4">
-          <Link
-            href="/flying"
-            className="inline-block w-full md:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors duration-300"
-          >
-            {translations.cta.startGame}
-          </Link>
-          <p
-            className={`text-sm transition-colors duration-300 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-500'
-            }`}
-          >
-            {translations.cta.subtext}
-          </p>
+        {/* iOS 16 风格主要内容区域 */}
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-8 pb-8">
+          <div className="w-full max-w-lg mx-auto text-center">
+            {/* iOS 16 风格主标题区域 */}
+            <motion.div 
+              className="mb-12"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            >
+              {/* 飞行棋图标 */}
+              <motion.div 
+                className="mb-8 flex justify-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="relative">
+                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-2xl shadow-blue-500/30 dark:shadow-blue-500/20 flex items-center justify-center">
+                    <div className="text-5xl sm:text-6xl">🎲</div>
+                  </div>
+                  {/* iOS 16 风格光泽效果 */}
+                  <div className="absolute top-4 left-4 w-8 h-8 bg-white/30 rounded-full blur-sm"></div>
+                  <div className="absolute bottom-4 right-4 w-4 h-4 bg-white/20 rounded-full blur-sm"></div>
+                </div>
+              </motion.div>
+
+              {/* 主标题 */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight">
+                {translations.title}
+              </h1>
+              
+              {/* 副标题 */}
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-medium leading-relaxed px-4">
+                {translations.subtitle}
+              </p>
+            </motion.div>
+
+            {/* iOS 16 风格开始游戏按钮 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+            >
+              <Link href="/flying">
+                <motion.button
+                  className="w-full sm:w-auto px-12 py-5 rounded-3xl font-black text-xl tracking-wide text-white shadow-2xl hover:shadow-3xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 border border-blue-500/30"
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -2
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className="flex items-center justify-center gap-3">
+                    <span>🚀</span>
+                    <span>{translations.cta.startGame}</span>
+                  </span>
+                </motion.button>
+              </Link>
+            </motion.div>
+
+            {/* iOS 16 风格底部提示 */}
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.6 }}
+            >
+              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                {translations.cta.subtext}
+              </p>
+            </motion.div>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
