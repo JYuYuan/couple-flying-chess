@@ -52,6 +52,7 @@
   "modeCategories": {
     "basic": "经典模式",
     "lifestyle": "生活模式",
+    "roleplay": "角色扮演",
     "adult": "情趣模式"
   },
   "modes": {
@@ -114,6 +115,22 @@
     "master-slave-sex": {
       "name": "角色版",
       "description": "探索不同角色的特殊互动"
+    },
+    "roleplay-workplace": {
+      "name": "职场角色扮演",
+      "description": "体验职场中的各种角色与情境"
+    },
+    "roleplay-fantasy": {
+      "name": "幻想角色扮演", 
+      "description": "进入奇幻世界体验不同的角色"
+    },
+    "roleplay-uniform": {
+      "name": "制服角色扮演",
+      "description": "各种制服主题的角色扮演体验"
+    },
+    "roleplay-ancient": {
+      "name": "古装角色扮演",
+      "description": "穿越时空体验古代角色与情境"
     }
   },
   "customMode": {

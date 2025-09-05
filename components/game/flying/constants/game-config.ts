@@ -15,6 +15,10 @@ import {
   Sparkles,
   Users,
   UtensilsCrossed,
+  Briefcase,
+  Wand2,
+  UserCheck,
+  Scroll,
 } from 'lucide-react';
 import type { GameMode } from '@/components/game/flying/types/game';
 
@@ -34,6 +38,10 @@ export const gameModeIcons = {
   game: Gamepad2,
   adult: ShieldX,
   'master-slave-sex': Crown,
+  'roleplay-workplace': Briefcase,
+  'roleplay-fantasy': Wand2,
+  'roleplay-uniform': UserCheck,
+  'roleplay-ancient': Scroll,
   custom: Plus,
 };
 
@@ -53,6 +61,10 @@ export const gameModeColors = {
   game: 'from-cyan-400 to-cyan-600',
   adult: 'from-red-600 to-red-800',
   'master-slave-sex': 'from-purple-800 to-purple-900',
+  'roleplay-workplace': 'from-indigo-400 to-blue-600',
+  'roleplay-fantasy': 'from-purple-400 to-pink-600',
+  'roleplay-uniform': 'from-teal-400 to-cyan-600',
+  'roleplay-ancient': 'from-amber-400 to-orange-600',
   custom: 'from-green-400 to-green-600',
 };
 
@@ -72,6 +84,10 @@ export const gameModeEmojis = {
   game: '🎮',
   adult: '🔞',
   'master-slave-sex': '👑',
+  'roleplay-workplace': '💼',
+  'roleplay-fantasy': '🧙‍♀️',
+  'roleplay-uniform': '👮‍♀️',
+  'roleplay-ancient': '🏛️',
   custom: '🎨',
 };
 
@@ -91,4 +107,8 @@ export const gameModes: GameMode[] = [
   'game',
   'adult',
   'master-slave-sex',
+  'roleplay-workplace',
+  'roleplay-fantasy',
+  'roleplay-uniform',
+  'roleplay-ancient',
 ];

@@ -105,6 +105,26 @@
     "adult": {
       "name": "大人版",
       "description": "大人のカップル限定の親密なふれあい"
+    },
+    "master-slave-sex": {
+      "name": "ロールプレイ版",
+      "description": "特別な役割の相互作用を探求"
+    },
+    "roleplay-workplace": {
+      "name": "職場ロールプレイ",
+      "description": "様々な職場の役割と状況を体験"
+    },
+    "roleplay-fantasy": {
+      "name": "ファンタジーロールプレイ",
+      "description": "ファンタジー世界で異なるキャラクターを体験"
+    },
+    "roleplay-uniform": {
+      "name": "制服ロールプレイ",
+      "description": "様々な制服テーマのロールプレイ体験"
+    },
+    "roleplay-ancient": {
+      "name": "古装ロールプレイ", 
+      "description": "時空を超えて古代の役割と状況を体験"
     }
   },
   "home": {
@@ -132,7 +152,8 @@
   },
   "modeCategories": {
     "basic": "クラシックモード",
-    "lifestyle": "ライフスタイルモード",
+    "lifestyle": "ライフスタイルモード", 
+    "roleplay": "ロールプレイ",
     "adult": "アダルトモード"
   },
   "customMode": {

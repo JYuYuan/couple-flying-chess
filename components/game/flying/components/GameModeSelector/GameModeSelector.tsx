@@ -136,6 +136,38 @@ const modeStyles = {
       textColor: 'text-white',
       descColor: 'text-white/90',
     },
+    'roleplay-workplace': {
+      bg: 'bg-gradient-to-br from-indigo-900/60 via-gray-800 to-blue-900/60 hover:from-indigo-800/70 hover:to-blue-800/70',
+      iconBg:
+        'bg-gradient-to-br from-indigo-800/50 to-blue-700/50 group-hover:from-indigo-700/60 group-hover:to-blue-600/60',
+      iconColor: 'text-indigo-400',
+      textColor: 'text-gray-100 group-hover:text-indigo-300',
+      descColor: 'text-gray-400 group-hover:text-gray-300',
+    },
+    'roleplay-fantasy': {
+      bg: 'bg-gradient-to-br from-purple-900/60 via-gray-800 to-pink-900/60 hover:from-purple-800/70 hover:to-pink-800/70',
+      iconBg:
+        'bg-gradient-to-br from-purple-800/50 to-pink-700/50 group-hover:from-purple-700/60 group-hover:to-pink-600/60',
+      iconColor: 'text-purple-400',
+      textColor: 'text-gray-100 group-hover:text-purple-300',
+      descColor: 'text-gray-400 group-hover:text-gray-300',
+    },
+    'roleplay-uniform': {
+      bg: 'bg-gradient-to-br from-teal-900/60 via-gray-800 to-cyan-900/60 hover:from-teal-800/70 hover:to-cyan-800/70',
+      iconBg:
+        'bg-gradient-to-br from-teal-800/50 to-cyan-700/50 group-hover:from-teal-700/60 group-hover:to-cyan-600/60',
+      iconColor: 'text-teal-400',
+      textColor: 'text-gray-100 group-hover:text-teal-300',
+      descColor: 'text-gray-400 group-hover:text-gray-300',
+    },
+    'roleplay-ancient': {
+      bg: 'bg-gradient-to-br from-amber-900/60 via-gray-800 to-orange-900/60 hover:from-amber-800/70 hover:to-orange-800/70',
+      iconBg:
+        'bg-gradient-to-br from-amber-800/50 to-orange-700/50 group-hover:from-amber-700/60 group-hover:to-orange-600/60',
+      iconColor: 'text-amber-400',
+      textColor: 'text-gray-100 group-hover:text-amber-300',
+      descColor: 'text-gray-400 group-hover:text-gray-300',
+    },
   },
   light: {
     normal: {
@@ -255,6 +287,38 @@ const modeStyles = {
       textColor: 'text-white',
       descColor: 'text-white/90',
     },
+    'roleplay-workplace': {
+      bg: 'bg-gradient-to-br from-indigo-50 via-white to-blue-50 hover:from-indigo-100 hover:to-blue-100',
+      iconBg:
+        'bg-gradient-to-br from-indigo-100 to-blue-200 group-hover:from-indigo-200 group-hover:to-blue-300',
+      iconColor: 'text-indigo-600',
+      textColor: 'text-gray-800 group-hover:text-indigo-700',
+      descColor: 'text-gray-600 group-hover:text-gray-700',
+    },
+    'roleplay-fantasy': {
+      bg: 'bg-gradient-to-br from-purple-50 via-white to-pink-50 hover:from-purple-100 hover:to-pink-100',
+      iconBg:
+        'bg-gradient-to-br from-purple-100 to-pink-200 group-hover:from-purple-200 group-hover:to-pink-300',
+      iconColor: 'text-purple-600',
+      textColor: 'text-gray-800 group-hover:text-purple-700',
+      descColor: 'text-gray-600 group-hover:text-gray-700',
+    },
+    'roleplay-uniform': {
+      bg: 'bg-gradient-to-br from-teal-50 via-white to-cyan-50 hover:from-teal-100 hover:to-cyan-100',
+      iconBg:
+        'bg-gradient-to-br from-teal-100 to-cyan-200 group-hover:from-teal-200 group-hover:to-cyan-300',
+      iconColor: 'text-teal-600',
+      textColor: 'text-gray-800 group-hover:text-teal-700',
+      descColor: 'text-gray-600 group-hover:text-gray-700',
+    },
+    'roleplay-ancient': {
+      bg: 'bg-gradient-to-br from-amber-50 via-white to-orange-50 hover:from-amber-100 hover:to-orange-100',
+      iconBg:
+        'bg-gradient-to-br from-amber-100 to-orange-200 group-hover:from-amber-200 group-hover:to-orange-300',
+      iconColor: 'text-amber-600',
+      textColor: 'text-gray-800 group-hover:text-amber-700',
+      descColor: 'text-gray-600 group-hover:text-gray-700',
+    },
   },
 };
 
@@ -281,6 +345,12 @@ const defaultStyle = {
 const modeCategories = {
   basic: ['normal', 'love'] as GameMode[],
   lifestyle: ['daily', 'food', 'fitness', 'creative', 'romantic', 'game'] as GameMode[],
+  roleplay: [
+    'roleplay-workplace',
+    'roleplay-fantasy',
+    'roleplay-uniform',
+    'roleplay-ancient',
+  ] as GameMode[],
   adult: [
     'adult',
     'master-slave-sex',
@@ -307,6 +377,7 @@ export function GameModeSelector({
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
     basic: false,
     lifestyle: false,
+    roleplay: false,
     adult: false,
   });
 
@@ -352,6 +423,7 @@ export function GameModeSelector({
                 <div className="text-2xl">
                   {categoryKey === 'basic' && '🎯'}
                   {categoryKey === 'lifestyle' && '🌈'}
+                  {categoryKey === 'roleplay' && '🎭'}
                   {categoryKey === 'adult' && '❤️‍🔥'}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">

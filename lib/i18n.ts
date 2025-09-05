@@ -85,6 +85,7 @@ export interface Translations {
   modeCategories: {
     basic: string;
     lifestyle: string;
+    roleplay: string;
     adult: string;
   };
   customMode: {

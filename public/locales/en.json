@@ -54,6 +54,7 @@
   "modeCategories": {
     "basic": "Classic Mode",
     "lifestyle": "Lifestyle Mode",
+    "roleplay": "Roleplay",
     "adult": "Adult Mode"
   },
   "modes": {
@@ -116,6 +117,22 @@
     "master-slave-sex": {
       "name": "Roleplay",
       "description": "Explore special role-based interactions"
+    },
+    "roleplay-workplace": {
+      "name": "Workplace Roleplay",
+      "description": "Experience various workplace roles and scenarios"
+    },
+    "roleplay-fantasy": {
+      "name": "Fantasy Roleplay",
+      "description": "Enter fantasy worlds and experience different characters"
+    },
+    "roleplay-uniform": {
+      "name": "Uniform Roleplay", 
+      "description": "Various uniform-themed roleplay experiences"
+    },
+    "roleplay-ancient": {
+      "name": "Ancient Roleplay",
+      "description": "Travel through time to experience ancient roles and scenarios"
     }
   },
   "customMode": {

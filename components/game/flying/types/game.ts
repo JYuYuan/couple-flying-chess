@@ -1,5 +1,25 @@
 export type GameState = 'start' | 'playing' | 'task' | 'win' | 'winTask' | 'moving' | 'customMode';
-export type GameMode = 'normal' | 'love' | 'couple' | 'advanced' | 'intimate' | 'mixed' | 'hetero' | 'daily' | 'food' | 'fitness' | 'creative' | 'romantic' | 'game' | 'adult' | 'master-slave-sex' | 'custom';
+export type GameMode =
+  | 'normal'
+  | 'love'
+  | 'couple'
+  | 'advanced'
+  | 'intimate'
+  | 'mixed'
+  | 'hetero'
+  | 'daily'
+  | 'food'
+  | 'fitness'
+  | 'creative'
+  | 'romantic'
+  | 'game'
+  | 'adult'
+  | 'master-slave-sex'
+  | 'custom'
+  | 'roleplay-workplace'
+  | 'roleplay-fantasy'
+  | 'roleplay-uniform'
+  | 'roleplay-ancient';
 export type PlayerColor = 'red' | 'blue';
 export type TaskType = 'star' | 'trap' | 'collision';
 
