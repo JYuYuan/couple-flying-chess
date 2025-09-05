@@ -312,7 +312,7 @@ export function CustomModeCreator({
                                           }}
                                         >
                                           <div className="flex items-center justify-between">
-                                            <span className="text-sm flex-1 mr-2">{task}</span>
+                                            <span className="text-sm flex-1 mr-2">{task.replace("$time","")}</span>
                                             {newCustomMode.tasks.includes(task) && (
                                               <div className="w-5 h-5 bg-indigo-500 rounded-full flex items-center justify-center">
                                                 <Check size={12} className="text-white" />
@@ -406,7 +406,7 @@ export function CustomModeCreator({
                               <span
                                 className={`text-sm font-semibold text-gray-700 dark:text-gray-200`}
                               >
-                                {task}
+                                {task.replace("$time","")}
                               </span>
                             </div>
                             <motion.button
