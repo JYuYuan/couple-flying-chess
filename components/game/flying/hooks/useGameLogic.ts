@@ -47,7 +47,7 @@ export function useGameLogic(
       // 从任务描述中提取时间信息并转换为毫秒
       let durationMs: number | undefined;
       if (currentTaskDescription.indexOf('$time') > -1)
-        durationMs = randomMs(30 * 1000, 3 * 60 * 1000);
+        durationMs = randomMs(5 * 1000, 2 * 60 * 1000);
 
       setCurrentTask({
         executor,
