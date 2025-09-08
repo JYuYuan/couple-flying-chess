@@ -722,7 +722,7 @@ export default function CoupleLudoGame() {
             <button
               onClick={restartGame}
               title={translations.game.backToHome}
-              className={`p-2 sm:p-3 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
+              className={`flex-shrink-0 p-2 sm:p-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 transform ${
                 gameState.currentPlayer === 'red'
                   ? 'bg-red-100 hover:bg-red-200 text-red-600 shadow-red-200'
                   : 'bg-blue-100 hover:bg-blue-200 text-blue-600 shadow-blue-200'
@@ -732,20 +732,22 @@ export default function CoupleLudoGame() {
             </button>
 
             {/* 标题 */}
-            <div className="flex-1 text-center">
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-black bg-gradient-to-r bg-clip-text text-transparent from-gray-900 via-gray-800 to-gray-700 dark:from-gray-100 dark:via-white dark:to-gray-200">
-                {translations.game.title}
-              </h1>
-              <p
-                className="text-sm sm:text-base font-semibold transition-colors duration-300"
-                style={{
-                  color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
-                }}
-              >
-                {gameState.gameMode === 'custom'
-                  ? customModes.currentCustomMode?.name || '自定义模式'
-                  : translations.modes[gameState.gameMode].name}
-              </p>
+            <div className="flex-1 min-w-0 mx-3 sm:mx-4">
+              <div className="text-center">
+                <h1 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-black bg-gradient-to-r bg-clip-text text-transparent from-gray-900 via-gray-800 to-gray-700 dark:from-gray-100 dark:via-white dark:to-gray-200 transition-all duration-300 truncate">
+                  {translations.game.title}
+                </h1>
+                <p
+                  className="text-xs sm:text-sm lg:text-base font-semibold transition-all duration-300 truncate animate-pulse"
+                  style={{
+                    color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                  }}
+                >
+                  {gameState.gameMode === 'custom'
+                    ? customModes.currentCustomMode?.name || '自定义模式'
+                    : translations.modes[gameState.gameMode].name}
+                </p>
+              </div>
             </div>
 
             {/* 控制器区域 */}
@@ -764,16 +766,26 @@ export default function CoupleLudoGame() {
         {/* iOS 16 风格回合指示器 */}
         <div className="text-center">
           <div
-            className="inline-flex items-center justify-center px-8 py-4 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/80 border-white/40 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/40 dark:shadow-black/40"
+            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-3xl shadow-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-xl border bg-white/80 border-white/40 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/40 dark:shadow-black/40 animate-bounce"
             style={{
               background:
                 gameState.currentPlayer === 'red'
                   ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(236, 72, 153, 0.9))'
                   : 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(99, 102, 241, 0.9))',
+              transform: 'translateY(0px)',
+              animation: 'fadeInScale 0.6s ease-out, float 3s ease-in-out infinite',
             }}
           >
-            <div className="w-3 h-3 rounded-full mr-3 bg-white animate-pulse shadow-lg"></div>
-            <span className="text-lg sm:text-xl font-black text-white tracking-wide">
+            <div 
+              className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full mr-2 sm:mr-3 bg-white shadow-lg transition-all duration-300"
+              style={{
+                animation: 'pulseGlow 2s ease-in-out infinite',
+                boxShadow: gameState.currentPlayer === 'red' 
+                  ? '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(239, 68, 68, 0.6)' 
+                  : '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(59, 130, 246, 0.6)'
+              }}
+            ></div>
+            <span className="text-base sm:text-lg lg:text-xl font-black text-white tracking-wide transition-all duration-300">
               {gameState.currentPlayer === 'red'
                 ? translations.game.redTurn
                 : translations.game.blueTurn}
@@ -785,28 +797,50 @@ export default function CoupleLudoGame() {
         <div className="flex flex-col items-center space-y-6">
           {/* iOS 16 风格骰子显示 */}
           <div
-            className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
+            className="relative w-20 sm:w-24 lg:w-28 h-20 sm:h-24 lg:h-28 rounded-3xl shadow-2xl transition-all duration-500 transform hover:scale-110 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
             style={{
               background:
                 gameState.currentPlayer === 'red'
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1))'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))',
-              animation: gameState.isRolling ? 'spin 0.1s linear infinite' : 'none',
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(236, 72, 153, 0.15))'
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.15))',
+              animation: gameState.isRolling 
+                ? 'diceRoll 0.15s linear infinite, shake 0.1s ease-in-out infinite' 
+                : 'float 4s ease-in-out infinite',
+              transformOrigin: 'center center',
             }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className="text-3xl sm:text-4xl font-black tracking-wider"
+                className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-wider transition-all duration-300"
                 style={{
                   color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                  textShadow: gameState.currentPlayer === 'red' 
+                    ? '0 0 10px rgba(220, 38, 38, 0.5)' 
+                    : '0 0 10px rgba(37, 99, 235, 0.5)',
+                  transform: gameState.isRolling ? 'scale(1.1)' : 'scale(1)',
                 }}
               >
                 {gameState.diceValue ?? '?'}
               </span>
             </div>
             {/* iOS 16 风格装饰性光泽效果 */}
-            <div className="absolute top-3 left-3 w-4 h-4 bg-white/40 rounded-full blur-sm"></div>
-            <div className="absolute bottom-3 right-3 w-2 h-2 bg-white/20 rounded-full blur-sm"></div>
+            <div 
+              className="absolute top-2 sm:top-3 left-2 sm:left-3 w-3 sm:w-4 h-3 sm:h-4 bg-white/40 rounded-full blur-sm transition-all duration-300"
+              style={{
+                animation: 'shimmer 2s ease-in-out infinite',
+              }}
+            ></div>
+            <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/20 rounded-full blur-sm"></div>
+            {/* 发光边框效果 */}
+            <div 
+              className="absolute inset-0 rounded-3xl pointer-events-none"
+              style={{
+                boxShadow: gameState.currentPlayer === 'red'
+                  ? '0 0 30px rgba(239, 68, 68, 0.3), inset 0 0 30px rgba(239, 68, 68, 0.1)'
+                  : '0 0 30px rgba(59, 130, 246, 0.3), inset 0 0 30px rgba(59, 130, 246, 0.1)',
+                animation: gameState.isRolling ? 'glowPulse 0.3s ease-in-out infinite' : 'none',
+              }}
+            ></div>
           </div>
 
           {/* iOS 16 风格掷骰子按钮 */}
@@ -818,7 +852,7 @@ export default function CoupleLudoGame() {
               gameState.gameState === 'task' ||
               taskManagement.isLoadingTasks
             }
-            className="px-10 py-5 rounded-3xl font-black text-lg tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white"
+            className="relative px-8 sm:px-10 py-4 sm:py-5 rounded-3xl font-black text-base sm:text-lg tracking-wide transition-all duration-500 transform hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white overflow-hidden"
             style={{
               background:
                 gameState.currentPlayer === 'red'
@@ -828,11 +862,27 @@ export default function CoupleLudoGame() {
                 gameState.currentPlayer === 'red'
                   ? 'rgba(239, 68, 68, 0.3)'
                   : 'rgba(59, 130, 246, 0.3)',
+              animation: gameState.isRolling ? 'buttonPulse 0.3s ease-in-out infinite' : 'none',
             }}
           >
-            <span className="flex items-center justify-center gap-2">
+            {/* 按钮发光背景动画 */}
+            <div 
+              className="absolute inset-0 opacity-30 transition-opacity duration-300"
+              style={{
+                background: gameState.currentPlayer === 'red'
+                  ? 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent 70%)'
+                  : 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent 70%)',
+                animation: 'ripple 2s ease-in-out infinite',
+              }}
+            ></div>
+            <span className="relative z-10 flex items-center justify-center gap-2">
               {gameState.isRolling && (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <div 
+                  className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"
+                  style={{
+                    animation: 'spinFast 0.5s linear infinite',
+                  }}
+                ></div>
               )}
               {gameState.isMoving
                 ? translations.common.moving
