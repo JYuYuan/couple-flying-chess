@@ -33,22 +33,25 @@ export function useCustomModes() {
   }, []);
 
   const createCustomMode = useCallback(
-    (onSuccess?: () => void) => {
-      if (newCustomMode.name.trim() && newCustomMode.tasks.length > 0) {
+    (newModeData?: NewCustomMode, onSuccess?: () => void) => {
+      const modeData = newModeData || newCustomMode;
+      if (modeData.name.trim() && modeData.tasks.length > 0) {
         const customMode: CustomMode = {
           id: Date.now().toString(),
-          name: newCustomMode.name.trim(),
-          type: newCustomMode.type,
-          description: newCustomMode.description.trim() || '自定义模式',
-          tasks: [...newCustomMode.tasks],
+          name: modeData.name.trim(),
+          type: modeData.type,
+          description: modeData.description.trim() || '自定义模式',
+          tasks: [...modeData.tasks],
           createdAt: Date.now(),
         };
 
         const updatedModes = [...customModes, customMode];
         saveCustomModes(updatedModes);
 
-        setNewCustomMode({ name: '', description: '', tasks: [], type: 'custom' });
-        setShowCustomModeCreator(false);
+        if (!newModeData) {
+          setNewCustomMode({ name: '', description: '', tasks: [], type: 'custom' });
+          setShowCustomModeCreator(false);
+        }
         onSuccess?.();
         return true;
       }
@@ -65,6 +68,16 @@ export function useCustomModes() {
     [customModes, saveCustomModes],
   );
 
+  const updateCustomMode = useCallback(
+    (modeId: string, updatedMode: Partial<CustomMode>) => {
+      const updatedModes = customModes.map((mode) =>
+        mode.id === modeId ? { ...mode, ...updatedMode } : mode
+      );
+      saveCustomModes(updatedModes);
+    },
+    [customModes, saveCustomModes],
+  );
+
   return {
     customModes,
     currentCustomMode,
@@ -76,5 +89,6 @@ export function useCustomModes() {
     loadCustomModes,
     createCustomMode,
     deleteCustomMode,
+    updateCustomMode,
   };
 }

@@ -12,6 +12,8 @@ import React, {
 } from 'react';
 import { Language, Translations, loadTranslations } from '@/lib/i18n';
 import { soundConfig, SoundKey } from './config/sounds';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 type Theme = 'light' | 'dark';
 
@@ -42,6 +44,16 @@ type GlobalContextType = {
   stopAllSounds: () => void;
   getAudioRef: (key: SoundKey) => HTMLAudioElement | undefined;
   getAllAudioRef: (key: SoundKey) => Map<SoundKey, HTMLAudioElement> | undefined;
+
+  // Dialog
+  showToast: (message: string, type: 'success' | 'error') => void;
+  showConfirmDialog: (
+    title: string,
+    message: string,
+    onConfirm: () => void,
+    onCancel?: () => void,
+  ) => void;
+  hideConfirmDialog: () => void;
 };
 
 // ----- Context -----
@@ -185,6 +197,46 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     loadTranslationsAsync();
   }, [language]);
 
+  // -------- Dialog --------
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
+
+  const showConfirmDialog = useCallback(
+    (title: string, message: string, onConfirm: () => void, onCancel?: () => void) => {
+      setConfirmDialog({
+        isOpen: true,
+        title,
+        message,
+        onConfirm,
+        onCancel,
+      });
+    },
+    [],
+  );
+
+  const hideConfirmDialog = useCallback(() => {
+    setConfirmDialog((prev) => ({
+      ...prev,
+      isOpen: false,
+    }));
+  }, []);
+
+  const showToast = useCallback((message: string, type: 'success' | 'error') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
+
   // -------- Context Value --------
   const contextValue: GlobalContextType = {
     theme,
@@ -205,6 +257,10 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     stopAllSounds,
     getAudioRef,
     getAllAudioRef,
+
+    showToast,
+    showConfirmDialog,
+    hideConfirmDialog,
   };
 
   if (loadingTranslations) {
@@ -218,7 +274,90 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     );
   }
 
-  return <GlobalContext.Provider value={contextValue}>{children}</GlobalContext.Provider>;
+  return (
+    <GlobalContext.Provider value={contextValue}>
+      {children}
+
+      {toast && (
+        <div className={`toast ${toast.type}`}>
+          {toast.type === 'success' ? <CheckCircle size={20} /> : <XCircle size={20} />}
+          <span>{toast.message}</span>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {confirmDialog.isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
+            onClick={(e) =>
+              e.target === e.currentTarget &&
+              (confirmDialog.onCancel ? confirmDialog.onCancel() : hideConfirmDialog())
+            }
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="
+                bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl
+                w-full max-w-sm mx-4 overflow-hidden
+                border border-gray-200/20 dark:border-gray-700/20
+              "
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* 弹窗标题 */}
+              <div className="px-6 pt-6 pb-4 text-center">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  {confirmDialog.title}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {confirmDialog.message}
+                </p>
+              </div>
+
+              {/* 按钮区域 */}
+              <div className="flex flex-col">
+                {/* 分割线 */}
+                <div className="h-px bg-gray-200 dark:bg-gray-700" />
+
+                {/* 确认按钮 */}
+                <motion.button
+                  onClick={confirmDialog.onConfirm}
+                  className="
+                    w-full py-4 text-center text-blue-600 dark:text-blue-400 font-semibold text-base
+                    hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors
+                    active:bg-blue-100 dark:active:bg-blue-900/40
+                  "
+                  whileTap={{ scale: 0.98 }}
+                >
+                  确认
+                </motion.button>
+
+                {/* 分割线 */}
+                <div className="h-px bg-gray-200 dark:bg-gray-700" />
+
+                {/* 取消按钮 */}
+                <motion.button
+                  onClick={confirmDialog.onCancel || hideConfirmDialog}
+                  className="
+                    w-full py-4 text-center text-gray-600 dark:text-gray-400 font-medium text-base
+                    hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors
+                    active:bg-gray-100 dark:active:bg-gray-700
+                  "
+                  whileTap={{ scale: 0.98 }}
+                >
+                  取消
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </GlobalContext.Provider>
+  );
 };
 
 // ----- Hook -----

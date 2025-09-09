@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import Timer from '@/components/game/flying/components/Timer/Timer';
 import type { CurrentTask, PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
-import { Translations } from '@/lib/i18n';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 interface WinTaskModalProps {

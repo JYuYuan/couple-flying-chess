@@ -16,7 +16,6 @@ import { TaskModal } from '@/components/game/flying/components/TaskModal/TaskMod
 import { WinModal } from '@/components/game/flying/components/WinModal/WinModal';
 import { WinTaskModal } from '@/components/game/flying/components/WinTaskModal/WinTaskModal';
 import { GameMode, PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
-import LanguageSelector from '@/components/language-selector';
 import SpecialEffects, {
   EffectType,
 } from '@/components/game/flying/components/SpecialEffects/SpecialEffects';
@@ -33,7 +32,7 @@ interface gamePlayParams {
 const GamePlayPage: React.FC = () => {
   const params: gamePlayParams = useParams(); // 动态路由参数
   const { isNewGame = 1, initialCustomMode = '', initialGameMode = 'normal' } = params || {};
-  const { playSound, translations, language } = useGlobal();
+  const { playSound, translations, language, showToast } = useGlobal();
   const router = useRouter();
 
   const persistence = useGamePersistence();
@@ -49,8 +48,6 @@ const GamePlayPage: React.FC = () => {
 
   // 基础状态
   const [boardPath, setBoardPath] = useState<PathCell[]>([]);
-
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // 特效状态
   const [currentEffect, setCurrentEffect] = useState<EffectType>(null);
@@ -247,12 +244,6 @@ const GamePlayPage: React.FC = () => {
   }, [initialGameMode, initialCustomMode, isNewGame, language]);
 
   useEffect(() => {
-    if (gameState.gameState !== 'start' && gameState.gameMode) {
-      taskManagement.loadTasks(gameState.gameMode, language);
-    }
-  }, [language]);
-
-  useEffect(() => {
     if (gameState.gameMode === 'custom' && customModes.currentCustomMode) {
       if (customModes.currentCustomMode.tasks.length > 0) {
         taskManagement.setTaskQueue(shuffleArray([...customModes.currentCustomMode.tasks]));
@@ -261,12 +252,6 @@ const GamePlayPage: React.FC = () => {
       }
     }
   }, [gameState.gameMode, customModes.currentCustomMode]);
-
-  // 工具函数
-  const showToast = useCallback((message: string, type: 'success' | 'error') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
 
   // 事件处理
   const rollDice = () => {
@@ -338,7 +323,7 @@ const GamePlayPage: React.FC = () => {
     router.back();
   }, [gameState, persistence]);
 
-  if (taskManagement.isLoadingTasks) return <Loading />
+  if (taskManagement.isLoadingTasks) return <Loading />;
 
   return (
     <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950 relative">
@@ -386,7 +371,7 @@ const GamePlayPage: React.FC = () => {
                   {translations?.game.title}
                 </h1>
                 <p
-                  className="text-xs sm:text-sm lg:text-base font-semibold transition-all duration-300 truncate animate-pulse"
+                  className="text-xs sm:text-sm lg:text-base font-semibold transition-all duration-300 truncate"
                   style={{
                     color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
                   }}
@@ -396,11 +381,6 @@ const GamePlayPage: React.FC = () => {
                     : translations?.modes[gameState.gameMode].name}
                 </p>
               </div>
-            </div>
-
-            {/* 控制器区域 */}
-            <div className="flex-shrink-0 flex items-center gap-2">
-              <LanguageSelector />
             </div>
           </div>
         </div>
@@ -581,13 +561,6 @@ const GamePlayPage: React.FC = () => {
           onTaskComplete={handleWinTaskComplete}
           selectedWinTask={gameState.selectedWinTask}
         />
-      )}
-
-      {toast && (
-        <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? <CheckCircle size={20} /> : <XCircle size={20} />}
-          <span>{toast.message}</span>
-        </div>
       )}
 
       {/* 特效组件 */}

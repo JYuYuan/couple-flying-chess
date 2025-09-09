@@ -2,7 +2,6 @@ import React from 'react';
 import { BirdIcon as Helicopter, Bomb, Plane, Rocket, Star, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { PlayerColor } from '@/components/game/flying/types/game';
-import { Translations } from '@/lib/i18n';
 import { PathCell } from '@/lib/game-config';
 
 interface GameBoardProps {

@@ -21,6 +21,7 @@
       "disabled": "已禁用",
       "volume": "音量",
       "testPlay": "测试播放",
+      "globalMute": "全局静音",
       "names": {
         "bgm": "背景音乐",
         "rollDice": "掷骰子",
@@ -28,6 +29,10 @@
         "countDown": "倒计时",
         "stopDice": "停止骰子"
       }
+    },
+    "taskTemplate": {
+      "title": "任务模板设置",
+      "description": "管理和编辑游戏任务模板"
     },
     "other": {
       "title": "其他设置",

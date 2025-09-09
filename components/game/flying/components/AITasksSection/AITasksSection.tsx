@@ -1,7 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
 import type { DeepSeekApiConfig, NewCustomMode } from '@/components/game/flying/types/game';
-import { Translations } from '@/lib/i18n';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 interface AITasksSectionProps {

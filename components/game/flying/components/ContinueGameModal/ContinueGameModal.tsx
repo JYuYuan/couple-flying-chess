@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { RotateCcw, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
-import { Translations } from '@/lib/i18n';
 import { GameMode } from '@/components/game/flying/types/game';
 import { useGlobal } from '@/contexts/GlobalContext';
 

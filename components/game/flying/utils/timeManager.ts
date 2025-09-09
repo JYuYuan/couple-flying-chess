@@ -1,4 +1,6 @@
 // 游戏时间管理工具
+import { randomMs } from '@/lib/utils';
+
 export interface TimeSettings {
   defaultTaskTime: number; // 默认任务时间（秒）
   keywordTimes: { [keyword: string]: number }; // 关键词对应时间（秒）
@@ -9,27 +11,27 @@ export interface TimeSettings {
 export const defaultTimeSettings: TimeSettings = {
   defaultTaskTime: 60,
   keywordTimes: {
-    '亲吻': 10,
-    '拥抱': 15,
-    '按摩': 120,
-    '做菜': 300,
-    '运动': 600,
-    '游戏': 180,
-    '跳舞': 120,
-    '唱歌': 60,
-    '拍照': 30,
-    '聊天': 300,
-    '写作': 600,
-    '阅读': 900,
-    '绘画': 1200,
-    '冥想': 300,
-    '瑜伽': 1800,
-    '购物': 3600,
-    '散步': 1200,
-    '看电影': 7200,
-    '洗澡': 1800,
-    '化妆': 1200,
-    '打扫': 2400,
+    亲吻: 10,
+    拥抱: 15,
+    按摩: 120,
+    做菜: 300,
+    运动: 600,
+    游戏: 180,
+    跳舞: 120,
+    唱歌: 60,
+    拍照: 30,
+    聊天: 300,
+    写作: 600,
+    阅读: 900,
+    绘画: 1200,
+    冥想: 300,
+    瑜伽: 1800,
+    购物: 3600,
+    散步: 1200,
+    看电影: 7200,
+    洗澡: 1800,
+    化妆: 1200,
+    打扫: 2400,
   },
   enableAutoTime: true,
 };
@@ -67,7 +69,7 @@ export const saveTimeSettings = (settings: TimeSettings): void => {
 // 检测任务内容中的关键词并返回对应时间
 export const detectTaskTime = (taskContent: string, settings?: TimeSettings): number => {
   const timeSettings = settings || loadTimeSettings();
-  
+
   // 如果未启用自动时间检测，返回默认时间
   if (!timeSettings.enableAutoTime) {
     return timeSettings.defaultTaskTime;
@@ -86,7 +88,9 @@ export const detectTaskTime = (taskContent: string, settings?: TimeSettings): nu
 
   // 如果找到匹配的关键词，返回最长时间
   if (matchedKeywords.length > 0) {
-    console.log(`Task: "${taskContent}" matched keywords: [${matchedKeywords.join(', ')}], time: ${maxTime}s`);
+    console.log(
+      `Task: "${taskContent}" matched keywords: [${matchedKeywords.join(', ')}], time: ${maxTime}s`,
+    );
     return maxTime;
   }
 
@@ -115,20 +119,22 @@ export const secondsToMilliseconds = (seconds: number): number => {
 };
 
 // 获取任务建议时间
-export const getSuggestedTaskTime = (taskContent: string): { time: number; reason: string; keywords: string[] } => {
+export const getSuggestedTaskTime = (
+  taskContent: string,
+): { time: number; reason: string; keywords: string[] } => {
   const timeSettings = loadTimeSettings();
-  let maxTime = timeSettings.defaultTaskTime;
+  const min = 5,
+    max = timeSettings.defaultTaskTime;
+  let maxTime = Math.floor(randomMs(min * 1000, max * 1000) / 1000);
   let matchedKeywords: string[] = [];
-  let reason = '使用默认时间';
+  let reason = `使用默认随机时间${min}秒~${max}秒`;
 
   if (timeSettings.enableAutoTime) {
     Object.entries(timeSettings.keywordTimes).forEach(([keyword, time]) => {
       if (taskContent.includes(keyword)) {
         matchedKeywords.push(keyword);
-        if (time > maxTime) {
-          maxTime = time;
-          reason = `匹配关键词"${keyword}"`;
-        }
+        maxTime = time;
+        reason = `匹配关键词"${keyword}"`;
       }
     });
 
@@ -138,15 +144,22 @@ export const getSuggestedTaskTime = (taskContent: string): { time: number; reaso
   }
 
   return {
-    time: maxTime,
     reason,
+    time: maxTime,
     keywords: matchedKeywords,
   };
 };
 
 // 批量检测多个任务的时间
-export const detectBatchTaskTimes = (tasks: string[], settings?: TimeSettings): Array<{ task: string; time: number; keywords: string[] }> => {
-  return tasks.map(task => {
+export const detectBatchTaskTimes = (
+  tasks: string[],
+  settings?: TimeSettings,
+): Array<{
+  task: string;
+  time: number;
+  keywords: string[];
+}> => {
+  return tasks.map((task) => {
     const time = detectTaskTime(task, settings);
     const suggestion = getSuggestedTaskTime(task);
     return {

@@ -21,6 +21,7 @@
       "disabled": "Disabled",
       "volume": "Volume",
       "testPlay": "Test Play",
+      "globalMute": "Global Mute",
       "names": {
         "bgm": "Background Music",
         "rollDice": "Roll Dice",

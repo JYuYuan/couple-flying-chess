@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import type { CurrentTask, TaskType } from '@/components/game/flying/types/game';
 import Timer from '@/components/game/flying/components/Timer/Timer';
-import { Translations } from '@/lib/i18n';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 interface TaskModalProps {

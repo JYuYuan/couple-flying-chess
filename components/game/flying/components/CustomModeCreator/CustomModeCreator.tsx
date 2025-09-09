@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { GameMode, NewCustomMode } from '@/components/game/flying/types/game';
-import { Translations } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import { gameModes } from '@/components/game/flying/constants/game-config';

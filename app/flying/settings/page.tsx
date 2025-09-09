@@ -11,9 +11,13 @@ import {
   TimeSettings,
 } from '@/components/game/flying/utils/timeManager';
 import { useGlobal } from '@/contexts/GlobalContext';
+import { useTaskManagement } from '@/components/game/flying/hooks/useTaskManagement';
+import Loading from '@/components/Loading';
 
 const FlyingSettings: React.FC = () => {
-  const { translations } = useGlobal();
+  const { translations, language } = useGlobal();
+  const taskManagement = useTaskManagement();
+
   const t = translations?.settings?.flying;
 
   const [timeSettings, setTimeSettings] = useState<TimeSettings>(defaultTimeSettings);
@@ -44,6 +48,10 @@ const FlyingSettings: React.FC = () => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    taskManagement.loadTasks('normal', language, translations);
+  }, [language]);
 
   // 保存设置到本地存储
   const saveSettings = (newSettings: TimeSettings) => {
@@ -101,6 +109,9 @@ const FlyingSettings: React.FC = () => {
       setTestResult(result);
     }
   }, [testTask, timeSettings]);
+
+  if (taskManagement.isLoadingTasks) return <Loading />;
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
@@ -446,23 +457,20 @@ const FlyingSettings: React.FC = () => {
                 {t?.test?.tryExamples || '试试这些示例：'}
               </div>
               <div className="flex flex-wrap gap-2">
-                {[
-                  '给对方一个温暖的拥抱',
-                  '一起做一道美味的菜',
-                  '进行30分钟的运动',
-                  '看一部浪漫的电影',
-                  '一起散步聊天',
-                ].map((example) => (
-                  <motion.button
-                    key={example}
-                    onClick={() => setTestTask(example)}
-                    className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs transition-colors"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {example}
-                  </motion.button>
-                ))}
+                {taskManagement.taskQueue
+                  .filter((item) => item.indexOf('$time') > -1)
+                  .map((item) => item.replace('$time', ''))
+                  .map((example) => (
+                    <motion.button
+                      key={example}
+                      onClick={() => setTestTask(example)}
+                      className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs transition-colors"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {example}
+                    </motion.button>
+                  ))}
               </div>
             </div>
           </div>

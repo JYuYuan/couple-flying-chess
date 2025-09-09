@@ -1,4 +1,5 @@
 import {
+  Briefcase,
   Calendar,
   Coffee,
   Crown,
@@ -10,15 +11,14 @@ import {
   Lock,
   Palette,
   Plus,
+  Scroll,
   ShieldX,
   Shuffle,
   Sparkles,
+  UserCheck,
   Users,
   UtensilsCrossed,
-  Briefcase,
   Wand2,
-  UserCheck,
-  Scroll,
 } from 'lucide-react';
 import type { GameMode } from '@/components/game/flying/types/game';
 

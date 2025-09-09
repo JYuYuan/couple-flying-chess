@@ -21,6 +21,7 @@
       "disabled": "無効",
       "volume": "音量",
       "testPlay": "テスト再生",
+      "globalMute": "グローバルミュート",
       "names": {
         "bgm": "バックグラウンドミュージック",
         "rollDice": "サイコロを振る",

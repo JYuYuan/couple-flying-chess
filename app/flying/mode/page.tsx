@@ -18,7 +18,7 @@ import { motion } from 'framer-motion';
 import { Settings } from 'lucide-react';
 
 const GameModePage: React.FC = () => {
-  const { language, translations, playSound, stopSound, getAudioRef } = useGlobal();
+  const { language, translations, playSound, stopSound, getAudioRef, showToast } = useGlobal();
   const persistence = useGamePersistence();
   const router = useRouter();
 
@@ -34,11 +34,6 @@ const GameModePage: React.FC = () => {
   const [manualTask, setManualTask] = useState('');
   const [showContinueModal, setShowContinueModal] = useState(false);
   const [isClosingModal, setIsClosingModal] = useState(false);
-  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-
-  const showToast = (message: string, type: 'success' | 'error') => {
-    setToast({ type, message });
-  };
 
   const [pendingGameStart, setPendingGameStart] = useState<{
     mode: GameMode;
@@ -233,9 +228,9 @@ const GameModePage: React.FC = () => {
 
             {/* 装饰性图案 */}
             <div className="mt-6 flex justify-center space-x-2">
-              <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
-              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
+              <div className="w-2 h-2 bg-indigo-400 rounded-full"></div>
+              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+              <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
             </div>
           </div>
         </div>
@@ -276,7 +271,7 @@ const GameModePage: React.FC = () => {
               setManualTask('');
             }}
             onCreateMode={() => {
-              const success = customModes.createCustomMode(() => {
+              const success = customModes.createCustomMode(customModes.newCustomMode, () => {
                 showToast(
                   translations?.customMode.messages.createSuccess || '自定义模式创建成功！',
                   'success',
@@ -364,12 +359,6 @@ const GameModePage: React.FC = () => {
             }
           }}
         />
-      )}
-
-      {toast && (
-        <div className={`toast ${toast.type}`}>
-          <span>{toast.message}</span>
-        </div>
       )}
     </div>
   );

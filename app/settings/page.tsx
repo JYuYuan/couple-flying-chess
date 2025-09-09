@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Play, Volume2, VolumeX, Zap } from 'lucide-react';
+import { ArrowLeft, ListTodo, Play, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { soundConfig, SoundKey } from '@/contexts/config/sounds';
 
@@ -109,10 +109,10 @@ export default function Settings() {
 
         {/* 设置内容 */}
         <div className="flex-1 px-6 sm:px-8 pb-8">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto space-y-6">
             {/* 全局静音控制 */}
             <motion.div
-              className="mb-6 backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
+              className="backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
@@ -120,7 +120,9 @@ export default function Settings() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <VolumeX className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">全局静音</h2>
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                    {t?.sound?.globalMute || '全局静音'}
+                  </h2>
                 </div>
 
                 <motion.label
@@ -249,9 +251,36 @@ export default function Settings() {
               </div>
             </motion.div>
 
+            {/* 任务模板设置 Item */}
+
+            <motion.div
+              className="backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+            >
+              <Link href={'/settings/task'}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <ListTodo className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                      {t?.taskTemplate?.title || '任务模板设置'}
+                    </h2>
+                  </div>
+
+                  <motion.label
+                    className="relative inline-flex items-center cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
+                  </motion.label>
+                </div>
+              </Link>
+            </motion.div>
+
             {/* 其他设置区域预留 */}
             <motion.div
-              className="mt-6 backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
+              className="backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}

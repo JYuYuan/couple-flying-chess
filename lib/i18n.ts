@@ -51,6 +51,7 @@ export interface Translations {
       disabled: string;
       volume: string;
       testPlay: string;
+      globalMute: string;
       names: {
         bgm: string;
         rollDice: string;
@@ -58,6 +59,9 @@ export interface Translations {
         countDown: string;
         stopDice: string;
       };
+    };
+    taskTemplate: {
+      title: string;
     };
     other: {
       title: string;

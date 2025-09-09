@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { PlayerColor } from '../types/game';
 import { PathCell } from '@/lib/game-config';
-import { useAudio } from '@/hooks/use-audio';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 export function usePlayerMovement(
   boardPath: PathCell[],
@@ -13,17 +13,7 @@ export function usePlayerMovement(
   setGameState: (state: any) => void,
   onMovementComplete: (position: number, player: PlayerColor) => void,
 ) {
-  const stepSound = useAudio({
-    src: '/audio/step.wav',
-    volume: 0.8, // 可选，默认为 1.0
-    loop: false, // 可选，默认为 false
-  });
-
-  const playStepSound = useCallback(() => {
-    stepSound.play().catch((error) => {
-      console.log('播放步进音效失败:', error);
-    });
-  }, []);
+  const { playSound } = useGlobal();
 
   const movePlayerStep = useCallback(
     (targetPosition: number, player: PlayerColor, currentStepPos?: number) => {
@@ -40,7 +30,7 @@ export function usePlayerMovement(
       else setBluePosition(nextPosition);
 
       // 播放步进音效
-      playStepSound();
+      playSound('stepDice');
 
       setTimeout(() => movePlayerStep(targetPosition, player, nextPosition), 300);
     },
@@ -79,7 +69,7 @@ export function usePlayerMovement(
         else setBluePosition(currentPos);
 
         // 播放步进音效
-        playStepSound();
+        playSound('stepDice');
 
         setTimeout(step, 300);
       };

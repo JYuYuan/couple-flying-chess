@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertTriangle, Bomb, Sparkles, Star, Zap } from 'lucide-react';
-import { Translations } from '@/lib/i18n';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 export type EffectType = 'star' | 'trap' | 'collision' | null;
