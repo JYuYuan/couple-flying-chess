@@ -1,27 +1,19 @@
 'use client';
 
-import { type Language, languageNames, languageFlags } from '@/lib/i18n';
-import { Github, Volume2, VolumeX } from 'lucide-react';
-import { useSound } from '@/contexts/SoundContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { type Language, languageFlags, languageNames } from '@/lib/i18n';
+import { Volume2, VolumeX } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface LanguageSelectorProps {
-  currentLanguage: Language;
-  onLanguageChange: (language: Language) => void;
-  showGithub?: boolean;
   className?: string;
 }
 
-export default function LanguageSelector({
-  currentLanguage,
-  onLanguageChange,
-  className = '',
-}: LanguageSelectorProps) {
+export default function LanguageSelector({ className = '' }: LanguageSelectorProps) {
   const languages: Language[] = ['zh', 'en', 'ja'];
-  const { isMuted, toggleMute } = useSound();
-
+  const { setLanguage, language: currentLanguage, isMuted, toggleMute } = useGlobal();
   // 根据 className 判断是否为 title 样式
   const isTitleStyle = className.includes('title');
 
@@ -30,9 +22,7 @@ export default function LanguageSelector({
       className={`flex items-center space-x-2 ${currentLanguage === 'zh' && isTitleStyle ? 'justify-center' : ''}`}
     >
       {/* iOS 16 风格语言选择按钮组 */}
-      <div
-        className="relative flex items-center p-2 rounded-2xl shadow-xl border transition-all duration-500 backdrop-blur-xl bg-white/80 border-white/40 shadow-gray-200/40 dark:bg-gray-800/80 dark:border-gray-700/40 dark:shadow-black/30"
-      >
+      <div className="relative flex items-center p-2 rounded-2xl shadow-xl border transition-all duration-500 backdrop-blur-xl bg-white/80 border-white/40 shadow-gray-200/40 dark:bg-gray-800/80 dark:border-gray-700/40 dark:shadow-black/30">
         {languages.map((lang) => (
           <motion.button
             key={lang}
@@ -44,8 +34,8 @@ export default function LanguageSelector({
                   : 'transition-colors duration-300 text-gray-700 hover:text-gray-900 hover:bg-black/10 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10'
               }
             `}
-            onClick={() => onLanguageChange(lang)}
             title={languageNames[lang]}
+            onClick={() => setLanguage(lang)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -109,9 +99,7 @@ export default function LanguageSelector({
         {/* iOS 16 风格毛玻璃背景脉冲动画 */}
         <motion.div
           className={`absolute inset-0 rounded-2xl backdrop-blur-sm ${
-            isMuted
-              ? 'bg-red-400/30 dark:bg-red-400/20'
-              : 'bg-green-400/30 dark:bg-green-400/20'
+            isMuted ? 'bg-red-400/30 dark:bg-red-400/20' : 'bg-green-400/30 dark:bg-green-400/20'
           }`}
           animate={{
             scale: [1, 1.1, 1],

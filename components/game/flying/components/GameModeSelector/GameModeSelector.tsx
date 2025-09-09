@@ -4,12 +4,12 @@ import type { CustomMode, GameMode } from '@/components/game/flying/types/game';
 import { gameModeEmojis, gameModeIcons } from '@/components/game/flying/constants/game-config';
 import { Translations } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface GameModeSelectorProps {
-  translations: Translations;
   customModes: CustomMode[];
   isLoadingTasks: boolean;
-  gameMode: GameMode;
+  gameMode?: GameMode;
   onStartGame: (mode: GameMode) => void;
   onStartCustomGame: (mode: CustomMode) => void;
   onCreateCustomMode: () => void;
@@ -363,7 +363,6 @@ const modeCategories = {
 };
 
 export function GameModeSelector({
-  translations,
   customModes,
   isLoadingTasks,
   gameMode,
@@ -372,6 +371,8 @@ export function GameModeSelector({
   onCreateCustomMode,
   onDeleteCustomMode,
 }: GameModeSelectorProps) {
+  const { translations } = useGlobal();
+
   const isDarkMode = document.documentElement.classList.contains('dark');
   // 展开/折叠状态
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
@@ -427,7 +428,11 @@ export function GameModeSelector({
                   {categoryKey === 'adult' && '❤️‍🔥'}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                  {translations.modeCategories[categoryKey as keyof Translations['modeCategories']]}
+                  {
+                    translations?.modeCategories[
+                      categoryKey as keyof Translations['modeCategories']
+                    ]
+                  }
                 </h3>
                 <span className="text-xs px-2.5 py-1 rounded-full shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-blue-500/30 dark:from-blue-600 dark:to-purple-600 dark:shadow-blue-500/20">
                   {category.length}
@@ -464,7 +469,7 @@ export function GameModeSelector({
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
                   >
                     {category.map((modeKey, index) => {
-                      const mode = translations.modes[modeKey];
+                      const mode = translations?.modes[modeKey];
                       if (!mode) return null;
 
                       const IconComponent = gameModeIcons[modeKey as GameMode];
@@ -526,7 +531,7 @@ export function GameModeSelector({
                               <div className="mt-4 flex items-center justify-center space-x-2">
                                 <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                                 <span className="text-sm font-medium">
-                                  {translations.common.loading}
+                                  {translations?.common.loading}
                                 </span>
                               </div>
                             )}
@@ -618,7 +623,7 @@ export function GameModeSelector({
                             onDeleteCustomMode(mode.id);
                           }}
                           className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 text-red-500 hover:text-red-600 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
-                          title={translations.customMode.delete}
+                          title={translations?.customMode.delete}
                         >
                           <X size={14} />
                         </button>
@@ -684,10 +689,10 @@ export function GameModeSelector({
 
                   {/* 标题和描述 */}
                   <h3 className="text-lg font-bold mb-2 transition-colors duration-300 text-gray-800 group-hover:text-slate-700 dark:text-gray-100 dark:group-hover:text-slate-300">
-                    {translations.customMode.title}
+                    {translations?.customMode.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-gray-600 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300">
-                    {translations.customMode.description}
+                    {translations?.customMode.description}
                   </p>
                 </div>
               </motion.div>

@@ -3,12 +3,11 @@ import { ArrowLeft, Crown, Sparkles, Trophy, Zap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import type { PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
-import { Translations } from '@/lib/i18n';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface WinModalProps {
   winner: PlayerColor;
   winTaskOptions: WinTaskOption[];
-  translations: Translations;
   onWinTaskSelect: (task: WinTaskOption) => void;
   onRestartFromWin: () => void;
 }
@@ -16,10 +15,11 @@ interface WinModalProps {
 export function WinModal({
   winner,
   winTaskOptions,
-  translations,
   onWinTaskSelect,
   onRestartFromWin,
 }: WinModalProps) {
+  const { translations } = useGlobal();
+
   // 禁用外层滚动
   useEffect(() => {
     // 保存当前的 overflow 样式
@@ -150,7 +150,7 @@ export function WinModal({
                 transition={{ delay: 0.5 }}
                 className="text-3xl sm:text-4xl font-black mb-4 text-gray-800 dark:text-white"
               >
-                🎉 {winner === 'red' ? translations.game.redWin : translations.game.blueWin} 🎉
+                🎉 {winner === 'red' ? translations?.game.redWin : translations?.game.blueWin} 🎉
               </motion.h1>
 
               <motion.p
@@ -159,7 +159,7 @@ export function WinModal({
                 transition={{ delay: 0.7 }}
                 className="text-lg mb-8 transition-colors duration-500 text-gray-600 dark:text-gray-300"
               >
-                {translations.game.selectWinTask || '选择一个胜利任务来庆祝吧！'}
+                {translations?.game.selectWinTask || '选择一个胜利任务来庆祝吧！'}
               </motion.p>
             </div>
 
@@ -181,7 +181,7 @@ export function WinModal({
                     className={winner === 'red' ? 'text-red-500' : 'text-blue-500'}
                   />
                   <h3 className="text-xl font-bold transition-colors duration-500 text-gray-800 dark:text-white">
-                    {translations.game.winTasksTitle || '胜利任务选择'}
+                    {translations?.game.winTasksTitle || '胜利任务选择'}
                   </h3>
                   <Trophy
                     size={24}
@@ -258,7 +258,7 @@ export function WinModal({
               >
                 <div className="flex items-center justify-center space-x-2">
                   <ArrowLeft size={20} />
-                  <span>{translations.common.skipToHome || '跳过回到首页'}</span>
+                  <span>{translations?.common.skipToHome || '跳过回到首页'}</span>
                 </div>
               </motion.button>
             </div>

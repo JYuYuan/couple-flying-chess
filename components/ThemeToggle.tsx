@@ -4,6 +4,7 @@ import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface ThemeToggleProps {
   className?: string;
@@ -11,23 +12,7 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className = '', size = 20 }: ThemeToggleProps) {
-  const { theme, toggleTheme, mounted } = useTheme();
-
-  // 防止水合不匹配，在未挂载时不渲染
-  if (!mounted) {
-    return (
-      <div
-        className={`
-          relative p-2 rounded-xl transition-all duration-300
-          bg-white hover:bg-gray-50 text-gray-600 shadow-lg shadow-gray-200/50
-          dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-yellow-400 dark:shadow-gray-900/20
-          border border-gray-200 dark:border-gray-700
-          ${className}
-        `}
-        style={{ width: size + 16, height: size + 16 }}
-      />
-    );
-  }
+  const { theme, toggleTheme } = useGlobal();
 
   const isDark = theme === 'dark';
 

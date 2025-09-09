@@ -42,6 +42,68 @@ export interface Translations {
     skipToHome: string;
     cancel: string;
   };
+  settings: {
+    title: string;
+    backToHome: string;
+    sound: {
+      title: string;
+      enabled: string;
+      disabled: string;
+      volume: string;
+      testPlay: string;
+      names: {
+        bgm: string;
+        rollDice: string;
+        stepDice: string;
+        countDown: string;
+        stopDice: string;
+      };
+    };
+    other: {
+      title: string;
+      comingSoon: string;
+    };
+    flying: {
+      title: string;
+      backToGameMode: string;
+      resetToDefaults: string;
+      basic: {
+        title: string;
+        defaultTaskTime: string;
+        defaultTaskTimeDesc: string;
+        smartTimeDetection: string;
+        smartTimeDetectionDesc: string;
+      };
+      keywords: {
+        title: string;
+        addNew: string;
+        addNewKeyword: string;
+        seconds: string;
+        deleteKeyword: string;
+      };
+      test: {
+        title: string;
+        taskContent: string;
+        taskPlaceholder: string;
+        detectedTime: string;
+        matchedKeywords: string;
+        detectionReason: string;
+        noMatch: string;
+        tryExamples: string;
+        useDefault: string;
+        matchedKeyword: string;
+        multipleKeywords: string;
+      };
+      usage: {
+        title: string;
+        point1: string;
+        point2: string;
+        point3: string;
+        point4: string;
+        point5: string;
+      };
+    };
+  };
   game: {
     title: string;
     subtitle: string;

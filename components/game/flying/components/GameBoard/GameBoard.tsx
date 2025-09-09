@@ -11,7 +11,6 @@ interface GameBoardProps {
   bluePosition: number;
   currentPlayer: PlayerColor;
   isMoving: boolean;
-  translations: Translations;
 }
 
 export function GameBoard({

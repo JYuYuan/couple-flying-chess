@@ -9,7 +9,70 @@
     "rolling": "掷骰中...",
     "moving": "移动中...",
     "preparing": "准备中...",
-    "skipToHome": "跳过回到首页"
+    "skipToHome": "跳过回到首页",
+    "cancel": "取消"
+  },
+  "settings": {
+    "title": "设置",
+    "backToHome": "返回主页",
+    "sound": {
+      "title": "声音设置",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "volume": "音量",
+      "testPlay": "测试播放",
+      "names": {
+        "bgm": "背景音乐",
+        "rollDice": "掷骰子",
+        "stepDice": "移动棋子",
+        "countDown": "倒计时",
+        "stopDice": "停止骰子"
+      }
+    },
+    "other": {
+      "title": "其他设置",
+      "comingSoon": "更多设置选项即将推出..."
+    },
+    "flying": {
+      "title": "游戏时间设置",
+      "backToGameMode": "返回游戏模式",
+      "resetToDefaults": "重置为默认设置",
+      "basic": {
+        "title": "基础设置",
+        "defaultTaskTime": "默认任务时间",
+        "defaultTaskTimeDesc": "未匹配关键词时使用的默认时间",
+        "smartTimeDetection": "智能时间检测",
+        "smartTimeDetectionDesc": "根据任务内容关键词自动设置时间"
+      },
+      "keywords": {
+        "title": "关键词时间配置",
+        "addNew": "添加新关键词",
+        "addNewKeyword": "输入关键词...",
+        "seconds": "秒",
+        "deleteKeyword": "删除关键词"
+      },
+      "test": {
+        "title": "关键词检测测试",
+        "taskContent": "测试任务内容：",
+        "taskPlaceholder": "输入任务描述来测试关键词检测...",
+        "detectedTime": "检测时间",
+        "matchedKeywords": "匹配关键词",
+        "detectionReason": "检测原因",
+        "noMatch": "无匹配",
+        "tryExamples": "试试这些示例：",
+        "useDefault": "使用默认时间",
+        "matchedKeyword": "匹配关键词",
+        "multipleKeywords": "匹配多个关键词，使用最长时间"
+      },
+      "usage": {
+        "title": "使用说明",
+        "point1": "启用\"智能时间检测\"后，系统会自动识别任务中的关键词并设置对应时间",
+        "point2": "如果任务包含多个关键词，将使用时间最长的关键词",
+        "point3": "未匹配到关键词时，将使用默认任务时间",
+        "point4": "所有时间设置会自动保存到本地存储",
+        "point5": "可以在上方测试区域实时预览关键词检测效果"
+      }
+    }
   },
   "game": {
     "title": "飞行棋",

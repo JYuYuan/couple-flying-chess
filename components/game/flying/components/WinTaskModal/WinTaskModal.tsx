@@ -5,12 +5,12 @@ import { Portal } from '@/components/Portal';
 import Timer from '@/components/game/flying/components/Timer/Timer';
 import type { CurrentTask, PlayerColor, WinTaskOption } from '@/components/game/flying/types/game';
 import { Translations } from '@/lib/i18n';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface WinTaskModalProps {
   winner: PlayerColor;
   selectedWinTask: WinTaskOption;
   currentTask?: CurrentTask | null;
-  translations: Translations;
   onTaskComplete: () => void;
   onRestart: () => void;
 }
@@ -19,10 +19,11 @@ export function WinTaskModal({
   winner,
   selectedWinTask,
   currentTask,
-  translations,
   onTaskComplete,
   onRestart,
 }: WinTaskModalProps) {
+  const { translations } = useGlobal();
+
   // 禁用外层滚动
   useEffect(() => {
     // 保存当前的 overflow 样式
@@ -94,7 +95,7 @@ export function WinTaskModal({
                   <Star size={28} className={winner === 'red' ? 'text-red-600' : 'text-blue-600'} />
                 </motion.div>
                 <h2 className="text-2xl font-bold transition-colors duration-500 text-gray-800 dark:text-white">
-                  {translations.game.winTaskExecution || '胜利任务执行'}
+                  {translations?.game.winTaskExecution || '胜利任务执行'}
                 </h2>
               </div>
 
@@ -113,8 +114,8 @@ export function WinTaskModal({
                     className={`w-2 h-2 rounded-full mr-2 ${winner === 'red' ? 'bg-red-500' : 'bg-blue-500'}`}
                   ></motion.div>
                   {winner === 'red'
-                    ? translations.tasks.redExecute
-                    : translations.tasks.blueExecute}
+                    ? translations?.tasks.redExecute
+                    : translations?.tasks.blueExecute}
                 </div>
               </div>
             </div>
@@ -164,7 +165,7 @@ export function WinTaskModal({
                   <Heart size={24} className="text-pink-500" />
                 </motion.div>
                 <p className="text-center font-medium transition-colors duration-500 text-gray-600 dark:text-gray-300">
-                  {translations.game.celebrationMessage || '完成这个任务来庆祝你们的胜利！'}
+                  {translations?.game.celebrationMessage || '完成这个任务来庆祝你们的胜利！'}
                 </p>
               </div>
 
@@ -192,7 +193,7 @@ export function WinTaskModal({
                     >
                       <CheckCircle size={18} />
                     </motion.div>
-                    <span>{translations.common.completed}</span>
+                    <span>{translations?.common.completed}</span>
                   </div>
                 </motion.button>
                 <motion.button
@@ -203,7 +204,7 @@ export function WinTaskModal({
                 >
                   <div className="flex items-center justify-center space-x-2">
                     <RotateCcw size={16} />
-                    <span>{translations.common.restart}</span>
+                    <span>{translations?.common.restart}</span>
                   </div>
                 </motion.button>
               </div>

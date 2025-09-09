@@ -12,6 +12,68 @@
     "skipToHome": "Skip to Home",
     "cancel": "Cancel"
   },
+  "settings": {
+    "title": "Settings",
+    "backToHome": "Back to Home",
+    "sound": {
+      "title": "Sound Settings",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "volume": "Volume",
+      "testPlay": "Test Play",
+      "names": {
+        "bgm": "Background Music",
+        "rollDice": "Roll Dice",
+        "stepDice": "Move Piece",
+        "countDown": "Countdown",
+        "stopDice": "Stop Dice"
+      }
+    },
+    "other": {
+      "title": "Other Settings",
+      "comingSoon": "More setting options coming soon..."
+    },
+    "flying": {
+      "title": "Game Time Settings",
+      "backToGameMode": "Back to Game Mode",
+      "resetToDefaults": "Reset to Defaults",
+      "basic": {
+        "title": "Basic Settings",
+        "defaultTaskTime": "Default Task Time",
+        "defaultTaskTimeDesc": "Default time when no keywords match",
+        "smartTimeDetection": "Smart Time Detection",
+        "smartTimeDetectionDesc": "Automatically set time based on task keywords"
+      },
+      "keywords": {
+        "title": "Keyword Time Configuration",
+        "addNew": "Add New Keyword",
+        "addNewKeyword": "Enter keyword...",
+        "seconds": "seconds",
+        "deleteKeyword": "Delete keyword"
+      },
+      "test": {
+        "title": "Keyword Detection Test",
+        "taskContent": "Test Task Content:",
+        "taskPlaceholder": "Enter task description to test keyword detection...",
+        "detectedTime": "Detected Time",
+        "matchedKeywords": "Matched Keywords",
+        "detectionReason": "Detection Reason",
+        "noMatch": "No Match",
+        "tryExamples": "Try these examples:",
+        "useDefault": "Use default time",
+        "matchedKeyword": "Matched keyword",
+        "multipleKeywords": "Multiple keywords matched, using longest time"
+      },
+      "usage": {
+        "title": "Usage Instructions",
+        "point1": "When \"Smart Time Detection\" is enabled, the system will automatically identify keywords in tasks and set corresponding times",
+        "point2": "If a task contains multiple keywords, the longest time will be used",
+        "point3": "When no keywords match, the default task time will be used",
+        "point4": "All time settings are automatically saved to local storage",
+        "point5": "You can preview keyword detection effects in the test area above"
+      }
+    }
+  },
   "game": {
     "title": "Flight Chess",
     "subtitle": "Love Flight Chess",

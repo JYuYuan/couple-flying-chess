@@ -5,15 +5,16 @@ import { Portal } from '@/components/Portal';
 import type { CurrentTask, TaskType } from '@/components/game/flying/types/game';
 import Timer from '@/components/game/flying/components/Timer/Timer';
 import { Translations } from '@/lib/i18n';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface TaskModalProps {
   currentTask: CurrentTask;
   taskType: TaskType;
-  translations: Translations;
   onTaskComplete: (isCompleted: boolean) => void;
 }
 
-export function TaskModal({ currentTask, taskType, translations, onTaskComplete }: TaskModalProps) {
+export function TaskModal({ currentTask, taskType, onTaskComplete }: TaskModalProps) {
+  const { translations } = useGlobal();
   // 禁用外层滚动
   useEffect(() => {
     // 保存当前的 overflow 样式
@@ -42,7 +43,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
       case 'star':
         return {
           icon: Star,
-          title: translations.tasks.starTask,
+          title: translations?.tasks.starTask,
           bgGradient:
             'from-yellow-100/80 to-amber-100/80 dark:from-yellow-600/20 dark:to-amber-700/20',
           iconColor: 'text-yellow-500 drop-shadow-sm',
@@ -51,7 +52,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
       case 'trap':
         return {
           icon: AlertTriangle,
-          title: translations.tasks.trapTask,
+          title: translations?.tasks.trapTask,
           bgGradient: 'from-orange-100/80 to-red-100/80 dark:from-orange-600/20 dark:to-red-700/20',
           iconColor: 'text-orange-500 drop-shadow-sm',
           borderColor: 'border-orange-200 dark:border-orange-600/30',
@@ -59,7 +60,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
       default:
         return {
           icon: Users,
-          title: translations.tasks.collisionTask,
+          title: translations?.tasks.collisionTask,
           bgGradient:
             'from-purple-100/80 to-pink-100/80 dark:from-purple-600/20 dark:to-pink-700/20',
           iconColor: 'text-purple-500 drop-shadow-sm',
@@ -106,7 +107,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                   <TaskIcon size={32} className={taskInfo.iconColor} />
                 </div>
                 <h2 className="text-2xl font-black transition-colors duration-500 text-gray-900 dark:text-white tracking-tight">
-                  {translations.tasks.challenge}
+                  {translations?.tasks.challenge}
                 </h2>
               </div>
               <p className="text-center font-bold transition-colors duration-500 text-gray-700 dark:text-gray-300">
@@ -136,8 +137,8 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                     }}
                   ></div>
                   {currentTask.executor === 'red'
-                    ? translations.tasks.redExecute
-                    : translations.tasks.blueExecute}
+                    ? translations?.tasks.redExecute
+                    : translations?.tasks.blueExecute}
                 </div>
               </div>
 
@@ -182,8 +183,8 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                       className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
                     >
                       {taskType === 'collision'
-                        ? translations.tasks.collisionCompletedReward
-                        : translations.tasks.completedReward}
+                        ? translations?.tasks.collisionCompletedReward
+                        : translations?.tasks.completedReward}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -192,8 +193,8 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                       className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
                     >
                       {taskType === 'collision'
-                        ? translations.tasks.collisionFailedPenalty
-                        : translations.tasks.failedPenalty}
+                        ? translations?.tasks.collisionFailedPenalty
+                        : translations?.tasks.failedPenalty}
                     </span>
                   </div>
                 </div>
@@ -227,7 +228,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                 >
                   <div className="flex items-center justify-center space-x-3">
                     <CheckCircle size={22} className="drop-shadow-sm" />
-                    <span className="text-lg tracking-wide">{translations.common.completed}</span>
+                    <span className="text-lg tracking-wide">{translations?.common.completed}</span>
                   </div>
                 </motion.button>
                 <motion.button
@@ -242,7 +243,7 @@ export function TaskModal({ currentTask, taskType, translations, onTaskComplete 
                 >
                   <div className="flex items-center justify-center space-x-3">
                     <XCircle size={22} className="drop-shadow-sm" />
-                    <span className="text-lg tracking-wide">{translations.common.failed}</span>
+                    <span className="text-lg tracking-wide">{translations?.common.failed}</span>
                   </div>
                 </motion.button>
               </div>

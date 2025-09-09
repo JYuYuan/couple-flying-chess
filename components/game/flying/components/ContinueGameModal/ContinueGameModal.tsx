@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import { Translations } from '@/lib/i18n';
 import { GameMode } from '@/components/game/flying/types/game';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface ContinueGameModalProps {
   gameMode: string;
@@ -14,7 +15,6 @@ interface ContinueGameModalProps {
   onContinue: () => void;
   onNewGame: () => void;
   onClose?: () => void;
-  translations: Translations;
   isVisible?: boolean;
 }
 
@@ -27,9 +27,9 @@ export function ContinueGameModal({
   onContinue,
   onNewGame,
   onClose,
-  translations,
   isVisible = true,
 }: ContinueGameModalProps) {
+  const { translations } = useGlobal();
   // 禁用外层滚动
   useEffect(() => {
     if (!isVisible) return;

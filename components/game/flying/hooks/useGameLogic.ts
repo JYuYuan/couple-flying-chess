@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { CurrentTask, GameState, PlayerColor, TaskType } from '../types/game';
 import { PathCell } from '@/lib/game-config';
 import { Translations } from '@/lib/i18n';
 import { randomMs } from '@/lib/utils';
+import { defaultTimeSettings, TimeSettings } from '@/components/game/flying/utils/timeManager';
 
 export function useGameLogic(
   boardPath: PathCell[],
@@ -22,6 +23,24 @@ export function useGameLogic(
     originalPosition: number,
   ) => void,
 ) {
+  const [timeSettings, setTimeSettings] = useState<TimeSettings>(defaultTimeSettings);
+
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('flyingTimeSettings');
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        setTimeSettings((prev) => ({
+          ...prev,
+          ...parsed,
+          keywordTimes: { ...defaultTimeSettings.keywordTimes, ...parsed.keywordTimes },
+        }));
+      } catch (error) {
+        console.error('Failed to parse time settings:', error);
+      }
+    }
+  }, []);
+
   const triggerTask = useCallback(
     (type: TaskType, playerOnCell: PlayerColor, translations?: Translations) => {
       if (taskQueue.length === 0) {
@@ -46,8 +65,17 @@ export function useGameLogic(
 
       // 从任务描述中提取时间信息并转换为毫秒
       let durationMs: number | undefined;
-      if (currentTaskDescription.indexOf('$time') > -1)
-        durationMs = randomMs(5 * 1000, 60 * 1000);
+      if (currentTaskDescription.indexOf('$time') > -1) {
+        if (timeSettings.enableAutoTime) {
+          Object.entries(timeSettings.keywordTimes).forEach(([keyword, time]) => {
+            if (currentTaskDescription.indexOf(keyword) > -1) {
+              durationMs = time;
+            }
+          });
+        } else {
+          durationMs = randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
+        }
+      }
 
       setCurrentTask({
         executor,
@@ -57,7 +85,7 @@ export function useGameLogic(
       });
       setGameState('task');
     },
-    [taskQueue, setTaskQueue, setCurrentTask, setGameState],
+    [taskQueue, setTaskQueue, setCurrentTask, setGameState, timeSettings],
   );
 
   const checkSpecialEvents = useCallback(

@@ -2,12 +2,12 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import type { DeepSeekApiConfig, NewCustomMode } from '@/components/game/flying/types/game';
 import { Translations } from '@/lib/i18n';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface AITasksSectionProps {
   deepSeekApi: DeepSeekApiConfig;
   newCustomMode: NewCustomMode;
   isGeneratingTasks: boolean;
-  translations: Translations;
   onApiKeyChange: (key: string) => void;
   onApiConfigChange: (updates: Partial<DeepSeekApiConfig>) => void;
   onGenerateTasks: () => void;
@@ -18,12 +18,13 @@ export function AITasksSection({
   deepSeekApi,
   newCustomMode,
   isGeneratingTasks,
-  translations,
   onApiKeyChange,
   onApiConfigChange,
   onGenerateTasks,
   onToggleTask,
 }: AITasksSectionProps) {
+  const { translations } = useGlobal();
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -33,7 +34,7 @@ export function AITasksSection({
             type="text"
             maxLength={100}
             value={deepSeekApi.apiKey}
-            placeholder={translations.customMode.ai.deepSeekKey}
+            placeholder={translations?.customMode.ai.deepSeekKey}
             onChange={(e) => onApiKeyChange(e.target.value)}
             className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
@@ -43,7 +44,7 @@ export function AITasksSection({
             rel="noopener noreferrer"
             className="inline-block text-sm font-medium transition-colors duration-200 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
           >
-            {translations.customMode.ai.link}
+            {translations?.customMode.ai.link}
           </a>
         </div>
       </div>
@@ -51,13 +52,13 @@ export function AITasksSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            {translations.customMode.ai.role}
+            {translations?.customMode.ai.role}
           </label>
           <input
             type="text"
             maxLength={100}
             value={deepSeekApi.role}
-            placeholder={translations.customMode.ai.role}
+            placeholder={translations?.customMode.ai.role}
             onChange={(e) => onApiConfigChange({ role: e.target.value })}
             className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
@@ -65,13 +66,13 @@ export function AITasksSection({
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            {translations.customMode.ai.keyword}
+            {translations?.customMode.ai.keyword}
           </label>
           <input
             type="text"
             maxLength={100}
             value={deepSeekApi.keyword}
-            placeholder={translations.customMode.ai.keyword}
+            placeholder={translations?.customMode.ai.keyword}
             onChange={(e) => onApiConfigChange({ keyword: e.target.value })}
             className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
@@ -81,13 +82,13 @@ export function AITasksSection({
       <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
         <div className="flex-1 space-y-2">
           <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            {translations.customMode.ai.number}
+            {translations?.customMode.ai.number}
           </label>
           <input
             type="text"
             maxLength={30}
             value={deepSeekApi.taskNum}
-            placeholder={translations.customMode.ai.number}
+            placeholder={translations?.customMode.ai.number}
             onChange={(e) => onApiConfigChange({ taskNum: e.target.value })}
             className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
           />
@@ -104,8 +105,8 @@ export function AITasksSection({
               )}
               <span>
                 {isGeneratingTasks
-                  ? translations.customMode.creator.loading
-                  : translations.customMode.ai.loadTasks}
+                  ? translations?.customMode.creator.loading
+                  : translations?.customMode.ai.loadTasks}
               </span>
             </div>
           </button>
@@ -116,7 +117,7 @@ export function AITasksSection({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-              {translations.customMode.ai.title}
+              {translations?.customMode.ai.title}
             </h5>
             <span className="text-indigo-600 bg-indigo-100 px-2 py-1 rounded-full text-xs">
               {deepSeekApi.tasks?.length || 0}

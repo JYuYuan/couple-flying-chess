@@ -2,11 +2,11 @@ import type React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import './seo-styles.css';
-import StructuredData from './structured-data';
 import Analytics from './analytics';
 import { PageTransition } from '@/components/PageTransition';
-import { SoundProvider } from '@/contexts/SoundContext';
-import { ThemeProvider } from '@/contexts/ThemeContext';
+import { GlobalProvider } from '@/contexts/GlobalContext';
+import SEOContent from '@/components/seo-content';
+import KeywordsContent from '@/app/keywords-content';
 
 export const metadata: Metadata = {
   title: {
@@ -128,11 +128,16 @@ export default function RootLayout({
       <body
         className={`min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950`}
       >
-        <ThemeProvider>
-          <SoundProvider>
-            <PageTransition>{children}</PageTransition>
-          </SoundProvider>
-        </ThemeProvider>
+        <GlobalProvider>
+          <PageTransition>{children}</PageTransition>
+        </GlobalProvider>
+        <div className="seo-hidden-content">
+          <SEOContent />
+        </div>
+        {/* 关键词优化内容 - 提升长尾词排名 */}
+        <div className="keywords-hidden-content" style={{ display: 'none' }}>
+          <KeywordsContent />
+        </div>
       </body>
     </html>
   );

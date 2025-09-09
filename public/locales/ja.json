@@ -9,7 +9,70 @@
     "rolling": "振っています...",
     "moving": "移動中...",
     "preparing": "準備中...",
-    "skipToHome": "ホームに戻る"
+    "skipToHome": "ホームに戻る",
+    "cancel": "キャンセル"
+  },
+  "settings": {
+    "title": "設定",
+    "backToHome": "ホームに戻る",
+    "sound": {
+      "title": "サウンド設定",
+      "enabled": "有効",
+      "disabled": "無効",
+      "volume": "音量",
+      "testPlay": "テスト再生",
+      "names": {
+        "bgm": "バックグラウンドミュージック",
+        "rollDice": "サイコロを振る",
+        "stepDice": "駒を動かす",
+        "countDown": "カウントダウン",
+        "stopDice": "サイコロを止める"
+      }
+    },
+    "other": {
+      "title": "その他の設定",
+      "comingSoon": "その他の設定オプションは近日公開予定..."
+    },
+    "flying": {
+      "title": "ゲーム時間設定",
+      "backToGameMode": "ゲームモードに戻る",
+      "resetToDefaults": "デフォルトに戻す",
+      "basic": {
+        "title": "基本設定",
+        "defaultTaskTime": "デフォルトタスク時間",
+        "defaultTaskTimeDesc": "キーワードがマッチしない場合のデフォルト時間",
+        "smartTimeDetection": "スマート時間検出",
+        "smartTimeDetectionDesc": "タスクキーワードに基づいて自動的に時間を設定"
+      },
+      "keywords": {
+        "title": "キーワード時間設定",
+        "addNew": "新しいキーワードを追加",
+        "addNewKeyword": "キーワードを入力...",
+        "seconds": "秒",
+        "deleteKeyword": "キーワードを削除"
+      },
+      "test": {
+        "title": "キーワード検出テスト",
+        "taskContent": "テストタスク内容：",
+        "taskPlaceholder": "キーワード検出をテストするためにタスク説明を入力...",
+        "detectedTime": "検出時間",
+        "matchedKeywords": "マッチしたキーワード",
+        "detectionReason": "検出理由",
+        "noMatch": "マッチなし",
+        "tryExamples": "これらの例を試してください：",
+        "useDefault": "デフォルト時間を使用",
+        "matchedKeyword": "マッチしたキーワード",
+        "multipleKeywords": "複数のキーワードがマッチ、最長時間を使用"
+      },
+      "usage": {
+        "title": "使用方法",
+        "point1": "\"スマート時間検出\"が有効の場合、システムはタスク内のキーワードを自動的に識別し、対応する時間を設定します",
+        "point2": "タスクに複数のキーワードが含まれている場合、最長時間が使用されます",
+        "point3": "キーワードがマッチしない場合、デフォルトタスク時間が使用されます",
+        "point4": "すべての時間設定はローカルストレージに自動的に保存されます",
+        "point5": "上記のテストエリアでキーワード検出効果をプレビューできます"
+      }
+    }
   },
   "game": {
     "title": "飛行チェス",

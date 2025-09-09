@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlertTriangle, Bomb, Sparkles, Star, Zap } from 'lucide-react';
 import { Translations } from '@/lib/i18n';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 export type EffectType = 'star' | 'trap' | 'collision' | null;
 
@@ -9,16 +10,15 @@ interface SpecialEffectsProps {
   effectType: EffectType;
   onComplete: () => void;
   duration?: number;
-  translations: Translations;
 }
 
 const SpecialEffects: React.FC<SpecialEffectsProps> = ({
   effectType,
   onComplete,
   duration = 2000,
-  translations,
 }) => {
   const [particles, setParticles] = useState<number[]>([]);
+  const { translations } = useGlobal();
 
   useEffect(() => {
     if (effectType) {
@@ -45,7 +45,7 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
           bgColor:
             'from-yellow-100/80 via-amber-100/90 to-orange-100/80 dark:from-yellow-900/30 dark:via-amber-900/40 dark:to-orange-900/30',
           particleColor: 'bg-yellow-500 dark:bg-yellow-400',
-          ...translations.game[effectType],
+          ...translations?.game[effectType],
         };
       case 'trap':
         return {
@@ -55,7 +55,7 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
           bgColor:
             'from-red-100/80 via-rose-100/90 to-pink-100/80 dark:from-red-900/30 dark:via-rose-900/40 dark:to-pink-900/30',
           particleColor: 'bg-red-500 dark:bg-red-400',
-          ...translations.game[effectType],
+          ...translations?.game[effectType],
         };
       case 'collision':
         return {
@@ -65,7 +65,7 @@ const SpecialEffects: React.FC<SpecialEffectsProps> = ({
           bgColor:
             'from-purple-100/80 via-indigo-100/90 to-blue-100/80 dark:from-purple-900/30 dark:via-indigo-900/40 dark:to-blue-900/30',
           particleColor: 'bg-purple-500 dark:bg-purple-400',
-          ...translations.game[effectType],
+          ...translations?.game[effectType],
         };
       default:
         return null;

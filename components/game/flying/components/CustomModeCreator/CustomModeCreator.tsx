@@ -16,6 +16,7 @@ import { Translations } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Portal } from '@/components/Portal';
 import { gameModes } from '@/components/game/flying/constants/game-config';
+import { useGlobal } from '@/contexts/GlobalContext';
 
 interface CustomModeCreatorProps {
   newCustomMode: NewCustomMode;
@@ -24,7 +25,6 @@ interface CustomModeCreatorProps {
   setManualTask: React.Dispatch<React.SetStateAction<string>>;
   availableModeTasks: Record<GameMode, string[]>;
   isLoadingTasks: boolean;
-  translations: Translations;
   onClose: () => void;
   onCreateMode: () => void;
   onLoadAllTasks: () => void;
@@ -40,7 +40,6 @@ export function CustomModeCreator({
   setManualTask,
   availableModeTasks,
   isLoadingTasks,
-  translations,
   onClose,
   onCreateMode,
   onLoadAllTasks,
@@ -48,6 +47,7 @@ export function CustomModeCreator({
   onRemoveTask,
   aiTasksSection,
 }: CustomModeCreatorProps) {
+  const { translations } = useGlobal();
   const loading = isLoadingTasks || (isLoadingTasks && !Object.keys(availableModeTasks).length);
 
   const [expandedModes, setExpandedModes] = useState<Record<string, boolean>>({});
@@ -110,10 +110,10 @@ export function CustomModeCreator({
                     </div>
                     <div>
                       <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                        {translations.customMode.creator.title}
+                        {translations?.customMode.creator.title}
                       </h2>
                       <p className="text-white/80 text-sm sm:text-base">
-                        {translations.customMode.creator.subTitle}
+                        {translations?.customMode.creator.subTitle}
                       </p>
                     </div>
                   </div>
@@ -135,14 +135,14 @@ export function CustomModeCreator({
                   <div className="flex items-center space-x-2 mb-4">
                     <Palette size={20} className="text-indigo-600" />
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      {translations.customMode.creator.baseInfo}
+                      {translations?.customMode.creator.baseInfo}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className={`text-sm font-medium text-gray-700 dark:text-gray-200`}>
-                        {translations.customMode.creator.modeName}
+                        {translations?.customMode.creator.modeName}
                       </label>
                       <input
                         type="text"
@@ -153,7 +153,7 @@ export function CustomModeCreator({
                             name: e.target.value,
                           }))
                         }
-                        placeholder={translations.customMode.creator.modeNamePlaceholder}
+                        placeholder={translations?.customMode.creator.modeNamePlaceholder}
                         maxLength={20}
                         className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700/70 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500`}
                       />
@@ -161,7 +161,7 @@ export function CustomModeCreator({
 
                     <div className="space-y-2">
                       <label className={`text-sm font-medium text-gray-700 dark:text-gray-200`}>
-                        {translations.customMode.creator.modeDescription}
+                        {translations?.customMode.creator.modeDescription}
                       </label>
                       <input
                         type="text"
@@ -172,7 +172,7 @@ export function CustomModeCreator({
                             description: e.target.value,
                           }))
                         }
-                        placeholder={translations.customMode.creator.modeDescriptionPlaceholder}
+                        placeholder={translations?.customMode.creator.modeDescriptionPlaceholder}
                         maxLength={50}
                         className={`w-full px-4 py-3 backdrop-blur-sm border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 dark:bg-gray-700/70 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 bg-white/70 border-gray-200 text-gray-800 placeholder-gray-500`}
                       />
@@ -185,7 +185,7 @@ export function CustomModeCreator({
                   <div className="flex items-center space-x-2">
                     <Wand2 size={20} className="text-purple-600" />
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                      {translations.customMode.creator.taskSelection}
+                      {translations?.customMode.creator.taskSelection}
                     </h3>
                   </div>
 
@@ -201,13 +201,13 @@ export function CustomModeCreator({
                         value="custom"
                         className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:shadow-sm dark:data-[state=active]:text-gray-100 text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800`}
                       >
-                        {translations.customMode.creatorType.custom}
+                        {translations?.customMode.creatorType.custom}
                       </TabsTrigger>
                       <TabsTrigger
                         value="ai"
                         className={`rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 dark:text-gray-300 dark:data-[state=active]:bg-gray-600 dark:data-[state=active]:shadow-sm dark:data-[state=active]:text-gray-100 text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-gray-800'`}
                       >
-                        {translations.customMode.creatorType.ai}
+                        {translations?.customMode.creatorType.ai}
                       </TabsTrigger>
                     </TabsList>
 
@@ -216,7 +216,7 @@ export function CustomModeCreator({
                         className={`backdrop-blur-sm rounded-2xl p-6 border dark:bg-gray-800/50 dark:border-gray-700/50 bg-white/50 border-gray-200/50`}
                       >
                         <h4 className="font-semibold mb-4 text-gray-800 dark:text-gray-100">
-                          {translations.customMode.creator.fromExistingModes}
+                          {translations?.customMode.creator.fromExistingModes}
                         </h4>
                         <motion.button
                           disabled={loading}
@@ -231,8 +231,8 @@ export function CustomModeCreator({
                             )}
                             <span>
                               {loading
-                                ? translations.customMode.creator.loading
-                                : translations.customMode.creator.loadTasks}
+                                ? translations?.customMode.creator.loading
+                                : translations?.customMode.creator.loadTasks}
                             </span>
                           </div>
                         </motion.button>
@@ -252,7 +252,7 @@ export function CustomModeCreator({
                                 >
                                   <div className="flex items-center space-x-3">
                                     <h6 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                      {(translations.modes as any)[mode]?.name || mode}
+                                      {(translations?.modes as any)[mode]?.name || mode}
                                     </h6>
                                     <span className="text-indigo-600 bg-indigo-100 px-2 py-1 rounded-full text-xs">
                                       {availableModeTasks[mode]?.length || 0} 个任务
@@ -312,7 +312,9 @@ export function CustomModeCreator({
                                           }}
                                         >
                                           <div className="flex items-center justify-between">
-                                            <span className="text-sm flex-1 mr-2">{task.replace("$time","")}</span>
+                                            <span className="text-sm flex-1 mr-2">
+                                              {task.replace('$time', '')}
+                                            </span>
                                             {newCustomMode.tasks.includes(task) && (
                                               <div className="w-5 h-5 bg-indigo-500 rounded-full flex items-center justify-center">
                                                 <Check size={12} className="text-white" />
@@ -345,14 +347,14 @@ export function CustomModeCreator({
                     className={`backdrop-blur-sm rounded-2xl p-6 border dark:bg-gray-800/50 dark:border-gray-700/50 bg-white/50 border-gray-200/50`}
                   >
                     <h4 className={`font-semibold mb-4 text-gray-800 dark:text-gray-100`}>
-                      {translations.customMode.creator.manualAdd}
+                      {translations?.customMode.creator.manualAdd}
                     </h4>
                     <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                       <input
                         type="text"
                         value={manualTask}
                         onChange={(e) => setManualTask(e.target.value)}
-                        placeholder={translations.customMode.creator.manualAddPlaceholder}
+                        placeholder={translations?.customMode.creator.manualAddPlaceholder}
                         maxLength={100}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
@@ -382,7 +384,7 @@ export function CustomModeCreator({
                     >
                       <div className="flex items-center justify-between mb-4">
                         <h4 className={`font-semibold text-gray-800 dark:text-gray-100`}>
-                          {translations.customMode.creator.selectedTasks}
+                          {translations?.customMode.creator.selectedTasks}
                         </h4>
                         <span className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                           {newCustomMode.tasks.length}
@@ -406,7 +408,7 @@ export function CustomModeCreator({
                               <span
                                 className={`text-sm font-semibold text-gray-700 dark:text-gray-200`}
                               >
-                                {task.replace("$time","")}
+                                {task.replace('$time', '')}
                               </span>
                             </div>
                             <motion.button
@@ -439,7 +441,7 @@ export function CustomModeCreator({
                   >
                     <div className="flex items-center justify-center space-x-2">
                       <Save size={18} />
-                      <span>{translations.customMode.creator.createButton}</span>
+                      <span>{translations?.customMode.creator.createButton}</span>
                     </div>
                   </motion.button>
                   <motion.button
@@ -448,7 +450,7 @@ export function CustomModeCreator({
                     className={`sm:w-32 font-medium py-4 px-6 rounded-xl transition-all duration-200 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 bg-gray-200 hover:bg-gray-300 text-gray-700`}
                     onClick={onClose}
                   >
-                    {translations.customMode.creator.cancel}
+                    {translations?.customMode.creator.cancel}
                   </motion.button>
                 </div>
               </div>
