@@ -100,7 +100,7 @@ export interface Translations {
     preparing: string;
     skipToHome: string;
     cancel: string;
-    confirm:string;
+    confirm: string;
   };
   customModeManager: CustomModeManager;
   settings: {
@@ -119,6 +119,8 @@ export interface Translations {
         stepDice: string;
         countDown: string;
         stopDice: string;
+        ding: string;
+        wheelSpin: string;
       };
     };
     taskTemplate: {

@@ -41,6 +41,34 @@ export function useGameLogic(
     }
   }, []);
 
+  // 确定任务执行者
+  const determineExecutor = useCallback((type: TaskType, playerOnCell: PlayerColor): PlayerColor => {
+    if (type === 'trap') {
+      return playerOnCell; // 陷阱：当前玩家执行
+    } else {
+      // 星星或碰撞：对方玩家执行
+      return playerOnCell === 'red' ? 'blue' : 'red';
+    }
+  }, []);
+
+  // 计算任务持续时间
+  const calculateTaskDuration = useCallback((taskDescription: string): number | undefined => {
+    if (taskDescription.indexOf('$time') === -1) return undefined;
+    
+    if (timeSettings.enableAutoTime) {
+      // 根据关键词匹配时间
+      for (const [keyword, time] of Object.entries(timeSettings.keywordTimes)) {
+        if (taskDescription.indexOf(keyword) > -1) {
+          return time;
+        }
+      }
+      return undefined;
+    } else {
+      // 随机生成时间
+      return randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
+    }
+  }, [timeSettings]);
+
   const triggerTask = useCallback(
     (type: TaskType, playerOnCell: PlayerColor, translations?: Translations) => {
       if (taskQueue.length === 0) {
@@ -54,28 +82,8 @@ export function useGameLogic(
       const currentTaskDescription = taskQueue[0];
       setTaskQueue([...taskQueue.slice(1), taskQueue[0]]);
 
-      let executor: PlayerColor;
-      if (type === 'star') {
-        executor = playerOnCell === 'red' ? 'blue' : 'red';
-      } else if (type === 'trap') {
-        executor = playerOnCell;
-      } else {
-        executor = playerOnCell === 'red' ? 'blue' : 'red';
-      }
-
-      // 从任务描述中提取时间信息并转换为毫秒
-      let durationMs: number | undefined;
-      if (currentTaskDescription.indexOf('$time') > -1) {
-        if (timeSettings.enableAutoTime) {
-          Object.entries(timeSettings.keywordTimes).forEach(([keyword, time]) => {
-            if (currentTaskDescription.indexOf(keyword) > -1) {
-              durationMs = time;
-            }
-          });
-        } else {
-          durationMs = randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
-        }
-      }
+      const executor = determineExecutor(type, playerOnCell);
+      const durationMs = calculateTaskDuration(currentTaskDescription);
 
       setCurrentTask({
         executor,
@@ -85,7 +93,7 @@ export function useGameLogic(
       });
       setGameState('task');
     },
-    [taskQueue, setTaskQueue, setCurrentTask, setGameState, timeSettings],
+    [taskQueue, setTaskQueue, setCurrentTask, setGameState, determineExecutor, calculateTaskDuration],
   );
 
   const checkSpecialEvents = useCallback(
@@ -140,6 +148,72 @@ export function useGameLogic(
     ],
   );
 
+  // 计算奖励或惩罚步数
+  const calculateSteps = useCallback((isCompleted: boolean) => {
+    const rewardSteps = Math.floor(Math.random() * 4);
+    const penaltySteps = Math.floor(Math.random() * 4) + 3;
+    return isCompleted ? rewardSteps : -penaltySteps;
+  }, []);
+
+  // 获取玩家当前位置
+  const getPlayerPosition = useCallback((player: PlayerColor) => {
+    return player === 'red' ? redPosition : bluePosition;
+  }, [redPosition, bluePosition]);
+
+  // 获取玩家移动消息
+  const getMovementMessage = useCallback(
+    (player: PlayerColor, steps: number, translations: Translations) => {
+      if (steps === 0) {
+        return player === 'red' ? translations.toast.redStay : translations.toast.blueStay;
+      } else if (steps > 0) {
+        const template = player === 'red' ? translations.toast.redForward : translations.toast.blueForward;
+        return template.replace('{steps}', steps.toString());
+      } else {
+        const template = player === 'red' ? translations.toast.redBackward : translations.toast.blueBackward;
+        return template.replace('{steps}', Math.abs(steps).toString());
+      }
+    },
+    []
+  );
+
+  // 处理碰撞任务结果
+  const handleCollisionTaskResult = useCallback(
+    (
+      isCompleted: boolean,
+      executorPlayer: PlayerColor,
+      translations: Translations,
+      onShowToast: (message: string, type: 'success' | 'error') => void
+    ) => {
+      let toastMessage = '';
+      let toastType: 'success' | 'error';
+
+      if (!isCompleted) {
+        toastMessage = executorPlayer === 'red' 
+          ? translations.toast.redFailedToStart 
+          : translations.toast.blueFailedToStart;
+        toastType = 'error';
+        setCurrentTask(null);
+        setTaskType(null);
+        onShowToast(toastMessage, toastType);
+        setGameState('playing');
+        switchTurn();
+        return { resetToStart: true, player: executorPlayer };
+      } else {
+        toastMessage = executorPlayer === 'red'
+          ? translations.toast.redCompleted
+          : translations.toast.blueCompleted;
+        toastType = 'success';
+        setCurrentTask(null);
+        setTaskType(null);
+        onShowToast(toastMessage, toastType);
+        setGameState('playing');
+        switchTurn();
+        return { resetToStart: false };
+      }
+    },
+    [setCurrentTask, setTaskType, setGameState, switchTurn]
+  );
+
   const handleTaskComplete = useCallback(
     (
       isCompleted: boolean,
@@ -151,75 +225,34 @@ export function useGameLogic(
       if (!currentTask || !translations) return;
 
       const activePlayer = currentTask.executor;
-      const currentPosition = activePlayer === 'red' ? redPosition : bluePosition;
+      const currentPosition = getPlayerPosition(activePlayer);
       const maxPosition = boardPath.length - 1;
       let finalPosition = currentPosition;
       let toastMessage = '';
       let toastType: 'success' | 'error' = 'success';
 
       if (taskType === 'star' || taskType === 'trap') {
-        const rewardSteps = Math.floor(Math.random() * 4);
-        const penaltySteps = Math.floor(Math.random() * 4) + 3;
-
-        if (isCompleted) {
-          let newPosition = currentPosition + rewardSteps;
+        const steps = calculateSteps(isCompleted);
+        
+        if (steps >= 0) {
+          // 处理前进或原地不动
+          let newPosition = currentPosition + steps;
           if (newPosition > maxPosition) {
             const overshoot = newPosition - maxPosition;
             newPosition = maxPosition - overshoot;
             newPosition = Math.max(0, newPosition);
           }
           finalPosition = newPosition;
-
-          if (rewardSteps === 0) {
-            toastMessage =
-              activePlayer === 'red' ? translations.toast.redStay : translations.toast.blueStay;
-          } else {
-            const template =
-              activePlayer === 'red'
-                ? translations.toast.redForward
-                : translations.toast.blueForward;
-            toastMessage = template.replace('{steps}', rewardSteps.toString());
-          }
           toastType = 'success';
         } else {
-          finalPosition = Math.max(currentPosition - penaltySteps, 0);
-          const template =
-            activePlayer === 'red'
-              ? translations.toast.redBackward
-              : translations.toast.blueBackward;
-          toastMessage = template.replace('{steps}', penaltySteps.toString());
+          // 处理后退
+          finalPosition = Math.max(currentPosition + steps, 0);
           toastType = 'error';
         }
+        
+        toastMessage = getMovementMessage(activePlayer, steps, translations);
       } else if (taskType === 'collision') {
-        const executorPlayer = currentTask.executor;
-        if (!isCompleted) {
-          if (executorPlayer === 'red') {
-            // setRedPosition(0); // 这个需要在父组件处理
-            toastMessage = translations.toast.redFailedToStart;
-          } else {
-            // setBluePosition(0); // 这个需要在父组件处理
-            toastMessage = translations.toast.blueFailedToStart;
-          }
-          toastType = 'error';
-          setCurrentTask(null);
-          setTaskType(null);
-          onShowToast(toastMessage, toastType);
-          setGameState('playing');
-          switchTurn();
-          return { resetToStart: true, player: executorPlayer };
-        } else {
-          toastMessage =
-            executorPlayer === 'red'
-              ? translations.toast.redCompleted
-              : translations.toast.blueCompleted;
-          toastType = 'success';
-          setCurrentTask(null);
-          setTaskType(null);
-          onShowToast(toastMessage, toastType);
-          setGameState('playing');
-          switchTurn();
-          return { resetToStart: false };
-        }
+        return handleCollisionTaskResult(isCompleted, activePlayer, translations, onShowToast);
       }
 
       onShowToast(toastMessage, toastType);
@@ -241,8 +274,10 @@ export function useGameLogic(
       return { resetToStart: false };
     },
     [
-      redPosition,
-      bluePosition,
+      getPlayerPosition,
+      calculateSteps,
+      getMovementMessage,
+      handleCollisionTaskResult,
       boardPath.length,
       setCurrentTask,
       setTaskType,

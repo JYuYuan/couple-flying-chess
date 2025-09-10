@@ -15,9 +15,24 @@ export function usePlayerMovement(
 ) {
   const { playSound } = useGlobal();
 
+  // 获取当前玩家位置的辅助函数
+  const getPlayerPosition = useCallback(
+    (player: PlayerColor) => (player === 'red' ? redPosition : bluePosition),
+    [redPosition, bluePosition],
+  );
+
+  // 设置玩家位置的辅助函数
+  const setPlayerPosition = useCallback(
+    (player: PlayerColor, position: number) => {
+      if (player === 'red') setRedPosition(position);
+      else setBluePosition(position);
+    },
+    [setRedPosition, setBluePosition],
+  );
+
   const movePlayerStep = useCallback(
     (targetPosition: number, player: PlayerColor, currentStepPos?: number) => {
-      const startPosition = currentStepPos ?? (player === 'red' ? redPosition : bluePosition);
+      const startPosition = currentStepPos ?? getPlayerPosition(player);
 
       if (startPosition >= targetPosition) {
         setIsMoving(false);
@@ -26,20 +41,19 @@ export function usePlayerMovement(
       }
 
       const nextPosition = startPosition + 1;
-      if (player === 'red') setRedPosition(nextPosition);
-      else setBluePosition(nextPosition);
+      setPlayerPosition(player, nextPosition);
 
       // 播放步进音效
       playSound('stepDice');
 
       setTimeout(() => movePlayerStep(targetPosition, player, nextPosition), 300);
     },
-    [redPosition, bluePosition, onMovementComplete, setRedPosition, setBluePosition, setIsMoving],
+    [getPlayerPosition, setPlayerPosition, onMovementComplete, setIsMoving, playSound],
   );
 
   const movePlayerToEndAndBack = useCallback(
     (endPosition: number, finalPosition: number, player: PlayerColor, totalSteps: number) => {
-      const startPosition = player === 'red' ? redPosition : bluePosition;
+      const startPosition = getPlayerPosition(player);
       let currentStep = 0;
       let currentPos = startPosition;
       let hasReachedEnd = false;
@@ -65,8 +79,7 @@ export function usePlayerMovement(
           }
         }
 
-        if (player === 'red') setRedPosition(currentPos);
-        else setBluePosition(currentPos);
+        setPlayerPosition(player, currentPos);
 
         // 播放步进音效
         playSound('stepDice');
@@ -76,12 +89,12 @@ export function usePlayerMovement(
 
       step();
     },
-    [redPosition, bluePosition, onMovementComplete, setRedPosition, setBluePosition],
+    [getPlayerPosition, setPlayerPosition, onMovementComplete, setIsMoving, playSound],
   );
 
   const movePlayer = useCallback(
     (steps: number, currentPlayer: PlayerColor) => {
-      const currentPos = currentPlayer === 'red' ? redPosition : bluePosition;
+      const currentPos = getPlayerPosition(currentPlayer);
       const maxPosition = boardPath.length - 1;
       let targetPosition = currentPos + steps;
 
@@ -102,8 +115,7 @@ export function usePlayerMovement(
     },
     [
       boardPath.length,
-      redPosition,
-      bluePosition,
+      getPlayerPosition,
       movePlayerStep,
       movePlayerToEndAndBack,
       setIsMoving,

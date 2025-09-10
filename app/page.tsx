@@ -154,7 +154,9 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
             >
+              {/* 飞行棋按钮 */}
               <Link href="/flying/mode">
                 <motion.button
                   className="w-full sm:w-auto px-12 py-5 rounded-3xl font-black text-xl tracking-wide text-white shadow-2xl hover:shadow-3xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 border border-blue-500/30"
@@ -168,6 +170,24 @@ export default function Home() {
                   <span className="flex items-center justify-center gap-3">
                     <span>🚀</span>
                     <span>{translations.cta?.startGame}</span>
+                  </span>
+                </motion.button>
+              </Link>
+              
+              {/* 大转盘按钮 */}
+              <Link href="/wheel/mode">
+                <motion.button
+                  className="w-full sm:w-auto px-12 py-5 rounded-3xl font-black text-xl tracking-wide text-white shadow-2xl hover:shadow-3xl transition-all duration-300 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 border border-amber-400/30"
+                  whileHover={{
+                    scale: 1.02,
+                    y: -2,
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className="flex items-center justify-center gap-3">
+                    <span>🎡</span>
+                    <span>幸运转盘</span>
                   </span>
                 </motion.button>
               </Link>

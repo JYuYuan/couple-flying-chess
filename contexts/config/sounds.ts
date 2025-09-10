@@ -25,6 +25,17 @@ export const soundConfig = {
     loop: false,
     volume: 1,
   },
+  // 大转盘音效
+  wheelSpin: {
+    src: '/audio/shake-and-roll-dice-soundbible.mp3', // 复用掷骰子音效
+    loop: false,
+    volume: 0.8,
+  },
+  ding: {
+    src: '/audio/ding.mp3', // 复用完成音效
+    loop: false,
+    volume: 1,
+  },
 };
 
 export type SoundKey = keyof typeof soundConfig;

@@ -36,8 +36,16 @@ export const defaultTimeSettings: TimeSettings = {
   enableAutoTime: true,
 };
 
+// 缓存已加载的时间设置
+let cachedTimeSettings: TimeSettings | null = null;
+
 // 从本地存储加载时间设置
 export const loadTimeSettings = (): TimeSettings => {
+  // 如果已有缓存，直接返回
+  if (cachedTimeSettings) {
+    return cachedTimeSettings;
+  }
+
   if (typeof window === 'undefined') {
     return defaultTimeSettings;
   }
@@ -46,21 +54,26 @@ export const loadTimeSettings = (): TimeSettings => {
     const savedSettings = localStorage.getItem('flyingTimeSettings');
     if (savedSettings) {
       const parsed = JSON.parse(savedSettings);
-      return {
+      cachedTimeSettings = {
         ...defaultTimeSettings,
         ...parsed,
         keywordTimes: { ...defaultTimeSettings.keywordTimes, ...parsed.keywordTimes },
       };
+      return cachedTimeSettings as TimeSettings;
     }
   } catch (error) {
     console.error('Failed to load time settings:', error);
   }
 
-  return defaultTimeSettings;
+  cachedTimeSettings = { ...defaultTimeSettings };
+  return cachedTimeSettings;
 };
 
 // 保存时间设置到本地存储
 export const saveTimeSettings = (settings: TimeSettings): void => {
+  // 更新缓存
+  cachedTimeSettings = { ...settings };
+
   if (typeof window !== 'undefined') {
     localStorage.setItem('flyingTimeSettings', JSON.stringify(settings));
   }
@@ -68,7 +81,8 @@ export const saveTimeSettings = (settings: TimeSettings): void => {
 
 // 检测任务内容中的关键词并返回对应时间
 export const detectTaskTime = (taskContent: string, settings?: TimeSettings): number => {
-  const timeSettings = settings || loadTimeSettings();
+  // 使用传入的设置或缓存的设置，避免重复加载
+  const timeSettings = settings || cachedTimeSettings || loadTimeSettings();
 
   // 如果未启用自动时间检测，返回默认时间
   if (!timeSettings.enableAutoTime) {
@@ -96,6 +110,11 @@ export const detectTaskTime = (taskContent: string, settings?: TimeSettings): nu
 
   // 未找到关键词，返回默认时间
   return timeSettings.defaultTaskTime;
+};
+
+// 清除缓存的时间设置，在需要重新加载时调用
+export const clearTimeSettingsCache = (): void => {
+  cachedTimeSettings = null;
 };
 
 // 格式化时间显示（秒转换为易读格式）

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createBoardPath, PathCell } from '@/lib/game-config';
 import { ArrowLeft } from 'lucide-react';
 import { loadTranslations } from '@/lib/i18n';
@@ -22,7 +22,7 @@ import SpecialEffects, {
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
-import { useStableCallback, useOptimizedState, useDebounce } from '@/hooks/use-performance';
+import { useOptimizedState, useStableCallback } from '@/hooks/use-performance';
 
 interface gamePlayParams {
   isNewGame?: boolean;
@@ -76,9 +76,7 @@ const GamePlayPage: React.FC = () => {
       buttonGradient: isRed
         ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(236, 72, 153, 0.95))'
         : 'linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(99, 102, 241, 0.95))',
-      borderColor: isRed
-        ? 'rgba(239, 68, 68, 0.3)'
-        : 'rgba(59, 130, 246, 0.3)',
+      borderColor: isRed ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.3)',
       textColor: isRed ? '#dc2626' : '#2563eb',
       glowShadow: isRed
         ? '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(239, 68, 68, 0.6)'
@@ -328,12 +326,10 @@ const GamePlayPage: React.FC = () => {
     }
   });
 
-  const handleWinTaskSelect = useStableCallback(
-    (task: WinTaskOption) => {
-      gameState.setSelectedWinTask(task);
-      gameState.setGameState('winTask');
-    },
-  );
+  const handleWinTaskSelect = useStableCallback((task: WinTaskOption) => {
+    gameState.setSelectedWinTask(task);
+    gameState.setGameState('winTask');
+  });
 
   const handleWinTaskComplete = useStableCallback(() => {
     // 清空当前游戏类型的持久化数据

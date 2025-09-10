@@ -278,6 +278,31 @@ export default function Settings() {
               </Link>
             </motion.div>
 
+            <motion.div
+              className="backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+            >
+              <Link href={'/settings/time'}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <ListTodo className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                      {t?.flying?.title}
+                    </h2>
+                  </div>
+
+                  <motion.label
+                    className="relative inline-flex items-center cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <ArrowLeft className="w-5 h-5 text-gray-400 rotate-180" />
+                  </motion.label>
+                </div>
+              </Link>
+            </motion.div>
+
             {/* 其他设置区域预留 */}
             <motion.div
               className="backdrop-blur-xl rounded-3xl p-6 shadow-lg border bg-white/70 border-white/40 shadow-gray-200/30 dark:bg-gray-800/70 dark:border-gray-700/40 dark:shadow-black/20"

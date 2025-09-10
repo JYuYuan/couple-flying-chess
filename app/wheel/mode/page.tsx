@@ -80,7 +80,7 @@ const GameModePage: React.FC = () => {
 
   const redirectStartGame = (mode: string, customMode?: string, isNewGame?: boolean) => {
     router.push(
-      `/flying/start?mode=${mode}&customMode=${customMode}&isNewGame=${isNewGame ? 1 : 0}`,
+      `/wheel/start?mode=${mode}&customMode=${customMode}&isNewGame=${isNewGame ? 1 : 0}`,
     );
   };
 
@@ -139,10 +139,10 @@ const GameModePage: React.FC = () => {
               {/* iOS 16 风格主标题 */}
               <div className="space-y-4">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-tight tracking-tight">
-                  {translations?.game.title}
+                  大转盘
                 </h1>
                 <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed px-4 sm:px-8 lg:px-16 xl:px-24 text-gray-700 dark:text-gray-300">
-                  {translations?.game.subtitle}
+                  大转盘按钮，点击开始游戏。
                 </p>
               </div>
 

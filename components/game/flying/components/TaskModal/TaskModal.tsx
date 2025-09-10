@@ -10,9 +10,15 @@ interface TaskModalProps {
   currentTask: CurrentTask;
   taskType: TaskType;
   onTaskComplete: (isCompleted: boolean) => void;
+  isExec?: boolean;
 }
 
-export function TaskModal({ currentTask, taskType, onTaskComplete }: TaskModalProps) {
+export function TaskModal({
+  currentTask,
+  taskType,
+  onTaskComplete,
+  isExec = true,
+}: TaskModalProps) {
   const { translations } = useGlobal();
   // 禁用外层滚动
   useEffect(() => {
@@ -117,29 +123,31 @@ export function TaskModal({ currentTask, taskType, onTaskComplete }: TaskModalPr
             {/* iOS 16 风格内容区域 */}
             <div className="p-8 space-y-8">
               {/* iOS 16 风格执行者 */}
-              <div className="text-center">
-                <div
-                  className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg backdrop-blur-sm"
-                  style={{
-                    background:
-                      currentTask.executor === 'red'
-                        ? 'linear-gradient(135deg, rgba(254, 202, 202, 0.9), rgba(252, 165, 165, 0.9))'
-                        : 'linear-gradient(135deg, rgba(191, 219, 254, 0.9), rgba(147, 197, 253, 0.9))',
-                    color: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
-                    border: `2px solid ${currentTask.executor === 'red' ? '#fecaca' : '#bfdbfe'}`,
-                  }}
-                >
+              {isExec && (
+                <div className="text-center">
                   <div
-                    className="w-3 h-3 rounded-full mr-3 shadow-sm"
+                    className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg backdrop-blur-sm"
                     style={{
-                      backgroundColor: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
+                      background:
+                        currentTask.executor === 'red'
+                          ? 'linear-gradient(135deg, rgba(254, 202, 202, 0.9), rgba(252, 165, 165, 0.9))'
+                          : 'linear-gradient(135deg, rgba(191, 219, 254, 0.9), rgba(147, 197, 253, 0.9))',
+                      color: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
+                      border: `2px solid ${currentTask.executor === 'red' ? '#fecaca' : '#bfdbfe'}`,
                     }}
-                  ></div>
-                  {currentTask.executor === 'red'
-                    ? translations?.tasks.redExecute
-                    : translations?.tasks.blueExecute}
+                  >
+                    <div
+                      className="w-3 h-3 rounded-full mr-3 shadow-sm"
+                      style={{
+                        backgroundColor: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
+                      }}
+                    ></div>
+                    {currentTask.executor === 'red'
+                      ? translations?.tasks.redExecute
+                      : translations?.tasks.blueExecute}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* 任务描述 */}
               <div

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { Play, RotateCcw, Zap } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -12,7 +12,7 @@ interface TimerProps {
   variant?: 'default' | 'task' | 'win'; // 计时器变体样式
 }
 
-const Timer: React.FC<TimerProps> = ({
+const Timer: React.FC<TimerProps> = React.memo(({
   initialTimeLeft,
   onComplete,
   className = '',
@@ -52,7 +52,7 @@ const Timer: React.FC<TimerProps> = ({
   }, []);
 
   // 获取尺寸相关的样式
-  const getSizeStyles = () => {
+  const getSizeStyles = useMemo(() => {
     switch (size) {
       case 'small':
         return {
@@ -73,10 +73,10 @@ const Timer: React.FC<TimerProps> = ({
           text: 'text-2xl',
         };
     }
-  };
+  }, [size]);
 
   // 获取变体相关的样式
-  const getVariantStyles = () => {
+  const getVariantStyles = useMemo(() => {
     const baseClasses = {
       background:
         'bg-gradient-to-r from-white/80 to-gray-50/80 backdrop-blur-sm border border-gray-200/40 dark:bg-gradient-to-r dark:from-gray-800/80 dark:to-gray-700/80 dark:border-gray-600/40',
@@ -117,10 +117,10 @@ const Timer: React.FC<TimerProps> = ({
               : 'text-gray-600 dark:text-gray-400',
         };
     }
-  };
+  }, [variant, isRunning, isCompleted]);
 
-  const sizeStyles = getSizeStyles();
-  const variantStyles = getVariantStyles();
+  const sizeStyles = getSizeStyles;
+  const variantStyles = getVariantStyles;
   // 格式化时间显示
   const formatTime = useCallback((ms: number): string => {
     const totalSeconds = Math.ceil(ms / 1000);
@@ -214,29 +214,29 @@ const Timer: React.FC<TimerProps> = ({
   }, [autoStart, startTimer]);
 
   // 获取当前图标
-  const getCurrentIcon = () => {
+  const getCurrentIcon = useMemo(() => {
     if (isCompleted) return RotateCcw;
     if (isRunning) return Zap;
     return Play;
-  };
+  }, [isCompleted, isRunning]);
 
-  const IconComponent = getCurrentIcon();
+  const IconComponent = getCurrentIcon;
 
   // 获取标题提示
-  const getTooltipText = () => {
+  const getTooltipText = useMemo(() => {
     if (isCompleted) return '点击重置';
     if (isRunning) return '倒计时进行中...';
     return '点击开始';
-  };
+  }, [isCompleted, isRunning]);
 
   // 点击事件处理
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (isCompleted) {
       resetTimer();
     } else if (!isRunning) {
       startTimer();
     }
-  };
+  }, [isCompleted, isRunning, resetTimer, startTimer]);
 
   return (
     <motion.div
@@ -252,7 +252,7 @@ const Timer: React.FC<TimerProps> = ({
         ${variantStyles.shadow}
         ${className}
       `}
-      title={getTooltipText()}
+      title={getTooltipText}
     >
       <AnimatePresence mode="wait">
         {showIcon && (
@@ -300,6 +300,6 @@ const Timer: React.FC<TimerProps> = ({
       </div>
     </motion.div>
   );
-};
+});
 
 export default React.memo(Timer);

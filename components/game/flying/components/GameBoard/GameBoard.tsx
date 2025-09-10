@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BirdIcon as Helicopter, Bomb, Plane, Rocket, Star, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { PlayerColor } from '@/components/game/flying/types/game';
@@ -12,15 +12,22 @@ interface GameBoardProps {
   isMoving: boolean;
 }
 
-export function GameBoard({
+export const GameBoard = React.memo(function GameBoard({
   boardPath,
   redPosition,
   bluePosition,
   currentPlayer,
   isMoving,
 }: GameBoardProps) {
+  // 使用useMemo缓存玩家位置信息，避免不必要的重新计算
+  const playerPositions = useMemo(() => {
+    return boardPath.map((cell, index) => ({
+      isRedOnCell: index === redPosition,
+      isBlueOnCell: index === bluePosition,
+    }));
+  }, [boardPath, redPosition, bluePosition]);
   // 获取 iOS 16 风格单元格样式
-  const getCellStyle = (pathCell: PathCell, isRedOnCell: boolean, isBlueOnCell: boolean) => {
+  const getCellStyle = useMemo(() => (pathCell: PathCell, isRedOnCell: boolean, isBlueOnCell: boolean) => {
     const baseClasses = `relative z-[999] flex flex-col items-center justify-center aspect-square rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray-200/40 dark:shadow-black/30`;
 
     switch (pathCell.type) {
@@ -39,10 +46,10 @@ export function GameBoard({
       default:
         return 'transparent';
     }
-  };
+  }, []);
 
   // 获取 iOS 16 风格图标颜色
-  const getIconColor = (type: string) => {
+  const getIconColor = useMemo(() => (type: string) => {
     switch (type) {
       case 'start':
         return 'text-orange-800 drop-shadow-sm';
@@ -57,10 +64,10 @@ export function GameBoard({
       default:
         return 'text-gray-500';
     }
-  };
+  }, []);
 
   // 获取连接线方向
-  const getConnectionLines = (pathCell: PathCell) => {
+  const getConnectionLines = useMemo(() => (pathCell: PathCell) => {
     if (!boardPath || pathCell.type === 'start' || pathCell.type === 'end') return null;
 
     // 找到当前cell在路径中的位置
@@ -155,9 +162,9 @@ export function GameBoard({
     }
 
     return connections;
-  };
+  }, [boardPath]);
 
-  const renderBoard = () => {
+  const renderBoard = useMemo(() => {
     const boardGridSize = 7;
     const cells = [];
     const cellElements: { [key: string]: React.JSX.Element } = {};
@@ -281,7 +288,7 @@ export function GameBoard({
       }
     }
     return cells;
-  };
+  }, [boardPath, playerPositions, getCellStyle, getIconColor, getConnectionLines, redPosition, bluePosition, currentPlayer, isMoving]);
 
   return (
     <div className="relative w-full aspect-square">
@@ -307,9 +314,9 @@ export function GameBoard({
 
         {/* iOS 16 风格棋盘网格 */}
         <div className="relative z-10 grid grid-cols-7 grid-rows-7 gap-2 w-full h-full p-4">
-          {renderBoard()}
+          {renderBoard}
         </div>
       </div>
     </div>
   );
-}
+});

@@ -46,7 +46,7 @@ type GlobalContextType = {
   getAllAudioRef: (key: SoundKey) => Map<SoundKey, HTMLAudioElement> | undefined;
 
   // Dialog
-  showToast: (message: string, type: 'success' | 'error') => void;
+  showToast: (message: string, type?: 'success' | 'error') => void;
   showConfirmDialog: (
     title: string,
     message: string,
@@ -198,7 +198,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   }, [language]);
 
   // -------- Dialog --------
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type?: 'success' | 'error' } | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean;
     title: string;
@@ -232,7 +232,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }));
   }, []);
 
-  const showToast = useCallback((message: string, type: 'success' | 'error') => {
+  const showToast = useCallback((message: string, type?: 'success' | 'error') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   }, []);
@@ -280,7 +280,8 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
       {toast && (
         <div className={`toast ${toast.type}`}>
-          {toast.type === 'success' ? <CheckCircle size={20} /> : <XCircle size={20} />}
+          {toast.type === 'success' && <CheckCircle size={20} />}
+          {toast.type === 'error' && <XCircle size={20} />}
           <span>{toast.message}</span>
         </div>
       )}
