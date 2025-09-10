@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { createBoardPath, PathCell } from '@/lib/game-config';
-import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { loadTranslations } from '@/lib/i18n';
 import { shuffleArray } from '@/components/game/flying/utils/game-utils';
 import { useGameState } from '@/components/game/flying/hooks/useGameState';
@@ -423,52 +423,28 @@ const GamePlayPage: React.FC = () => {
         <div className="flex flex-col items-center space-y-6">
           {/* iOS 16 风格骰子显示 */}
           <div
-            className="relative w-20 sm:w-24 lg:w-28 h-20 sm:h-24 lg:h-28 rounded-3xl shadow-2xl transition-all duration-500 transform hover:scale-110 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
+            className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
             style={{
               background:
                 gameState.currentPlayer === 'red'
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(236, 72, 153, 0.15))'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(99, 102, 241, 0.15))',
-              animation: gameState.isRolling
-                ? 'diceRoll 0.15s linear infinite, shake 0.1s ease-in-out infinite'
-                : 'float 4s ease-in-out infinite',
-              transformOrigin: 'center center',
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1))'
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))',
+              animation: gameState.isRolling ? 'spin 0.1s linear infinite' : 'none',
             }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-wider transition-all duration-300"
+                className="text-3xl sm:text-4xl font-black tracking-wider"
                 style={{
                   color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
-                  textShadow:
-                    gameState.currentPlayer === 'red'
-                      ? '0 0 10px rgba(220, 38, 38, 0.5)'
-                      : '0 0 10px rgba(37, 99, 235, 0.5)',
-                  transform: gameState.isRolling ? 'scale(1.1)' : 'scale(1)',
                 }}
               >
                 {gameState.diceValue ?? '?'}
               </span>
             </div>
             {/* iOS 16 风格装饰性光泽效果 */}
-            <div
-              className="absolute top-2 sm:top-3 left-2 sm:left-3 w-3 sm:w-4 h-3 sm:h-4 bg-white/40 rounded-full blur-sm transition-all duration-300"
-              style={{
-                animation: 'shimmer 2s ease-in-out infinite',
-              }}
-            ></div>
-            <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/20 rounded-full blur-sm"></div>
-            {/* 发光边框效果 */}
-            <div
-              className="absolute inset-0 rounded-3xl pointer-events-none"
-              style={{
-                boxShadow:
-                  gameState.currentPlayer === 'red'
-                    ? '0 0 30px rgba(239, 68, 68, 0.3), inset 0 0 30px rgba(239, 68, 68, 0.1)'
-                    : '0 0 30px rgba(59, 130, 246, 0.3), inset 0 0 30px rgba(59, 130, 246, 0.1)',
-                animation: gameState.isRolling ? 'glowPulse 0.3s ease-in-out infinite' : 'none',
-              }}
-            ></div>
+            <div className="absolute top-3 left-3 w-4 h-4 bg-white/40 rounded-full blur-sm"></div>
+            <div className="absolute bottom-3 right-3 w-2 h-2 bg-white/20 rounded-full blur-sm"></div>
           </div>
 
           {/* iOS 16 风格掷骰子按钮 */}
@@ -480,7 +456,7 @@ const GamePlayPage: React.FC = () => {
               gameState.gameState === 'task' ||
               taskManagement.isLoadingTasks
             }
-            className="relative px-8 sm:px-10 py-4 sm:py-5 rounded-3xl font-black text-base sm:text-lg tracking-wide transition-all duration-500 transform hover:scale-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white overflow-hidden"
+            className="px-10 py-5 rounded-3xl font-black text-lg tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white"
             style={{
               background:
                 gameState.currentPlayer === 'red'
@@ -490,28 +466,11 @@ const GamePlayPage: React.FC = () => {
                 gameState.currentPlayer === 'red'
                   ? 'rgba(239, 68, 68, 0.3)'
                   : 'rgba(59, 130, 246, 0.3)',
-              animation: gameState.isRolling ? 'buttonPulse 0.3s ease-in-out infinite' : 'none',
             }}
           >
-            {/* 按钮发光背景动画 */}
-            <div
-              className="absolute inset-0 opacity-30 transition-opacity duration-300"
-              style={{
-                background:
-                  gameState.currentPlayer === 'red'
-                    ? 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent 70%)'
-                    : 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3), transparent 70%)',
-                animation: 'ripple 2s ease-in-out infinite',
-              }}
-            ></div>
-            <span className="relative z-10 flex items-center justify-center gap-2">
+            <span className="flex items-center justify-center gap-2">
               {gameState.isRolling && (
-                <div
-                  className="w-4 sm:w-5 h-4 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"
-                  style={{
-                    animation: 'spinFast 0.5s linear infinite',
-                  }}
-                ></div>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               )}
               {gameState.isMoving
                 ? translations?.common.moving

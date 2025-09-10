@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export default function Analytics() {
-  const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setIsClient(true);
+  }, []);
 
   // 如果不是客户端，返回 null
   if (!isClient) {
-    return null
+    return null;
   }
 
   return (
@@ -38,5 +38,5 @@ export default function Analytics() {
         }}
       />
     </>
-  )
-} 
+  );
+}

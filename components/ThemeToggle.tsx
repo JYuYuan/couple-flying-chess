@@ -3,7 +3,6 @@
 import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 interface ThemeToggleProps {

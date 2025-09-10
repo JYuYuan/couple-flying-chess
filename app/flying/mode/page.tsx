@@ -228,9 +228,9 @@ const GameModePage: React.FC = () => {
 
             {/* 装饰性图案 */}
             <div className="mt-6 flex justify-center space-x-2">
-              <div className="w-2 h-2 bg-indigo-400 rounded-full"></div>
-              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-              <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
+              <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
+              <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
             </div>
           </div>
         </div>

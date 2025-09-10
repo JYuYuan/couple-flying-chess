@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 // Web Vitals性能监控
 export default function WebVitals() {
@@ -15,18 +15,18 @@ export default function WebVitals() {
             event_label: metric.id,
             value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
             non_interaction: true,
-          })
+          });
         }
       }
 
       // 监控核心网页指标
-      getCLS(sendToGA)  // 累积布局位移
-      getFID(sendToGA)  // 首次输入延迟
-      getFCP(sendToGA)  // 首次内容绘制
-      getLCP(sendToGA)  // 最大内容绘制
-      getTTFB(sendToGA) // 到达首字节时间
-    })
-  }, [])
+      getCLS(sendToGA); // 累积布局位移
+      getFID(sendToGA); // 首次输入延迟
+      getFCP(sendToGA); // 首次内容绘制
+      getLCP(sendToGA); // 最大内容绘制
+      getTTFB(sendToGA); // 到达首字节时间
+    });
+  }, []);
 
-  return null
-} 
+  return null;
+}

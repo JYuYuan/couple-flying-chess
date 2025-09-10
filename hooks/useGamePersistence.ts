@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GameMode, PlayerColor } from '@/components/game/flying/types/game';
 
 type TaskType = 'normal' | 'special' | 'challenge' | 'custom' | null;
@@ -45,7 +45,7 @@ interface UseGamePersistenceProps {
   winner: PlayerColor | null;
   gameStarted: boolean;
   customModeId?: string;
-  
+
   // Callbacks
   onContinue: (savedState: SavedGameState) => void;
   onNewGame: () => void;
@@ -67,7 +67,7 @@ export function useGamePersistence({
   winner,
   gameStarted,
   customModeId,
-  
+
   // Callbacks
   onContinue,
   onNewGame,
@@ -80,64 +80,73 @@ export function useGamePersistence({
   const SAVE_DEBOUNCE_TIME = 1000; // 1 second debounce
 
   // Current game state
-  const currentGameState = useMemo<Omit<SavedGameState, 'timestamp'>>(() => ({
-    gameMode,
-    currentPlayer,
-    redPosition,
-    bluePosition,
-    diceValue,
-    isRolling,
-    isMoving,
-    taskQueue,
-    currentTask,
-    taskType,
-    winner,
-    gameStarted,
-    customModeId,
-  }), [
-    gameMode,
-    currentPlayer,
-    redPosition,
-    bluePosition,
-    diceValue,
-    isRolling,
-    isMoving,
-    taskQueue,
-    currentTask,
-    taskType,
-    winner,
-    gameStarted,
-    customModeId,
-  ]);
+  const currentGameState = useMemo<Omit<SavedGameState, 'timestamp'>>(
+    () => ({
+      gameMode,
+      currentPlayer,
+      redPosition,
+      bluePosition,
+      diceValue,
+      isRolling,
+      isMoving,
+      taskQueue,
+      currentTask,
+      taskType,
+      winner,
+      gameStarted,
+      customModeId,
+    }),
+    [
+      gameMode,
+      currentPlayer,
+      redPosition,
+      bluePosition,
+      diceValue,
+      isRolling,
+      isMoving,
+      taskQueue,
+      currentTask,
+      taskType,
+      winner,
+      gameStarted,
+      customModeId,
+    ],
+  );
 
   // Save game state to localStorage
-  const saveGameState = useCallback((state: Partial<SavedGameState> = {}) => {
-    const now = Date.now();
-    
-    // Debounce rapid saves
-    if (now - lastSaveTime.current < SAVE_DEBOUNCE_TIME) {
-      return;
-    }
-    
-    lastSaveTime.current = now;
-    
-    const gameToSave: Omit<SavedGameState, 'timestamp'> = {
-      ...currentGameState,
-      ...state,
-      // Always reset these states when saving
-      isRolling: false,
-      isMoving: false,
-    };
+  const saveGameState = useCallback(
+    (state: Partial<SavedGameState> = {}) => {
+      const now = Date.now();
 
-    try {
-      localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify({
-        ...gameToSave,
-        timestamp: now,
-      }));
-    } catch (error) {
-      console.error('Failed to save game state:', error);
-    }
-  }, [currentGameState]);
+      // Debounce rapid saves
+      if (now - lastSaveTime.current < SAVE_DEBOUNCE_TIME) {
+        return;
+      }
+
+      lastSaveTime.current = now;
+
+      const gameToSave: Omit<SavedGameState, 'timestamp'> = {
+        ...currentGameState,
+        ...state,
+        // Always reset these states when saving
+        isRolling: false,
+        isMoving: false,
+      };
+
+      try {
+        localStorage.setItem(
+          GAME_STORAGE_KEY,
+          JSON.stringify({
+            ...gameToSave,
+            timestamp: now,
+          }),
+        );
+      } catch (error) {
+        console.error('Failed to save game state:', error);
+      }
+    },
+    [currentGameState],
+  );
 
   // Clear saved game
   const clearSavedGame = useCallback(() => {
@@ -152,13 +161,13 @@ export function useGamePersistence({
       if (!saved) return null;
 
       const parsed = JSON.parse(saved) as SavedGameState;
-      
+
       // Check if the game was saved within the expiry time
       if (Date.now() - parsed.timestamp > GAME_STATE_EXPIRY) {
         clearSavedGame();
         return null;
       }
-      
+
       return parsed;
     } catch (error) {
       console.error('Failed to load saved game:', error);
@@ -170,16 +179,16 @@ export function useGamePersistence({
   // Handle continue game
   const handleContinueGame = useCallback(() => {
     if (!savedGame) return;
-    
+
     // Notify parent component to update state
     onContinue(savedGame);
-    
+
     // Save the continued game state
     saveGameState({
       ...savedGame,
       timestamp: Date.now(), // Update timestamp when continuing
     });
-    
+
     setShowContinueModal(false);
   }, [savedGame, onContinue, saveGameState]);
 
@@ -193,24 +202,24 @@ export function useGamePersistence({
   // Check for saved game on mount
   useEffect(() => {
     if (hasLoadedFromStorage.current) return;
-    
+
     const loadedGame = loadSavedGame();
     if (loadedGame) {
       setSavedGame(loadedGame);
       setShowContinueModal(true);
     }
-    
+
     hasLoadedFromStorage.current = true;
   }, [loadSavedGame]);
 
   // Auto-save when game state changes
   useEffect(() => {
     if (!gameStarted) return;
-    
+
     const timer = setTimeout(() => {
       saveGameState();
     }, SAVE_DEBOUNCE_TIME);
-    
+
     return () => clearTimeout(timer);
   }, [gameStarted, saveGameState, currentGameState]);
 
@@ -230,10 +239,13 @@ export function useGamePersistence({
 // Helper function to save game state (for external use)
 export function saveGameStateExternally(state: Omit<SavedGameState, 'timestamp'>) {
   try {
-    localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify({
-      ...state,
-      timestamp: Date.now(),
-    }));
+    localStorage.setItem(
+      GAME_STORAGE_KEY,
+      JSON.stringify({
+        ...state,
+        timestamp: Date.now(),
+      }),
+    );
   } catch (error) {
     console.error('Failed to save game state externally:', error);
   }
@@ -253,15 +265,15 @@ export function loadSavedGameExternally(): SavedGameState | null {
   try {
     const saved = localStorage.getItem(GAME_STORAGE_KEY);
     if (!saved) return null;
-    
+
     const parsed = JSON.parse(saved) as SavedGameState;
-    
+
     // Check if the game was saved within the expiry time
     if (Date.now() - parsed.timestamp > GAME_STATE_EXPIRY) {
       localStorage.removeItem(GAME_STORAGE_KEY);
       return null;
     }
-    
+
     return parsed;
   } catch (error) {
     console.error('Failed to load saved game externally:', error);

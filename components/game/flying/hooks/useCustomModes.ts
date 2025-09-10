@@ -71,7 +71,7 @@ export function useCustomModes() {
   const updateCustomMode = useCallback(
     (modeId: string, updatedMode: Partial<CustomMode>) => {
       const updatedModes = customModes.map((mode) =>
-        mode.id === modeId ? { ...mode, ...updatedMode } : mode
+        mode.id === modeId ? { ...mode, ...updatedMode } : mode,
       );
       saveCustomModes(updatedModes);
     },
