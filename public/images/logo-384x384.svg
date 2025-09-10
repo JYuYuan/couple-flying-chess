@@ -1,0 +1,68 @@
+
+<svg width="384" height="384" viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B9D"/>
+      <stop offset="50%" stop-color="#FF8E9E"/>
+      <stop offset="100%" stop-color="#FFB199"/>
+    </linearGradient>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4757"/>
+      <stop offset="100%" stop-color="#FF6B9D"/>
+    </linearGradient>
+    <linearGradient id="diceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="384" height="384" rx="96" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative dots -->
+  <circle cx="76.80000000000001" cy="76.80000000000001" r="7.68" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="307.20000000000005" cy="76.80000000000001" r="5.76" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="76.80000000000001" cy="307.20000000000005" r="5.76" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="307.20000000000005" cy="307.20000000000005" r="7.68" fill="rgba(255,255,255,0.3)"/>
+  
+  <!-- Main icons group -->
+  <g transform="translate(192, 192)">
+    <!-- Heart (top left) -->
+    <g transform="translate(-49.92, -49.92)">
+      <path d="M23.04 42.24l-2.688 -2.688C10.368 30.72 3.84 24.192 3.84 16.896 3.84 10.752 8.448 5.76 14.591999999999999 5.76c3.4559999999999995 0 6.5280000000000005 1.536 8.832 4.224C25.344 7.68 28.415999999999997 5.76 31.872 5.76 38.016000000000005 5.76 42.24 10.752 42.24 16.896c0 7.295999999999999 -6.5280000000000005 13.823999999999998 -16.512 22.656L23.04 42.24z" fill="url(#heartGradient)" filter="url(#shadow)"/>
+    </g>
+    
+    <!-- Dice (bottom right) -->
+    <g transform="translate(30.72, 30.72)">
+      <rect x="0" y="0" width="38.400000000000006" height="38.400000000000006" rx="7.68" fill="url(#diceGradient)" filter="url(#shadow)"/>
+      <!-- Dice dots (6) -->
+      <circle cx="11.52" cy="11.52" r="3.072" fill="white"/>
+      <circle cx="26.880000000000003" cy="11.52" r="3.072" fill="white"/>
+      <circle cx="11.52" cy="19.200000000000003" r="3.072" fill="white"/>
+      <circle cx="26.880000000000003" cy="19.200000000000003" r="3.072" fill="white"/>
+      <circle cx="11.52" cy="26.880000000000003" r="3.072" fill="white"/>
+      <circle cx="26.880000000000003" cy="26.880000000000003" r="3.072" fill="white"/>
+    </g>
+    
+    <!-- Couple icons (center) -->
+    <g transform="translate(-19.200000000000003, -9.600000000000001)">
+      <!-- Male -->
+      <circle cx="0" cy="-9.600000000000001" r="11.52" fill="#FFB199" stroke="#FF8E9E" stroke-width="1.92"/>
+      <rect x="-7.68" y="1.92" width="15.36" height="19.200000000000003" rx="3.84" fill="#3B82F6"/>
+      
+      <!-- Female -->
+      <circle cx="23.04" cy="-9.600000000000001" r="11.52" fill="#FFB199" stroke="#FF8E9E" stroke-width="1.92"/>
+      <rect x="15.36" y="1.92" width="15.36" height="19.200000000000003" rx="3.84" fill="#FF6B9D"/>
+      
+      <!-- Connecting heart -->
+      <circle cx="11.52" cy="-3.84" r="5.76" fill="#FF4757"/>
+    </g>
+  </g>
+  
+  <!-- Decorative stars -->
+  <path d="M96 57.599999999999994 L99.84 72.96000000000001 L115.19999999999999 72.96000000000001 L103.68 80.64 L107.52000000000001 92.16 L96 84.48 L84.48 92.16 L88.32000000000001 80.64 L76.80000000000001 72.96000000000001 L92.16 72.96000000000001 Z" fill="rgba(255,255,255,0.4)"/>
+  <path d="M280.32 318.71999999999997 L284.15999999999997 334.08 L295.68 334.08 L286.08 339.84000000000003 L289.92 353.28000000000003 L280.32 343.68 L270.71999999999997 353.28000000000003 L274.56 339.84000000000003 L264.96 334.08 L276.48 334.08 Z" fill="rgba(255,255,255,0.4)"/>
+</svg>

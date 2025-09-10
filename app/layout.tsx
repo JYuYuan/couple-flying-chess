@@ -25,18 +25,22 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/images/logo.png',
-        type: 'image/png',
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
       },
       {
         url: '/favicon.png',
         type: 'image/png',
       },
+      {
+        url: '/favicon.ico',
+        type: 'image/x-icon',
+      },
     ],
-    shortcut: '/favicon.png',
+    shortcut: '/favicon.ico',
     apple: [
       {
-        url: '/images/logo.png',
+        url: '/images/apple-touch-icon.png',
         sizes: '180x180',
         type: 'image/png',
       },
@@ -98,10 +102,11 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
 
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" href="/images/logo.png" />
-        <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/images/logo.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/images/logo.svg" />
 
         {/* PWA 相关设置 */}
         <meta name="theme-color" content="#d1d1d1ff" />

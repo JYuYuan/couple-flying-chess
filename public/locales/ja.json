@@ -10,7 +10,8 @@
     "moving": "移動中...",
     "preparing": "準備中...",
     "skipToHome": "ホームに戻る",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "confirm": "確認"
   },
   "settings": {
     "title": "設定",
@@ -282,6 +283,57 @@
     "end": "ゴール",
     "star": "ラッキー",
     "trap": "トラップ"
+  },
+  "customModeManager": {
+    "title": "カスタムモード管理",
+    "noModes": "カスタムモードはまだありません",
+    "createFirstMode": "最初のカスタムモードを作成しましょう！",
+    "createMode": "新規作成",
+    "editMode": "編集",
+    "importMode": "インポート",
+    "exportMode": "エクスポート",
+    "modeName": "モード名",
+    "modeDescription": "説明",
+    "taskList": "タスク一覧",
+    "addTask": "タスクを追加",
+    "taskPlaceholder": "タスクの内容を入力",
+    "batchAddTasks": "一括追加",
+    "pasteFromClipboard": "クリップボードから貼り付け",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "tasksCount": "{count}個のタスク",
+    "createdOn": "作成日: ",
+    "type": {
+      "ai": "AI生成",
+      "custom": "カスタム"
+    },
+    "deleteConfirm": {
+      "title": "削除の確認",
+      "message": "モード「{modeName}」を削除してもよろしいですか？この操作は元に戻せません。"
+    },
+    "import": {
+      "success": "{count}個のタスクをインポートしました",
+      "invalidFile": "JSONファイル(.json)を選択してください",
+      "invalidFormat": "ファイル形式が正しくありません。必要な情報が不足しています",
+      "overwriteConfirm": {
+        "title": "上書きの確認",
+        "message": "「{name}」という名前のモードが既に存在します。上書きしますか？"
+      },
+      "successImport": "「{name}」モードを{count}個のタスクでインポートしました",
+      "importFailed": "インポートに失敗しました。ファイルの内容を確認してください",
+      "fileError": "ファイル形式エラー。有効なJSONファイルであることを確認してください",
+      "readError": "ファイルの読み込みに失敗しました。ブラウザの権限を確認してください"
+    },
+    "clipboard": {
+      "noTasks": "クリップボードに有効なタスクが見つかりませんでした",
+      "readError": "クリップボードの読み取りに失敗しました。ブラウザの権限を確認してください"
+    },
+    "validation": {
+      "nameRequired": "モード名を入力してください",
+      "tasksRequired": "少なくとも1つのタスクを追加してください"
+    }
   },
   "tasks": {
     "challenge": "タスクチャレンジ",

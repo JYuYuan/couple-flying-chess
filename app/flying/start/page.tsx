@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { createBoardPath, PathCell } from '@/lib/game-config';
 import { ArrowLeft } from 'lucide-react';
 import { loadTranslations } from '@/lib/i18n';
@@ -22,6 +22,7 @@ import SpecialEffects, {
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import { useStableCallback, useOptimizedState, useDebounce } from '@/hooks/use-performance';
 
 interface gamePlayParams {
   isNewGame?: boolean;
@@ -49,10 +50,43 @@ const GamePlayPage: React.FC = () => {
   // 基础状态
   const [boardPath, setBoardPath] = useState<PathCell[]>([]);
 
-  // 特效状态
-  const [currentEffect, setCurrentEffect] = useState<EffectType>(null);
+  // 使用防抖优化特效状态更新
+  const [currentEffect, setCurrentEffectInternal] = useOptimizedState<EffectType>(null);
+  const setCurrentEffect = useStableCallback(setCurrentEffectInternal);
 
-  const animateTaskOutcomeMove = useCallback(
+  // 缓存玩家颜色相关的样式
+  const playerStyles = useMemo(() => {
+    const isRed = gameState.currentPlayer === 'red';
+    return {
+      buttonClass: isRed
+        ? 'bg-red-100 hover:bg-red-200 text-red-600 shadow-red-200'
+        : 'bg-blue-100 hover:bg-blue-200 text-blue-600 shadow-blue-200',
+      backgroundOverlay: isRed
+        ? 'radial-gradient(ellipse at top right, rgba(239, 68, 68, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.05), transparent 50%)'
+        : 'radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.05), transparent 50%)',
+      headerGradient: isRed
+        ? 'linear-gradient(to right, rgba(239, 68, 68, 0.05), rgba(236, 72, 153, 0.05))'
+        : 'linear-gradient(to right, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05))',
+      turnIndicatorGradient: isRed
+        ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(236, 72, 153, 0.9))'
+        : 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(99, 102, 241, 0.9))',
+      diceGradient: isRed
+        ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1))'
+        : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))',
+      buttonGradient: isRed
+        ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(236, 72, 153, 0.95))'
+        : 'linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(99, 102, 241, 0.95))',
+      borderColor: isRed
+        ? 'rgba(239, 68, 68, 0.3)'
+        : 'rgba(59, 130, 246, 0.3)',
+      textColor: isRed ? '#dc2626' : '#2563eb',
+      glowShadow: isRed
+        ? '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(239, 68, 68, 0.6)'
+        : '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(59, 130, 246, 0.6)',
+    };
+  }, [gameState.currentPlayer]);
+
+  const animateTaskOutcomeMove = useStableCallback(
     (targetPosition: number, player: PlayerColor, originalPosition: number) => {
       // 如果目标位置和当前位置相同，直接完成
       if (targetPosition === originalPosition) {
@@ -101,7 +135,6 @@ const GamePlayPage: React.FC = () => {
       };
       step();
     },
-    [boardPath.length, gameState, playSound],
   );
 
   // 游戏逻辑
@@ -254,7 +287,7 @@ const GamePlayPage: React.FC = () => {
   }, [gameState.gameMode, customModes.currentCustomMode]);
 
   // 事件处理
-  const rollDice = () => {
+  const rollDice = useStableCallback(() => {
     if (gameState.isRolling || gameState.isMoving || taskManagement.isLoadingTasks) return;
 
     // 播放掷骰子音效
@@ -275,9 +308,9 @@ const GamePlayPage: React.FC = () => {
         playerMovement.movePlayer(finalValue, gameState.currentPlayer);
       }
     }, 80);
-  };
+  });
 
-  const handleTaskComplete = (isCompleted: boolean) => {
+  const handleTaskComplete = useStableCallback((isCompleted: boolean) => {
     const result = gameLogic.handleTaskComplete(
       isCompleted,
       gameState.currentTask,
@@ -293,26 +326,25 @@ const GamePlayPage: React.FC = () => {
         gameState.setBluePosition(0);
       }
     }
-  };
+  });
 
-  const handleWinTaskSelect = useCallback(
+  const handleWinTaskSelect = useStableCallback(
     (task: WinTaskOption) => {
       gameState.setSelectedWinTask(task);
       gameState.setGameState('winTask');
     },
-    [gameState],
   );
 
-  const handleWinTaskComplete = useCallback(() => {
+  const handleWinTaskComplete = useStableCallback(() => {
     // 清空当前游戏类型的持久化数据
     persistence.clearGame(gameState.gameMode, gameState.customModeId);
 
     gameState.setGameState('win');
     gameState.setSelectedWinTask(null);
     gameState.setWinTaskOptions([]);
-  }, [gameState, persistence]);
+  });
 
-  const restartFromWin = useCallback(() => {
+  const restartFromWin = useStableCallback(() => {
     // 清空当前游戏类型的持久化数据
     persistence.clearGame(gameState.gameMode, gameState.customModeId);
 
@@ -321,7 +353,11 @@ const GamePlayPage: React.FC = () => {
     gameState.setSelectedWinTask(null);
     gameState.setWinTaskOptions([]);
     router.back();
-  }, [gameState, persistence]);
+  });
+
+  const handleBackButton = useStableCallback(() => {
+    router.back();
+  });
 
   if (taskManagement.isLoadingTasks) return <Loading />;
 
@@ -331,10 +367,7 @@ const GamePlayPage: React.FC = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            gameState.currentPlayer === 'red'
-              ? 'radial-gradient(ellipse at top right, rgba(239, 68, 68, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(236, 72, 153, 0.05), transparent 50%)'
-              : 'radial-gradient(ellipse at top right, rgba(59, 130, 246, 0.05), transparent 50%), radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.05), transparent 50%)',
+          background: playerStyles.backgroundOverlay,
         }}
       />
       {/* iOS 16 风格头部导航 */}
@@ -343,23 +376,16 @@ const GamePlayPage: React.FC = () => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background:
-              gameState.currentPlayer === 'red'
-                ? 'linear-gradient(to right, rgba(239, 68, 68, 0.05), rgba(236, 72, 153, 0.05))'
-                : 'linear-gradient(to right, rgba(59, 130, 246, 0.05), rgba(99, 102, 241, 0.05))',
+            background: playerStyles.headerGradient,
           }}
         />
         <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 relative z-10">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* 返回按钮 */}
             <button
-              onClick={() => router.back()}
+              onClick={handleBackButton}
               title={translations?.game.backToHome}
-              className={`flex-shrink-0 p-2 sm:p-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 transform ${
-                gameState.currentPlayer === 'red'
-                  ? 'bg-red-100 hover:bg-red-200 text-red-600 shadow-red-200'
-                  : 'bg-blue-100 hover:bg-blue-200 text-blue-600 shadow-blue-200'
-              } shadow-lg hover:shadow-xl`}
+              className={`flex-shrink-0 p-2 sm:p-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 transform ${playerStyles.buttonClass} shadow-lg hover:shadow-xl`}
             >
               <ArrowLeft size={20} className="sm:w-6 sm:h-6" />
             </button>
@@ -373,7 +399,7 @@ const GamePlayPage: React.FC = () => {
                 <p
                   className="text-xs sm:text-sm lg:text-base font-semibold transition-all duration-300 truncate"
                   style={{
-                    color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                    color: playerStyles.textColor,
                   }}
                 >
                   {gameState.gameMode === 'custom'
@@ -393,10 +419,7 @@ const GamePlayPage: React.FC = () => {
           <div
             className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-3xl shadow-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-xl border bg-white/80 border-white/40 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/40 dark:shadow-black/40 animate-bounce"
             style={{
-              background:
-                gameState.currentPlayer === 'red'
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(236, 72, 153, 0.9))'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(99, 102, 241, 0.9))',
+              background: playerStyles.turnIndicatorGradient,
               transform: 'translateY(0px)',
               animation: 'fadeInScale 0.6s ease-out, float 3s ease-in-out infinite',
             }}
@@ -405,10 +428,7 @@ const GamePlayPage: React.FC = () => {
               className="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full mr-2 sm:mr-3 bg-white shadow-lg transition-all duration-300"
               style={{
                 animation: 'pulseGlow 2s ease-in-out infinite',
-                boxShadow:
-                  gameState.currentPlayer === 'red'
-                    ? '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(239, 68, 68, 0.6)'
-                    : '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(59, 130, 246, 0.6)',
+                boxShadow: playerStyles.glowShadow,
               }}
             ></div>
             <span className="text-base sm:text-lg lg:text-xl font-black text-white tracking-wide transition-all duration-300">
@@ -425,10 +445,7 @@ const GamePlayPage: React.FC = () => {
           <div
             className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 backdrop-blur-xl border bg-white/90 border-white/50 shadow-gray-400/40 dark:bg-gray-800/90 dark:border-gray-600/50 dark:shadow-black/50"
             style={{
-              background:
-                gameState.currentPlayer === 'red'
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(236, 72, 153, 0.1))'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1))',
+              background: playerStyles.diceGradient,
               animation: gameState.isRolling ? 'spin 0.1s linear infinite' : 'none',
             }}
           >
@@ -436,7 +453,7 @@ const GamePlayPage: React.FC = () => {
               <span
                 className="text-3xl sm:text-4xl font-black tracking-wider"
                 style={{
-                  color: gameState.currentPlayer === 'red' ? '#dc2626' : '#2563eb',
+                  color: playerStyles.textColor,
                 }}
               >
                 {gameState.diceValue ?? '?'}
@@ -458,14 +475,8 @@ const GamePlayPage: React.FC = () => {
             }
             className="px-10 py-5 rounded-3xl font-black text-lg tracking-wide transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-2xl hover:shadow-3xl backdrop-blur-xl border text-white"
             style={{
-              background:
-                gameState.currentPlayer === 'red'
-                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(236, 72, 153, 0.95))'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(99, 102, 241, 0.95))',
-              borderColor:
-                gameState.currentPlayer === 'red'
-                  ? 'rgba(239, 68, 68, 0.3)'
-                  : 'rgba(59, 130, 246, 0.3)',
+              background: playerStyles.buttonGradient,
+              borderColor: playerStyles.borderColor,
             }}
           >
             <span className="flex items-center justify-center gap-2">

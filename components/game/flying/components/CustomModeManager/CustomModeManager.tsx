@@ -30,7 +30,14 @@ const CustomModeManager: React.FC = () => {
     updateCustomMode,
   } = customModes;
 
-  const { showToast, showConfirmDialog, hideConfirmDialog } = useGlobal();
+  const {
+    showToast,
+    showConfirmDialog,
+    hideConfirmDialog,
+    translations: allTranslation,
+  } = useGlobal();
+
+  const translation = allTranslation?.customModeManager;
 
   const [isCreating, setIsCreating] = useState(false);
   const [editingMode, setEditingMode] = useState<CustomMode | null>(null);
@@ -54,7 +61,7 @@ const CustomModeManager: React.FC = () => {
       // 更新现有模式
       updateCustomMode(editingMode.id, {
         name: newMode.name.trim(),
-        description: newMode.description.trim() || '自定义模式',
+        description: newMode.description.trim() || translation?.modeDescription || '自定义模式',
         tasks: [...newMode.tasks],
         type: newMode.type,
       });
@@ -67,7 +74,10 @@ const CustomModeManager: React.FC = () => {
         resetForm();
       });
       if (!success) {
-        alert('请填写模式名称并添加至少一个任务');
+        showToast(
+          `${translation?.validation?.nameRequired || '请填写模式名称'}并${translation?.validation?.tasksRequired || '添加至少一个任务'}`,
+          'error',
+        );
       }
     }
   };
@@ -99,8 +109,9 @@ const CustomModeManager: React.FC = () => {
 
   const handleDelete = (mode: CustomMode) => {
     showConfirmDialog(
-      '删除确认',
-      `确定要删除模式"${mode.name}"吗？此操作无法撤销。`,
+      translation?.deleteConfirm?.title || '删除确认',
+      translation?.deleteConfirm?.message?.replace('{modeName}', mode.name) ||
+        `确定要删除模式"${mode.name}"吗？此操作无法撤销。`,
       () => {
         deleteCustomMode(mode.id);
         showToast(`已删除模式"${mode.name}"`, 'success');
@@ -185,13 +196,20 @@ const CustomModeManager: React.FC = () => {
         }));
 
         // 显示成功提示
-        alert(`成功添加 ${tasks.length} 个任务`);
+        showToast(
+          translation?.import?.success?.replace('{count}', tasks.length.toString()) ||
+            `成功添加 ${tasks.length} 个任务`,
+          'success',
+        );
       } else {
-        alert('剪切板中没有找到有效的任务内容');
+        showToast(translation?.clipboard?.noTasks || '剪切板中没有找到有效的任务内容', 'error');
       }
     } catch (error) {
       console.error('读取剪切板失败:', error);
-      alert('读取剪切板失败，请检查浏览器权限设置');
+      showToast(
+        translation?.clipboard?.readError || '读取剪切板失败，请检查浏览器权限设置',
+        'error',
+      );
     }
   };
 
@@ -223,7 +241,7 @@ const CustomModeManager: React.FC = () => {
     if (!file) return;
 
     if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-      alert('请选择JSON文件(.json)');
+      alert(translation?.import?.invalidFile || '请选择JSON文件(.json)');
       return;
     }
 
@@ -235,7 +253,7 @@ const CustomModeManager: React.FC = () => {
 
         // 验证必要字段
         if (!modeData.name || !modeData.tasks || !Array.isArray(modeData.tasks)) {
-          alert('文件格式不正确，缺少必要的模式信息');
+          alert(translation?.import?.invalidFormat || '文件格式不正确，缺少必要的模式信息');
           return;
         }
 
@@ -243,8 +261,9 @@ const CustomModeManager: React.FC = () => {
         const existingMode = modes.find((mode) => mode.name === modeData.name);
         if (existingMode) {
           showConfirmDialog(
-            '模式覆盖确认',
-            `已存在名为"${modeData.name}"的模式，是否覆盖现有模式？`,
+            translation?.import?.overwriteConfirm?.title || '模式覆盖确认',
+            translation?.import?.overwriteConfirm?.message?.replace('{name}', modeData.name) ||
+              `已存在名为"${modeData.name}"的模式，是否覆盖现有模式？`,
             () => {
               // 如果选择覆盖，先删除现有模式
               deleteCustomMode(existingMode.id);
@@ -254,13 +273,19 @@ const CustomModeManager: React.FC = () => {
                 const newModeToImport: NewCustomMode = {
                   name: modeData.name,
                   type: modeData.type || 'custom',
-                  description: modeData.description || '导入的自定义模式',
+                  description:
+                    modeData.description ||
+                    translation?.import?.successImport?.split('，')[0] ||
+                    '导入的自定义模式',
                   tasks: modeData.tasks,
                 };
 
                 updateCustomMode(existingMode.id, newModeToImport);
                 showToast(
-                  `成功导入模式"${modeData.name}"，包含 ${modeData.tasks.length} 个任务`,
+                  translation?.import?.successImport
+                    ?.replace('{name}', modeData.name)
+                    ?.replace('{count}', modeData.tasks.length.toString()) ||
+                    `成功导入模式"${modeData.name}"，包含 ${modeData.tasks.length} 个任务`,
                   'success',
                 );
               }, 100);
@@ -273,28 +298,37 @@ const CustomModeManager: React.FC = () => {
           const newModeToImport: NewCustomMode = {
             name: modeData.name,
             type: modeData.type || 'custom',
-            description: modeData.description || '导入的自定义模式',
+            description:
+              modeData.description ||
+              translation?.import?.successImport?.split('，')[0] ||
+              '导入的自定义模式',
             tasks: modeData.tasks,
           };
 
           const success = createCustomMode(newModeToImport);
           if (success) {
             showToast(
-              `成功导入模式"${modeData.name}"，包含 ${modeData.tasks.length} 个任务`,
+              translation?.import?.successImport
+                ?.replace('{name}', modeData.name)
+                ?.replace('{count}', modeData.tasks.length.toString()) ||
+                `成功导入模式"${modeData.name}"，包含 ${modeData.tasks.length} 个任务`,
               'success',
             );
           } else {
-            showToast(`导入失败，请检查文件内容`, 'error');
+            showToast(translation?.import?.importFailed || `导入失败，请检查文件内容`, 'error');
           }
         }
       } catch (error) {
         console.error('解析JSON失败:', error);
-        showToast(`文件格式错误，请确保是有效的JSON文件`, 'error');
+        showToast(
+          translation?.import?.fileError || `文件格式错误，请确保是有效的JSON文件`,
+          'error',
+        );
       }
     };
 
     reader.onerror = () => {
-      alert('文件读取失败');
+      alert(translation?.import?.readError || '文件读取失败');
     };
 
     reader.readAsText(file, 'utf-8');
@@ -322,7 +356,7 @@ const CustomModeManager: React.FC = () => {
               "
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            title="导入自定义模式文件"
+            title={translation?.importMode || '导入自定义模式文件'}
           >
             <Upload className="w-4 h-4" />
             <input
@@ -332,7 +366,7 @@ const CustomModeManager: React.FC = () => {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               id="import-mode"
             />
-            导入模式
+            {translation?.importMode || '导入模式'}
           </motion.button>
         </div>
         <motion.button
@@ -347,7 +381,7 @@ const CustomModeManager: React.FC = () => {
           whileTap={{ scale: 0.95 }}
         >
           <Plus className="w-4 h-4" />
-          新增模式
+          {translation?.createMode || '新增模式'}
         </motion.button>
       </motion.div>
 
@@ -385,7 +419,9 @@ const CustomModeManager: React.FC = () => {
                         }
                       `}
                       >
-                        {mode.type === 'ai' ? 'AI生成' : '自定义'}
+                        {mode.type === 'ai'
+                          ? translation?.type?.ai || 'AI生成'
+                          : translation?.type?.custom || '自定义'}
                       </span>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
@@ -394,7 +430,10 @@ const CustomModeManager: React.FC = () => {
                     <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-1">
                         <Tag className="w-3 h-3" />
-                        {mode.tasks.length} 个任务
+                        {translation?.tasksCount?.replace(
+                          '{count}',
+                          mode.tasks.length.toString(),
+                        ) || `${mode.tasks.length} 个任务`}
                       </div>
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
@@ -421,7 +460,7 @@ const CustomModeManager: React.FC = () => {
                       className="p-2 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 text-purple-600 dark:text-purple-400 transition-colors"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      title="下载模式文件"
+                      title={translation?.exportMode || '下载模式文件'}
                     >
                       <Download className="w-4 h-4" />
                     </motion.button>
@@ -456,7 +495,7 @@ const CustomModeManager: React.FC = () => {
                     className="p-4 bg-gray-50/50 dark:bg-gray-700/20"
                   >
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                      任务列表
+                      {translation?.taskList || '任务列表'}
                     </h4>
                     <div className="space-y-2">
                       {mode.tasks.map((task, taskIndex) => (
@@ -514,7 +553,9 @@ const CustomModeManager: React.FC = () => {
               {/* 弹窗头部 */}
               <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                  {editingMode ? '编辑模式' : '新增模式'}
+                  {editingMode
+                    ? translation?.editMode || '编辑模式'
+                    : translation?.createMode || '新增模式'}
                 </h3>
                 <motion.button
                   onClick={resetForm}
@@ -532,7 +573,7 @@ const CustomModeManager: React.FC = () => {
                   {/* 模式名称 */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      模式名称
+                      {translation?.modeName || '模式名称'}
                     </label>
                     <input
                       type="text"
@@ -546,14 +587,14 @@ const CustomModeManager: React.FC = () => {
                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         transition-all duration-200
                       "
-                      placeholder="输入模式名称"
+                      placeholder={translation?.modeName || '输入模式名称'}
                     />
                   </div>
 
                   {/* 模式描述 */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      模式描述
+                      {translation?.modeDescription || '模式描述'}
                     </label>
                     <textarea
                       value={newMode.description}
@@ -569,14 +610,14 @@ const CustomModeManager: React.FC = () => {
                         focus:ring-2 focus:ring-blue-500 focus:border-transparent
                         transition-all duration-200 resize-none
                       "
-                      placeholder="输入模式描述"
+                      placeholder={translation?.modeDescription || '输入模式描述'}
                     />
                   </div>
 
                   {/* 任务管理 */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      任务列表
+                      {translation?.taskList || '任务列表'}
                     </label>
 
                     {/* 添加任务 */}
@@ -594,7 +635,7 @@ const CustomModeManager: React.FC = () => {
                           focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           transition-all duration-200
                         "
-                        placeholder="输入任务内容"
+                        placeholder={translation?.taskPlaceholder || '输入任务内容'}
                       />
                       <motion.button
                         onClick={handlePasteFromClipboard}
@@ -604,7 +645,10 @@ const CustomModeManager: React.FC = () => {
                         "
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        title="从剪切板批量添加任务（支持换行、逗号、顿号等分隔符）"
+                        title={
+                          translation?.pasteFromClipboard ||
+                          '从剪切板批量添加任务（支持换行、逗号、顿号等分隔符）'
+                        }
                       >
                         <Clipboard className="w-4 h-4" />
                       </motion.button>
@@ -668,7 +712,7 @@ const CustomModeManager: React.FC = () => {
                                   className="p-1 rounded-md hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 dark:text-green-400 transition-colors"
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.9 }}
-                                  title="保存"
+                                  title={translation?.save || '保存'}
                                 >
                                   <Save className="w-3 h-3" />
                                 </motion.button>
@@ -677,7 +721,7 @@ const CustomModeManager: React.FC = () => {
                                   className="p-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 transition-colors"
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.9 }}
-                                  title="取消"
+                                  title={translation?.cancel || '取消'}
                                 >
                                   <X className="w-3 h-3" />
                                 </motion.button>
@@ -732,7 +776,7 @@ const CustomModeManager: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  取消
+                  {translation?.cancel}
                 </motion.button>
                 <motion.button
                   onClick={handleSave}
@@ -747,7 +791,7 @@ const CustomModeManager: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Save className="w-4 h-4" />
-                  保存
+                  {translation?.save}
                 </motion.button>
               </div>
             </motion.div>
@@ -772,10 +816,10 @@ const CustomModeManager: React.FC = () => {
             <Tag className="w-8 h-8 text-blue-500 dark:text-blue-400" />
           </div>
           <h3 className="text-lg font-medium text-gray-600 dark:text-gray-400 mb-2">
-            暂无自定义模式
+            {translation?.noModes}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-500 mb-6">
-            创建你的第一个自定义模式吧！
+            {translation?.createFirstMode}
           </p>
           <motion.button
             onClick={() => setIsCreating(true)}
@@ -789,7 +833,7 @@ const CustomModeManager: React.FC = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Plus className="w-4 h-4" />
-            新增模式
+            {translation?.createMode}
           </motion.button>
         </motion.div>
       )}

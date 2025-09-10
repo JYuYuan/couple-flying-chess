@@ -10,7 +10,8 @@
     "moving": "Moving...",
     "preparing": "Preparing...",
     "skipToHome": "Skip to Home",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "settings": {
     "title": "Settings",
@@ -260,6 +261,57 @@
     "end": "Finish",
     "star": "Lucky",
     "trap": "Trap"
+  },
+  "customModeManager": {
+    "title": "Custom Mode Manager",
+    "noModes": "No custom modes yet",
+    "createFirstMode": "Create your first custom mode!",
+    "createMode": "Create Mode",
+    "editMode": "Edit Mode",
+    "importMode": "Import Mode",
+    "exportMode": "Export Mode",
+    "modeName": "Mode Name",
+    "modeDescription": "Mode Description",
+    "taskList": "Task List",
+    "addTask": "Add Task",
+    "taskPlaceholder": "Enter task content",
+    "batchAddTasks": "Batch Add Tasks",
+    "pasteFromClipboard": "Paste from Clipboard",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "tasksCount": "{count} tasks",
+    "createdOn": "Created on",
+    "type": {
+      "ai": "AI Generated",
+      "custom": "Custom"
+    },
+    "deleteConfirm": {
+      "title": "Confirm Deletion",
+      "message": "Are you sure you want to delete mode \"{modeName}\"? This action cannot be undone."
+    },
+    "import": {
+      "success": "Successfully imported {count} tasks",
+      "invalidFile": "Please select a JSON file (.json)",
+      "invalidFormat": "Invalid file format, missing required mode information",
+      "overwriteConfirm": {
+        "title": "Confirm Overwrite",
+        "message": "A mode named \"{name}\" already exists. Overwrite the existing mode?"
+      },
+      "successImport": "Successfully imported mode \"{name}\" with {count} tasks",
+      "importFailed": "Import failed, please check the file content",
+      "fileError": "File format error, please make sure it's a valid JSON file",
+      "readError": "Failed to read file, please check browser permissions"
+    },
+    "clipboard": {
+      "noTasks": "No valid task content found in clipboard",
+      "readError": "Failed to read from clipboard, please check browser permissions"
+    },
+    "validation": {
+      "nameRequired": "Please enter a mode name",
+      "tasksRequired": "Please add at least one task"
+    }
   },
   "tasks": {
     "challenge": "Task Challenge",

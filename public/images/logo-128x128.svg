@@ -1,0 +1,68 @@
+
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B9D"/>
+      <stop offset="50%" stop-color="#FF8E9E"/>
+      <stop offset="100%" stop-color="#FFB199"/>
+    </linearGradient>
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF4757"/>
+      <stop offset="100%" stop-color="#FF6B9D"/>
+    </linearGradient>
+    <linearGradient id="diceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="128" height="128" rx="32" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative dots -->
+  <circle cx="25.6" cy="25.6" r="2.56" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="102.4" cy="25.6" r="1.92" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="25.6" cy="102.4" r="1.92" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="102.4" cy="102.4" r="2.56" fill="rgba(255,255,255,0.3)"/>
+  
+  <!-- Main icons group -->
+  <g transform="translate(64, 64)">
+    <!-- Heart (top left) -->
+    <g transform="translate(-16.64, -16.64)">
+      <path d="M7.68 14.08l-0.896 -0.896C3.456 10.24 1.28 8.064 1.28 5.632 1.28 3.584 2.816 1.92 4.864 1.92c1.152 0 2.176 0.512 2.944 1.408C8.448 2.56 9.472 1.92 10.624 1.92 12.672 1.92 14.08 3.584 14.08 5.632c0 2.432 -2.176 4.608 -5.504 7.552L7.68 14.08z" fill="url(#heartGradient)" filter="url(#shadow)"/>
+    </g>
+    
+    <!-- Dice (bottom right) -->
+    <g transform="translate(10.24, 10.24)">
+      <rect x="0" y="0" width="12.8" height="12.8" rx="2.56" fill="url(#diceGradient)" filter="url(#shadow)"/>
+      <!-- Dice dots (6) -->
+      <circle cx="3.84" cy="3.84" r="1.024" fill="white"/>
+      <circle cx="8.96" cy="3.84" r="1.024" fill="white"/>
+      <circle cx="3.84" cy="6.4" r="1.024" fill="white"/>
+      <circle cx="8.96" cy="6.4" r="1.024" fill="white"/>
+      <circle cx="3.84" cy="8.96" r="1.024" fill="white"/>
+      <circle cx="8.96" cy="8.96" r="1.024" fill="white"/>
+    </g>
+    
+    <!-- Couple icons (center) -->
+    <g transform="translate(-6.4, -3.2)">
+      <!-- Male -->
+      <circle cx="0" cy="-3.2" r="3.84" fill="#FFB199" stroke="#FF8E9E" stroke-width="0.64"/>
+      <rect x="-2.56" y="0.64" width="5.12" height="6.4" rx="1.28" fill="#3B82F6"/>
+      
+      <!-- Female -->
+      <circle cx="7.68" cy="-3.2" r="3.84" fill="#FFB199" stroke="#FF8E9E" stroke-width="0.64"/>
+      <rect x="5.12" y="0.64" width="5.12" height="6.4" rx="1.28" fill="#FF6B9D"/>
+      
+      <!-- Connecting heart -->
+      <circle cx="3.84" cy="-1.28" r="1.92" fill="#FF4757"/>
+    </g>
+  </g>
+  
+  <!-- Decorative stars -->
+  <path d="M32 19.2 L33.28 24.32 L38.4 24.32 L34.56 26.88 L35.84 30.72 L32 28.16 L28.16 30.72 L29.44 26.88 L25.6 24.32 L30.72 24.32 Z" fill="rgba(255,255,255,0.4)"/>
+  <path d="M93.44 106.24 L94.72 111.36 L98.56 111.36 L95.36 113.28 L96.64 117.76 L93.44 114.56 L90.24 117.76 L91.52 113.28 L88.32 111.36 L92.16 111.36 Z" fill="rgba(255,255,255,0.4)"/>
+</svg>

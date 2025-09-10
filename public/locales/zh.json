@@ -10,7 +10,8 @@
     "moving": "移动中...",
     "preparing": "准备中...",
     "skipToHome": "跳过回到首页",
-    "cancel": "取消"
+    "cancel": "取消",
+    "confirm": "确认"
   },
   "settings": {
     "title": "设置",
@@ -263,6 +264,57 @@
     "end": "终点",
     "star": "幸运",
     "trap": "陷阱"
+  },
+  "customModeManager": {
+    "title": "自定义模式管理",
+    "noModes": "暂无自定义模式",
+    "createFirstMode": "创建你的第一个自定义模式吧！",
+    "createMode": "新增模式",
+    "editMode": "编辑模式",
+    "importMode": "导入模式",
+    "exportMode": "导出模式",
+    "modeName": "模式名称",
+    "modeDescription": "模式描述",
+    "taskList": "任务列表",
+    "addTask": "添加任务",
+    "taskPlaceholder": "输入任务内容",
+    "batchAddTasks": "批量添加任务",
+    "pasteFromClipboard": "从剪贴板粘贴",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "tasksCount": "{count} 个任务",
+    "createdOn": "创建于",
+    "type": {
+      "ai": "AI生成",
+      "custom": "自定义"
+    },
+    "deleteConfirm": {
+      "title": "删除确认",
+      "message": "确定要删除模式{modeName} 吗？此操作无法撤销。"
+    },
+    "import": {
+      "success": "成功导入{count}个任务",
+      "invalidFile": "请选择JSON文件(.json)",
+      "invalidFormat": "文件格式不正确，缺少必要的模式信息",
+      "overwriteConfirm": {
+        "title": "模式覆盖确认",
+        "message": "已存在名为{name}的模式，是否覆盖现有模式？"
+      },
+      "successImport": "成功导入模式{name}，包含{count}个任务",
+      "importFailed": "导入失败，请检查文件内容",
+      "fileError": "文件格式错误，请确保是有效的JSON文件",
+      "readError": "文件读取失败，请检查浏览器权限设置"
+    },
+    "clipboard": {
+      "noTasks": "剪贴板中没有找到有效的任务内容",
+      "readError": "读取剪贴板失败，请检查浏览器权限设置"
+    },
+    "validation": {
+      "nameRequired": "请填写模式名称",
+      "tasksRequired": "请添加至少一个任务"
+    }
   },
   "tasks": {
     "challenge": "任务挑战",

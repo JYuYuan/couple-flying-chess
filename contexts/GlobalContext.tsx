@@ -13,6 +13,7 @@ import { Language, loadTranslations, Translations } from '@/lib/i18n';
 import { soundConfig, SoundKey } from './config/sounds';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CheckCircle, XCircle } from 'lucide-react';
+import zh from '@/public/locales/zh.json';
 
 type Theme = 'light' | 'dark';
 
@@ -73,7 +74,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
     return 'zh';
   });
-  const [translations, setTranslations] = useState<Translations>();
+  const [translations, setTranslations] = useState<Translations>(zh as any);
 
   // -------- Sound --------
   const [isMuted, setIsMuted] = useState<boolean>(() => {
@@ -332,7 +333,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                   "
                   whileTap={{ scale: 0.98 }}
                 >
-                  确认
+                  {translations?.common.confirm}
                 </motion.button>
 
                 {/* 分割线 */}
@@ -348,7 +349,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                   "
                   whileTap={{ scale: 0.98 }}
                 >
-                  取消
+                  {translations?.common.cancel}
                 </motion.button>
               </div>
             </motion.div>

@@ -27,6 +27,65 @@ export interface HomeTranslations {
   };
 }
 
+interface CustomModeManager {
+  title: string;
+  noModes: string;
+  createFirstMode: string;
+  createMode: string;
+  editMode: string;
+  importMode: string;
+  exportMode: string;
+  modeName: string;
+  modeDescription: string;
+  taskList: string;
+  addTask: string;
+  taskPlaceholder: string;
+  batchAddTasks: string;
+  pasteFromClipboard: string;
+  save: string;
+  cancel: string;
+  delete: string;
+  edit: string;
+  tasksCount: string;
+  createdOn: string;
+  type: Type;
+  deleteConfirm: DeleteConfirm;
+  import: Import;
+  clipboard: Clipboard;
+  validation: Validation;
+}
+
+interface Validation {
+  nameRequired: string;
+  tasksRequired: string;
+}
+
+interface Clipboard {
+  noTasks: string;
+  readError: string;
+}
+
+interface Import {
+  success: string;
+  invalidFile: string;
+  invalidFormat: string;
+  overwriteConfirm: DeleteConfirm;
+  successImport: string;
+  importFailed: string;
+  fileError: string;
+  readError: string;
+}
+
+interface DeleteConfirm {
+  title: string;
+  message: string;
+}
+
+interface Type {
+  ai: string;
+  custom: string;
+}
+
 export interface Translations {
   home: HomeTranslations;
   common: {
@@ -41,7 +100,9 @@ export interface Translations {
     preparing: string;
     skipToHome: string;
     cancel: string;
+    confirm:string;
   };
+  customModeManager: CustomModeManager;
   settings: {
     title: string;
     backToHome: string;
