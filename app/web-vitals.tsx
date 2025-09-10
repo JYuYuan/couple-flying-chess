@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 export default function WebVitals() {
   useEffect(() => {
     // 动态导入web-vitals库
+    // @ts-ignore
     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
       // 发送性能数据到Google Analytics
       function sendToGA(metric: any) {
