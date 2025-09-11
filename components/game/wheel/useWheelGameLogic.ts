@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { CurrentTask, PlayerColor, TaskType } from '../flying/types/game';
 import { useStableCallback } from '@/hooks/use-performance';
-import { randomMs } from '@/lib/utils';
-import { defaultTimeSettings, TimeSettings } from '../flying/utils/timeManager';
+import { getSuggestedTaskTime } from '../flying/utils/timeManager';
 
 export interface WheelResult {
   type: 'normal' | 'star' | 'trap' | 'bonus';
@@ -23,23 +22,6 @@ export function useWheelGameLogic(
   setTaskQueue?: (queue: string[]) => void,
 ) {
   const [wheelResult, setWheelResult] = useState<WheelResult | null>(null);
-  const [timeSettings, setTimeSettings] = useState<TimeSettings>(defaultTimeSettings);
-
-  useEffect(() => {
-    const savedSettings = localStorage.getItem('flyingTimeSettings');
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings);
-        setTimeSettings((prev) => ({
-          ...prev,
-          ...parsed,
-          keywordTimes: { ...defaultTimeSettings.keywordTimes, ...parsed.keywordTimes },
-        }));
-      } catch (error) {
-        console.error('Failed to parse time settings:', error);
-      }
-    }
-  }, []);
 
   // 确定任务执行者（参考飞行棋逻辑）
   const determineExecutor = useCallback(
@@ -52,28 +34,6 @@ export function useWheelGameLogic(
       }
     },
     [],
-  );
-
-  // 计算任务持续时间（参考飞行棋逻辑）
-  const calculateTaskDuration = useCallback(
-    (taskDescription: string): number | undefined => {
-      if (taskDescription.indexOf('$time') === -1) return undefined;
-
-      if (timeSettings?.enableAutoTime) {
-        // 根据关键词匹配时间
-        for (const [keyword, time] of Object.entries(timeSettings.keywordTimes)) {
-          if (taskDescription.indexOf(keyword) > -1) {
-            return time;
-          }
-        }
-        return undefined;
-      } else {
-        // 随机生成时间
-        const defaultTime = timeSettings?.defaultTaskTime || 1;
-        return randomMs(5 * 1000, defaultTime * 60 * 1000);
-      }
-    },
-    [timeSettings],
   );
 
   // 触发任务（参考飞行棋逻辑）
@@ -101,7 +61,7 @@ export function useWheelGameLogic(
       }
 
       const executor = determineExecutor(type, playerOnCell);
-      const durationMs = calculateTaskDuration(currentTaskDescription);
+      const durationMs = getSuggestedTaskTime(currentTaskDescription).time;
 
       setCurrentTask({
         executor,

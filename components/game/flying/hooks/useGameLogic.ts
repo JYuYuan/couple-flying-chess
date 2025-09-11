@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import type { CurrentTask, GameState, PlayerColor, TaskType } from '../types/game';
 import { PathCell } from '@/lib/game-config';
 import { Translations } from '@/lib/i18n';
-import { randomMs } from '@/lib/utils';
-import { defaultTimeSettings, TimeSettings } from '@/components/game/flying/utils/timeManager';
+
+import { getSuggestedTaskTime } from '@/components/game/flying/utils/timeManager';
 
 export function useGameLogic(
   boardPath: PathCell[],
@@ -23,23 +23,6 @@ export function useGameLogic(
     originalPosition: number,
   ) => void,
 ) {
-  const [timeSettings, setTimeSettings] = useState<TimeSettings>(defaultTimeSettings);
-
-  useEffect(() => {
-    const savedSettings = localStorage.getItem('flyingTimeSettings');
-    if (savedSettings) {
-      try {
-        const parsed = JSON.parse(savedSettings);
-        setTimeSettings((prev) => ({
-          ...prev,
-          ...parsed,
-          keywordTimes: { ...defaultTimeSettings.keywordTimes, ...parsed.keywordTimes },
-        }));
-      } catch (error) {
-        console.error('Failed to parse time settings:', error);
-      }
-    }
-  }, []);
 
   // 确定任务执行者
   const determineExecutor = useCallback(
@@ -54,26 +37,7 @@ export function useGameLogic(
     [],
   );
 
-  // 计算任务持续时间
-  const calculateTaskDuration = useCallback(
-    (taskDescription: string): number | undefined => {
-      if (taskDescription.indexOf('$time') === -1) return undefined;
-
-      if (timeSettings.enableAutoTime) {
-        // 根据关键词匹配时间
-        for (const [keyword, time] of Object.entries(timeSettings.keywordTimes)) {
-          if (taskDescription.indexOf(keyword) > -1) {
-            return time;
-          }
-        }
-        return undefined;
-      } else {
-        // 随机生成时间
-        return randomMs(5 * 1000, timeSettings.defaultTaskTime * 60 * 1000);
-      }
-    },
-    [timeSettings],
-  );
+ 
 
   const triggerTask = useCallback(
     (type: TaskType, playerOnCell: PlayerColor, translations?: Translations) => {
@@ -89,7 +53,7 @@ export function useGameLogic(
       setTaskQueue([...taskQueue.slice(1), taskQueue[0]]);
 
       const executor = determineExecutor(type, playerOnCell);
-      const durationMs = calculateTaskDuration(currentTaskDescription);
+      const durationMs = getSuggestedTaskTime(currentTaskDescription).time;
 
       setCurrentTask({
         executor,
