@@ -29,6 +29,14 @@ const GamePlayPage: React.FC = () => {
   const initialGameMode = (params.get('mode') || 'normal') as GameMode;
   const customMode = params.get('customMode') || '';
   const isNewGame = parseInt(params.get('isNewGame') || '1');
+  const updateQuery = (key: string, value: string) => {
+    // 先拷贝一份现有参数
+    const searchParams = new URLSearchParams(params.toString());
+    searchParams.set(key, value);
+
+    // 更新 URL
+    router.replace(`?${searchParams.toString()}`);
+  };
 
   const { playSound, translations, language, showToast } = useGlobal();
   const router = useRouter();
@@ -270,6 +278,7 @@ const GamePlayPage: React.FC = () => {
     };
 
     initializeGame();
+    updateQuery("isNewGame","0");
   }, [initialGameMode, customMode, isNewGame, language]);
 
   useEffect(() => {
