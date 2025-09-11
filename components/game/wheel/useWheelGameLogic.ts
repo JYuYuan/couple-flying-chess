@@ -76,8 +76,7 @@ export function useWheelGameLogic(
       setTaskQueue,
       setCurrentTask,
       setGameState,
-      determineExecutor,
-      calculateTaskDuration,
+      determineExecutor
     ],
   );
   // 处理转盘结果

@@ -68,8 +68,7 @@ export function useGameLogic(
       setTaskQueue,
       setCurrentTask,
       setGameState,
-      determineExecutor,
-      calculateTaskDuration,
+      determineExecutor
     ],
   );
 
