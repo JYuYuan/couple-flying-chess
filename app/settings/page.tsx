@@ -8,42 +8,8 @@ import { useGlobal } from '@/contexts/GlobalContext';
 import { soundConfig, SoundKey } from '@/contexts/config/sounds';
 
 export default function Settings() {
-  const { translations, isMuted, toggleMute, playSound } = useGlobal();
+  const { translations, isMuted, toggleMute, playSound,soundSettings,saveSoundSettings } = useGlobal();
   const t = translations?.settings;
-
-  const [soundSettings, setSoundSettings] = useState<
-    Record<SoundKey, { enabled: boolean; volume: number }>
-  >(() => {
-    return Object.entries(soundConfig).reduce(
-      (acc, [key, config]) => {
-        const soundKey = key as SoundKey;
-        acc[soundKey] = {
-          enabled: true,
-          volume: config.volume,
-        };
-        return acc;
-      },
-      {} as Record<SoundKey, { enabled: boolean; volume: number }>,
-    );
-  });
-
-  // 从本地存储加载设置
-  useEffect(() => {
-    const savedSettings = localStorage.getItem('soundSettings');
-    if (savedSettings) {
-      try {
-        setSoundSettings(JSON.parse(savedSettings));
-      } catch (error) {
-        console.error('Failed to parse sound settings:', error);
-      }
-    }
-  }, []);
-
-  // 保存设置到本地存储
-  const saveSoundSettings = (newSettings: typeof soundSettings) => {
-    setSoundSettings(newSettings);
-    localStorage.setItem('soundSettings', JSON.stringify(newSettings));
-  };
 
   // 测试播放声音
   const testPlaySound = (soundKey: SoundKey) => {

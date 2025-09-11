@@ -38,6 +38,8 @@ type GlobalContextType = {
   stopAllSounds: () => void;
   getAudioRef: (key: SoundKey) => HTMLAudioElement | undefined;
   getAllAudioRef: (key: SoundKey) => Map<SoundKey, HTMLAudioElement> | undefined;
+  soundSettings: Record<SoundKey, { enabled: boolean; volume: number }>;
+  saveSoundSettings: (sounds: Record<SoundKey, { enabled: boolean; volume: number }>) => void;
 
   // Dialog
   showToast: (message: string, type?: 'success' | 'error') => void;
@@ -78,6 +80,37 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return false;
   });
 
+ const [soundSettings, setSoundSettings] = useState<
+    Record<SoundKey, { enabled: boolean; volume: number }>
+  >(() => {
+    return Object.entries(soundConfig).reduce(
+      (acc, [key, config]) => {
+        const soundKey = key as SoundKey;
+        acc[soundKey] = {
+          enabled: true,
+          volume: config.volume,
+        };
+        return acc;
+      },
+      {} as Record<SoundKey, { enabled: boolean; volume: number }>,
+    );
+  });
+
+  useEffect(() => {
+      const savedSettings = localStorage.getItem('soundSettings');
+      if (savedSettings) {
+        try {
+          setSoundSettings(JSON.parse(savedSettings));
+        } catch (error) {
+          console.error('Failed to parse sound settings:', error);
+        }
+      }
+    }, []);
+
+  const saveSoundSettings = (newSettings: typeof soundSettings) => {
+    setSoundSettings(newSettings);
+    localStorage.setItem('soundSettings', JSON.stringify(newSettings));
+  };
   // 声音池：用 Map 管理
   const soundsRef = useRef<Map<SoundKey, HTMLAudioElement>>(new Map());
 
@@ -93,7 +126,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   }, [soundsRef.current]);
 
   const playSound = (key: SoundKey) => {
-    const config = soundConfig[key];
+    const config = {...soundConfig[key],...soundSettings[key]};
     if (!config) {
       console.warn(`Sound ${key} not found in config`);
       return;
@@ -106,13 +139,11 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       audio.preload = 'auto';
       soundsRef.current.set(key, audio);
     }
-
+    
     audio.loop = config.loop ?? false;
     audio.volume = config.volume ?? 1;
-    audio.muted = isMuted;
-
+    audio.muted = isMuted?isMuted:!config.enabled;
     audio.currentTime = 0;
-
     audio.play().catch((e) => {
       console.warn(`Audio play blocked: ${key}`, e);
     });
@@ -146,9 +177,29 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   // -------- Theme 初始化 --------
   useEffect(() => {
-    Object.entries(soundConfig).forEach(([key,config])=>{
+    Object.entries(soundConfig).forEach(([key,config]:any)=>{
+      const setting= ((soundSettings as any)[key]);
+      console.log(setting)
       const audio = new Audio(config.src);
       audio.preload = 'auto';
+      audio.loop = config.loop ?? false;
+      audio.volume = setting.volume ?? 1;
+      audio.muted = true;
+      audio.addEventListener("loadedmetadata", () => {
+        console.log(key+"：元数据已加载，时长:", audio.duration);
+      });
+
+      audio.addEventListener("canplay", () => {
+        console.log(key+"：音频可播放");
+      });
+
+      audio.addEventListener("canplaythrough", () => {
+        console.log(key+"：音频已完全加载，可以流畅播放");
+      });
+
+      audio.addEventListener("error", (e) => {
+        console.error(key+"：音频加载失败", e);
+      });
       soundsRef.current.set(key as any, audio);
     })
     try {
@@ -256,6 +307,8 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     stopAllSounds,
     getAudioRef,
     getAllAudioRef,
+    soundSettings, 
+    saveSoundSettings,
 
     showToast,
     showConfirmDialog,
