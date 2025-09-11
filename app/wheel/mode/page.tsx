@@ -32,41 +32,6 @@ const GameModePage: React.FC = () => {
     savedData?: any;
   } | null>(null);
 
-  useEffect(() => {
-    playSound('bgm');
-
-    // 添加多种用户交互事件监听，用于解决浏览器的自动播放限制
-    const handleUserInteraction = () => {
-      playSound('bgm');
-      // 移除所有事件监听器
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-    };
-
-    // 监听多种用户交互事件
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-    document.addEventListener('mousemove', handleUserInteraction);
-
-    // 组件卸载时清理
-    return () => {
-      stopSound('bgm');
-      // 清理事件监听器
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-    };
-  }, []);
-
-  // 检查是否有保存的游戏状态
-  const hasGameSave = (mode: GameMode, customModeId?: string) => {
-    const savedData = persistence.loadGame(mode, customModeId);
-    return savedData && (savedData.redPosition > 0 || savedData.bluePosition > 0);
-  };
 
   const redirectStartGame = (mode: string, customMode?: string, isNewGame?: boolean) => {
     router.push(
@@ -76,8 +41,6 @@ const GameModePage: React.FC = () => {
 
   // 事件处理
   const startGame = async (mode: GameMode, customMode?: any) => {
-    // 尝试播放背景音乐（如果还没有播放）
-    if (getAudioRef('bgm')?.paused) playSound('bgm');
     // 直接开始新游戏
     redirectStartGame(mode, customMode, true);
   };

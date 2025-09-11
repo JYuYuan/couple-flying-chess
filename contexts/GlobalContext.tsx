@@ -17,12 +17,6 @@ import zh from '@/public/locales/zh.json';
 
 type Theme = 'light' | 'dark';
 
-// 声音类型
-type SoundOptions = {
-  loop?: boolean;
-  volume?: number; // 0 ~ 1
-};
-
 type GlobalContextType = {
   // Theme
   theme: Theme;
@@ -118,10 +112,12 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     audio.muted = isMuted;
 
     audio.currentTime = 0;
+
     audio.play().catch((e) => {
       console.warn(`Audio play blocked: ${key}`, e);
     });
   };
+
 
   const stopSound = (key: SoundKey) => {
     const audio = soundsRef.current.get(key);
@@ -146,16 +142,15 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     localStorage.setItem('isMuted', String(isMuted));
   }, [isMuted]);
 
-  useEffect(()=>{
-    playSound("bgm");
-  },[])
-
   const toggleMute = () => setIsMuted((prev) => !prev);
 
   // -------- Theme 初始化 --------
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
+    Object.entries(soundConfig).forEach(([key,config])=>{
+      const audio = new Audio(config.src);
+      audio.preload = 'auto';
+      soundsRef.current.set(key as any, audio);
+    })
     try {
       const savedTheme = localStorage.getItem('theme') as Theme | null;
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches

@@ -13,7 +13,7 @@ import { useGlobal } from '@/contexts/GlobalContext';
 import { useRouter } from 'next/navigation';
 
 const GameModePage: React.FC = () => {
-  const { translations, playSound, stopSound, getAudioRef, showToast } = useGlobal();
+  const { translations, playSound,  getAudioRef } = useGlobal();
   const persistence = useGamePersistence();
   const router = useRouter();
 
@@ -33,36 +33,6 @@ const GameModePage: React.FC = () => {
     savedData?: any;
   } | null>(null);
 
-  useEffect(() => {
-    playSound('bgm');
-
-    // 添加多种用户交互事件监听，用于解决浏览器的自动播放限制
-    const handleUserInteraction = () => {
-      playSound('bgm');
-      // 移除所有事件监听器
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-    };
-
-    // 监听多种用户交互事件
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-    document.addEventListener('mousemove', handleUserInteraction);
-
-    // 组件卸载时清理
-    return () => {
-      stopSound('bgm');
-      // 清理事件监听器
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-    };
-  }, []);
-
   // 检查是否有保存的游戏状态
   const hasGameSave = (mode: GameMode, customModeId?: string) => {
     const savedData = persistence.loadGame(mode, customModeId);
@@ -79,8 +49,6 @@ const GameModePage: React.FC = () => {
   const startGame = async (mode: GameMode, customMode?: any) => {
     const customModeId = customMode?.id;
 
-    // 尝试播放背景音乐（如果还没有播放）
-    if (getAudioRef('bgm')?.paused) playSound('bgm');
     // 检查是否有保存的游戏状态
     if (hasGameSave(mode, customModeId)) {
       // 先获取存档数据用于弹窗显示

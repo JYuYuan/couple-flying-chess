@@ -7,6 +7,8 @@ import { PageTransition } from '@/components/PageTransition';
 import { GlobalProvider } from '@/contexts/GlobalContext';
 import SEOContent from '@/components/seo-content';
 import KeywordsContent from '@/app/keywords-content';
+import Bgm from"./bgm";
+
 
 export const metadata: Metadata = {
   title: {
@@ -132,6 +134,7 @@ export default function RootLayout({
         className={`min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950`}
       >
         <GlobalProvider>
+          <Bgm/>
           <PageTransition>{children}</PageTransition>
         </GlobalProvider>
         <div className="seo-hidden-content">

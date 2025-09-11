@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isFirstRender = useRef(true);
@@ -20,6 +21,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     const isGoingBack = pathname === '/' || pathname.length < prevPathname.current.length;
     setDirection(isGoingBack ? 'back' : 'forward');
     prevPathname.current = pathname;
+
   }, [pathname]);
 
   // App切换风格的动画配置
