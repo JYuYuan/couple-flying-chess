@@ -148,7 +148,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   useEffect(()=>{
     playSound("bgm");
-  },[playSound])
+  },[])
 
   const toggleMute = () => setIsMuted((prev) => !prev);
 

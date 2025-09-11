@@ -53,7 +53,7 @@ export function useGameLogic(
       setTaskQueue([...taskQueue.slice(1), taskQueue[0]]);
 
       const executor = determineExecutor(type, playerOnCell);
-      const durationMs = getSuggestedTaskTime(currentTaskDescription).time;
+      const durationMs = getSuggestedTaskTime(currentTaskDescription).time * 1000;
 
       setCurrentTask({
         executor,

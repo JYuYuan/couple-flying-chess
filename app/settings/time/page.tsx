@@ -459,9 +459,9 @@ const FlyingSettings: React.FC = () => {
                 {taskManagement.taskQueue
                   .filter((item) => item.indexOf('$time') > -1)
                   .map((item) => item.replace('$time', ''))
-                  .map((example) => (
+                  .map((example,index) => (
                     <motion.button
-                      key={example}
+                      key={`${example}-${index}`}
                       onClick={() => setTestTask(example)}
                       className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs transition-colors"
                       whileHover={{ scale: 1.02 }}
