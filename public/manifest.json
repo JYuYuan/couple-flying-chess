@@ -27,51 +27,51 @@
   ],
   "icons": [
     {
-      "src": "/images/logo-72x72.svg",
+      "src": "/images/logo.png",
       "sizes": "72x72",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-96x96.svg",
+      "src": "/images/logo.png",
       "sizes": "96x96",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-128x128.svg",
+      "src": "/images/logo.png",
       "sizes": "128x128",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-144x144.svg",
+      "src": "/images/logo.png",
       "sizes": "144x144",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-152x152.svg",
+      "src": "/images/logo.png",
       "sizes": "152x152",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-192x192.svg",
+      "src": "/images/logo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/images/logo-384x384.svg",
+      "src": "/images/logo.png",
       "sizes": "384x384",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/logo-512x512.svg",
+      "src": "/images/logo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
@@ -84,9 +84,9 @@
       "url": "/flying/mode",
       "icons": [
         {
-          "src": "/images/logo-96x96.svg",
+          "src": "/images/logo.png",
           "sizes": "96x96",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     },
@@ -97,9 +97,9 @@
       "url": "/settings",
       "icons": [
         {
-          "src": "/images/logo-96x96.svg",
+          "src": "/images/logo.png",
           "sizes": "96x96",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     }

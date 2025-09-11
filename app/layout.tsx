@@ -102,11 +102,10 @@ export default function RootLayout({
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
         />
 
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/images/logo.svg" />
+        <link rel="apple-touch-icon" type="image/png" href="/images/logo.png" />
 
         {/* PWA 相关设置 */}
         <meta name="theme-color" content="#d1d1d1ff" />
@@ -117,7 +116,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="爱情飞行棋" />
-        <link rel="apple-touch-icon" href="/images/logo-192x192.png" />
         <link rel="apple-touch-startup-image" href="/images/splash-screen.png" />
         {/* 针对移动端搜索优化 */}
         <meta name="mobile-web-compatible" content="yes" />
