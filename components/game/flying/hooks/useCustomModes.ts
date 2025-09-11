@@ -78,6 +78,13 @@ export function useCustomModes() {
     [customModes, saveCustomModes],
   );
 
+  const getCustomMode = useCallback(
+    (modeId: string) => {
+      return customModes.find((mode) => mode.id === modeId);
+    },
+    [customModes],
+  );
+
   return {
     customModes,
     currentCustomMode,
@@ -90,5 +97,6 @@ export function useCustomModes() {
     createCustomMode,
     deleteCustomMode,
     updateCustomMode,
+    getCustomMode,
   };
 }

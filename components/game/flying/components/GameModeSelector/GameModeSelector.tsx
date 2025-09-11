@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ChevronDown, Edit, Plus, Sparkles, X } from 'lucide-react';
+import { ChevronDown, Edit, Plus, Sparkles, Target, Rainbow, Drama, HeartHandshake } from 'lucide-react';
 import type { CustomMode, GameMode } from '@/components/game/flying/types/game';
-import { gameModeEmojis, gameModeIcons } from '@/components/game/flying/constants/game-config';
+import { gameModeIcons } from '@/components/game/flying/constants/game-config';
 import { Translations } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGlobal } from '@/contexts/GlobalContext';
@@ -13,8 +13,6 @@ interface GameModeSelectorProps {
   gameMode?: GameMode;
   onStartGame: (mode: GameMode) => void;
   onStartCustomGame: (mode: CustomMode) => void;
-  onCreateCustomMode: () => void;
-  onDeleteCustomMode: (modeId: string) => void;
 }
 
 // 定义样式对象
@@ -369,8 +367,6 @@ export function GameModeSelector({
   gameMode,
   onStartGame,
   onStartCustomGame,
-  onCreateCustomMode,
-  onDeleteCustomMode,
 }: GameModeSelectorProps) {
   const { translations } = useGlobal();
 
@@ -422,11 +418,11 @@ export function GameModeSelector({
               whileTap={{ scale: 0.99 }}
             >
               <div className="flex items-center space-x-3">
-                <div className="text-2xl">
-                  {categoryKey === 'basic' && '🎯'}
-                  {categoryKey === 'lifestyle' && '🌈'}
-                  {categoryKey === 'roleplay' && '🎭'}
-                  {categoryKey === 'adult' && '❤️‍🔥'}
+                <div className="text-gray-600 dark:text-gray-400">
+                  {categoryKey === 'basic' && <Target size={24} />}
+                  {categoryKey === 'lifestyle' && <Rainbow size={24} />}
+                  {categoryKey === 'roleplay' && <Drama size={24} />}
+                  {categoryKey === 'adult' && <HeartHandshake size={24} />}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                   {
@@ -500,7 +496,7 @@ export function GameModeSelector({
                           </div>
 
                           <div className="relative p-6 h-full flex flex-col">
-                            {/* 图标和emoji区域 */}
+                            {/* 图标区域 */}
                             <div className="flex items-center justify-between mb-4">
                               <div
                                 className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${styles.iconBg}`}
@@ -509,9 +505,6 @@ export function GameModeSelector({
                                   size={24}
                                   className={`transition-all duration-300 ${styles.iconColor}`}
                                 />
-                              </div>
-                              <div className={`text-2xl animate-bounce`}>
-                                {gameModeEmojis[modeKey as GameMode]}
                               </div>
                             </div>
 
@@ -583,11 +576,6 @@ export function GameModeSelector({
                       : 'text-slate-600 group-hover:text-gray-600'
                   }`}
                 />
-              </div>
-
-              {/* emoji */}
-              <div className="text-3xl mb-3 group-hover:animate-bounce">
-                {gameModeEmojis.custom}
               </div>
 
               {/* 标题和描述 */}
@@ -669,26 +657,13 @@ export function GameModeSelector({
                   </div>
 
                   <div className="relative p-6 h-full flex flex-col">
-                    {/* 图标和删除按钮 */}
+                    {/* 图标区域 */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 bg-gradient-to-br from-indigo-100 to-purple-200 group-hover:from-indigo-200 group-hover:to-purple-300 dark:from-indigo-800/50 dark:to-purple-700/50 dark:group-hover:from-indigo-700/60 dark:group-hover:to-purple-600/60">
                         <Edit
                           size={24}
                           className="transition-colors duration-300 text-indigo-600 dark:text-indigo-400"
                         />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-2xl">🎨</div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDeleteCustomMode(mode.id);
-                          }}
-                          className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 text-red-500 hover:text-red-600 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100"
-                          title={translations?.customMode.delete}
-                        >
-                          <X size={14} />
-                        </button>
                       </div>
                     </div>
 

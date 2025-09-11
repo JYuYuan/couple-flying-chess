@@ -68,29 +68,6 @@ export const gameModeColors = {
   custom: 'from-green-400 to-green-600',
 };
 
-export const gameModeEmojis = {
-  normal: '😊',
-  love: '💕',
-  couple: '💖',
-  advanced: '🔥',
-  intimate: '🔒',
-  mixed: '🎲',
-  hetero: '💑',
-  daily: '📅',
-  food: '🍽️',
-  fitness: '💪',
-  creative: '🎨',
-  romantic: '💐',
-  game: '🎮',
-  adult: '🔞',
-  'master-slave-sex': '👑',
-  'roleplay-workplace': '💼',
-  'roleplay-fantasy': '🧙‍♀️',
-  'roleplay-uniform': '👮‍♀️',
-  'roleplay-ancient': '🏛️',
-  custom: '🎨',
-};
-
 export const gameModes: GameMode[] = [
   'normal',
   'love',

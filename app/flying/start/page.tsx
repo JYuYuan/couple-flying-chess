@@ -20,19 +20,16 @@ import SpecialEffects, {
   EffectType,
 } from '@/components/game/flying/components/SpecialEffects/SpecialEffects';
 import { useGlobal } from '@/contexts/GlobalContext';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { useOptimizedState, useStableCallback } from '@/hooks/use-performance';
 
-interface gamePlayParams {
-  isNewGame?: boolean;
-  initialCustomMode?: any;
-  initialGameMode?: GameMode;
-}
-
 const GamePlayPage: React.FC = () => {
-  const params: gamePlayParams = useParams(); // 动态路由参数
-  const { isNewGame = 1, initialCustomMode = '', initialGameMode = 'normal' } = params || {};
+  const params = useSearchParams(); // 动态路由参数
+  const initialGameMode = (params.get('mode') || 'normal') as GameMode;
+  const customMode = params.get('customMode') || '';
+  const isNewGame = parseInt(params.get('isNewGame') || '1');
+
   const { playSound, translations, language, showToast } = useGlobal();
   const router = useRouter();
 
@@ -204,6 +201,7 @@ const GamePlayPage: React.FC = () => {
 
       // 加载自定义模式数据
       customModes.loadCustomModes();
+      const initialCustomMode = customModes.getCustomMode(customMode);
 
       if (isNewGame) {
         // 开始新游戏
@@ -272,7 +270,7 @@ const GamePlayPage: React.FC = () => {
     };
 
     initializeGame();
-  }, [initialGameMode, initialCustomMode, isNewGame, language]);
+  }, [initialGameMode, customMode, isNewGame, language]);
 
   useEffect(() => {
     if (gameState.gameMode === 'custom' && customModes.currentCustomMode) {

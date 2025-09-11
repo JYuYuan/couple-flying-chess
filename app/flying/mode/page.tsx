@@ -77,7 +77,7 @@ const GameModePage: React.FC = () => {
 
   const redirectStartGame = (mode: string, customMode?: string, isNewGame?: boolean) => {
     router.push(
-      `/flying/start?mode=${mode}&customMode=${customMode}&isNewGame=${isNewGame ? 1 : 0}`,
+      `/flying/start?mode=${mode}&customMode=${customMode || ''}&isNewGame=${isNewGame ? 1 : 0}`,
     );
   };
 
@@ -87,7 +87,6 @@ const GameModePage: React.FC = () => {
 
     // 尝试播放背景音乐（如果还没有播放）
     if (getAudioRef('bgm')?.paused) playSound('bgm');
-
     // 检查是否有保存的游戏状态
     if (hasGameSave(mode, customModeId)) {
       // 先获取存档数据用于弹窗显示
@@ -201,10 +200,6 @@ const GameModePage: React.FC = () => {
             onStartCustomGame={(mode) => {
               return startGame('custom', mode);
             }}
-            onCreateCustomMode={() => {
-              customModes.setShowCustomModeCreator(true);
-            }}
-            onDeleteCustomMode={customModes.deleteCustomMode}
           />
         </div>
 
