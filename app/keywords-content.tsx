@@ -10,10 +10,10 @@ export default function KeywordsContent() {
     core: {
       title: '核心关键词',
       keywords: [
-        { word: '情侣飞行棋', search: 372, desc: '最核心的品牌词，搜索量最高' },
-        { word: '情侣飞行棋游戏全集', search: 40, desc: '包含多种游戏模式的完整版本' },
-        { word: '情侣飞行棋手机游戏', search: 37, desc: '专为手机优化的游戏版本' },
-        { word: '情侣飞行棋在线游戏', search: 28, desc: '无需下载，在线即玩' },
+        { word: '情侣小游戏', search: 372, desc: '最核心的品牌词，搜索量最高' },
+        { word: '情侣小游戏游戏全集', search: 40, desc: '包含多种游戏模式的完整版本' },
+        { word: '情侣小游戏手机游戏', search: 37, desc: '专为手机优化的游戏版本' },
+        { word: '情侣小游戏在线游戏', search: 28, desc: '无需下载，在线即玩' },
       ],
     },
     interaction: {
@@ -70,13 +70,13 @@ export default function KeywordsContent() {
   const gameFeatures = [
     {
       icon: <Smartphone className="w-6 h-6" />,
-      title: '情侣飞行棋手机游戏',
+      title: '情侣小游戏手机游戏',
       desc: '专为手机优化，支持iOS和Android系统，随时随地开启甜蜜互动时光。',
       tags: ['手机版', '移动端', 'APP', '在线玩'],
     },
     {
       icon: <Monitor className="w-6 h-6" />,
-      title: '情侣飞行棋在线游戏',
+      title: '情侣小游戏在线游戏',
       desc: '无需下载安装，打开浏览器即可开始游戏，支持电脑版大屏体验。',
       tags: ['在线游戏', '免费', '无需下载', '电脑版'],
     },
@@ -107,8 +107,8 @@ export default function KeywordsContent() {
   ];
 
   const popularSearches = [
-    '情侣飞行棋游戏全集免费下载',
-    '情侣飞行棋手机版在线玩',
+    '情侣小游戏游戏全集免费下载',
+    '情侣小游戏手机版在线玩',
     '情侣互动游戏推荐排行榜',
     '真心话大冒险情侣版题目',
     '异地恋情侣游戏有哪些',
@@ -124,7 +124,7 @@ export default function KeywordsContent() {
   const gameAdvantages = [
     {
       title: '🆓 完全免费',
-      desc: '情侣飞行棋在线游戏完全免费，无需付费即可享受所有功能',
+      desc: '情侣小游戏在线游戏完全免费，无需付费即可享受所有功能',
     },
     {
       title: '📱 多平台支持',
@@ -154,7 +154,7 @@ export default function KeywordsContent() {
       <section className="popular-searches">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <Star className="w-6 h-6 text-yellow-500" />
-          热门搜索 - 情侣飞行棋游戏相关
+          热门搜索 - 情侣小游戏游戏相关
         </h2>
         <div className="flex flex-wrap gap-2">
           {popularSearches.map((search, index) => (
@@ -167,7 +167,7 @@ export default function KeywordsContent() {
 
       {/* 关键词分类展示 */}
       <section className="keywords-categories">
-        <h2 className="text-2xl font-bold mb-6">情侣飞行棋游戏关键词大全</h2>
+        <h2 className="text-2xl font-bold mb-6">情侣小游戏游戏关键词大全</h2>
         <Tabs defaultValue="core" className="w-full">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="core">核心词</TabsTrigger>
@@ -203,7 +203,7 @@ export default function KeywordsContent() {
 
       {/* 游戏特色功能 */}
       <section className="game-features">
-        <h2 className="text-2xl font-bold mb-6">情侣飞行棋游戏特色功能</h2>
+        <h2 className="text-2xl font-bold mb-6">情侣小游戏游戏特色功能</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {gameFeatures.map((feature, index) => (
             <Card key={index}>
@@ -230,7 +230,7 @@ export default function KeywordsContent() {
 
       {/* 游戏优势 */}
       <section className="game-advantages">
-        <h2 className="text-2xl font-bold mb-6">为什么选择我们的情侣飞行棋游戏？</h2>
+        <h2 className="text-2xl font-bold mb-6">为什么选择我们的情侣小游戏游戏？</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {gameAdvantages.map((advantage, index) => (
             <Card key={index}>
@@ -287,25 +287,25 @@ export default function KeywordsContent() {
 
       {/* SEO优化内容 */}
       <section className="seo-content">
-        <h2 className="text-2xl font-bold mb-6">情侣飞行棋游戏全集 - 完整指南</h2>
+        <h2 className="text-2xl font-bold mb-6">情侣小游戏游戏全集 - 完整指南</h2>
         <div className="prose max-w-none">
-          <h3>什么是情侣飞行棋游戏？</h3>
+          <h3>什么是情侣小游戏游戏？</h3>
           <p>
-            情侣飞行棋游戏是一种融合了经典飞行棋玩法和情侣互动元素的创新桌游。
-            与传统飞行棋不同，我们的情侣飞行棋游戏全集包含了真心话大冒险、
+            情侣小游戏游戏是一种融合了经典飞行棋玩法和情侣互动元素的创新桌游。
+            与传统飞行棋不同，我们的情侣小游戏游戏全集包含了真心话大冒险、
             情侣挑战任务、亲密互动等多种元素，让游戏不仅仅是娱乐，更是增进感情的神器。
           </p>
 
-          <h3>情侣飞行棋手机游戏的优势</h3>
+          <h3>情侣小游戏手机游戏的优势</h3>
           <p>
-            我们的情侣飞行棋手机游戏支持iOS和Android系统，无需下载APP，
+            我们的情侣小游戏手机游戏支持iOS和Android系统，无需下载APP，
             直接在浏览器中即可开始游戏。手机版特别优化了触控操作，
             让你们能够随时随地开启甜蜜的互动时光。
           </p>
 
-          <h3>情侣飞行棋在线游戏怎么玩？</h3>
+          <h3>情侣小游戏在线游戏怎么玩？</h3>
           <p>
-            情侣飞行棋在线游戏完全免费，两人轮流掷骰子移动棋子，
+            情侣小游戏在线游戏完全免费，两人轮流掷骰子移动棋子，
             踩到特殊格子时会触发各种情侣任务。任务包括真心话问答、
             亲密挑战、甜蜜互动等，需要当场执行，增加游戏的真实性和趣味性。
           </p>

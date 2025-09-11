@@ -10,7 +10,7 @@ const path = require('path');
 
 /**
  * 生成简单的favicon.png (使用Base64数据)
- * 这是一个32x32的PNG，包含简化的情侣飞行棋logo
+ * 这是一个32x32的PNG，包含简化的情侣小游戏logo
  */
 function generateSimpleFavicon() {
   // 创建一个简单的SVG

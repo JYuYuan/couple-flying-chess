@@ -19,16 +19,16 @@ export default function StructuredData() {
     '@type': 'Product',
     name: {
       '@language': 'zh',
-      '@value': '情侣飞行棋游戏全集',
+      '@value': '情侣小游戏游戏全集',
     },
     alternateName: [
       {
         '@language': 'zh',
-        '@value': '情侣飞行棋手机游戏',
+        '@value': '情侣小游戏手机游戏',
       },
       {
         '@language': 'zh',
-        '@value': '情侣飞行棋在线游戏',
+        '@value': '情侣小游戏在线游戏',
       },
       {
         '@language': 'en',
@@ -42,7 +42,7 @@ export default function StructuredData() {
     description: {
       '@language': 'zh',
       '@value':
-        '2025最新情侣飞行棋游戏全集，融合经典飞行棋+真心话大冒险+情趣挑战任务，支持手机版、电脑版免费在线玩，情侣互动游戏首选',
+        '2025最新情侣小游戏游戏全集，融合经典飞行棋+真心话大冒险+情趣挑战任务，支持手机版、电脑版免费在线玩，情侣互动游戏首选',
     },
     brand: {
       '@type': 'Brand',
@@ -78,7 +78,7 @@ export default function StructuredData() {
           name: '小甜甜',
         },
         reviewBody:
-          '这个情侣飞行棋游戏全集真的太棒了！我和男朋友玩了好几个小时都不腻，任务设计得很有创意，让我们的感情更亲密了。强烈推荐给所有情侣！',
+          '这个情侣小游戏游戏全集真的太棒了！我和男朋友玩了好几个小时都不腻，任务设计得很有创意，让我们的感情更亲密了。强烈推荐给所有情侣！',
         inLanguage: 'zh',
         datePublished: '2025-01-15',
       },
@@ -93,7 +93,7 @@ export default function StructuredData() {
           name: '阿杰',
         },
         reviewBody:
-          '作为异地恋情侣，这个情侣飞行棋手机游戏简直是救星！我们通过视频通话一起玩，虽然相隔千里但感觉就像在一起一样。手机版操作很流畅，体验很棒！',
+          '作为异地恋情侣，这个情侣小游戏手机游戏简直是救星！我们通过视频通话一起玩，虽然相隔千里但感觉就像在一起一样。手机版操作很流畅，体验很棒！',
         inLanguage: 'zh',
         datePublished: '2025-01-10',
       },
@@ -114,7 +114,7 @@ export default function StructuredData() {
       },
     ],
     keywords:
-      '情侣飞行棋,情侣飞行棋游戏全集,情侣飞行棋手机游戏,情侣飞行棋在线游戏,情侣互动游戏,情侣小游戏,真心话大冒险,情侣破冰游戏,情侣升温游戏,情侣约会游戏,情侣挑战游戏,异地恋情侣游戏,情侣游戏app,情侣游戏手机版,情侣游戏在线玩,双人游戏情侣,情侣互动小游戏,情侣任务游戏,情侣娱乐游戏,情侣礼物推荐,情人节礼物,恋爱游戏,增进感情的游戏,情侣桌游,couple flight chess,couple board game,couple interactive game',
+      '情侣小游戏,情侣小游戏游戏全集,情侣小游戏手机游戏,情侣小游戏在线游戏,情侣互动游戏,情侣小游戏,真心话大冒险,情侣破冰游戏,情侣升温游戏,情侣约会游戏,情侣挑战游戏,异地恋情侣游戏,情侣游戏app,情侣游戏手机版,情侣游戏在线玩,双人游戏情侣,情侣互动小游戏,情侣任务游戏,情侣娱乐游戏,情侣礼物推荐,情人节礼物,恋爱游戏,增进感情的游戏,情侣桌游,couple flight chess,couple board game,couple interactive game',
     applicationCategory: 'Game',
     operatingSystem: 'Web Browser',
     inLanguage: ['zh', 'en', 'ja'],
@@ -134,34 +134,34 @@ export default function StructuredData() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: '情侣飞行棋游戏怎么玩？',
+        name: '情侣小游戏游戏怎么玩？',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '情侣飞行棋游戏结合了经典飞行棋和情侣互动元素。两人轮流掷骰子移动棋子，踩到特殊格子时会触发情侣任务，需要当场执行。游戏支持手机版和电脑版，可以免费在线玩。',
+          text: '情侣小游戏游戏结合了经典飞行棋和情侣互动元素。两人轮流掷骰子移动棋子，踩到特殊格子时会触发情侣任务，需要当场执行。游戏支持手机版和电脑版，可以免费在线玩。',
           inLanguage: 'zh',
         },
       },
       {
         '@type': 'Question',
-        name: '情侣飞行棋手机游戏支持哪些设备？',
+        name: '情侣小游戏手机游戏支持哪些设备？',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '情侣飞行棋手机游戏支持iOS和Android系统的手机和平板。也可以在电脑浏览器中打开，支持Windows、Mac系统。无需下载APP，直接在线游戏即可。',
+          text: '情侣小游戏手机游戏支持iOS和Android系统的手机和平板。也可以在电脑浏览器中打开，支持Windows、Mac系统。无需下载APP，直接在线游戏即可。',
           inLanguage: 'zh',
         },
       },
       {
         '@type': 'Question',
-        name: '情侣飞行棋在线游戏是免费的吗？',
+        name: '情侣小游戏在线游戏是免费的吗？',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '是的！情侣飞行棋在线游戏完全免费，无需付费即可享受所有游戏模式。我们提供6种不同的游戏模式，从温和到激情，满足不同情侣的需求。',
+          text: '是的！情侣小游戏在线游戏完全免费，无需付费即可享受所有游戏模式。我们提供6种不同的游戏模式，从温和到激情，满足不同情侣的需求。',
           inLanguage: 'zh',
         },
       },
       {
         '@type': 'Question',
-        name: '异地恋可以玩情侣飞行棋游戏吗？',
+        name: '异地恋可以玩情侣小游戏游戏吗？',
         acceptedAnswer: {
           '@type': 'Answer',
           text: '当然可以！异地恋情侣游戏是我们的特色功能之一。通过视频通话，两人可以同时观看游戏画面，一起掷骰子，执行任务。让异地恋也能享受面对面的甜蜜互动。',
@@ -170,7 +170,7 @@ export default function StructuredData() {
       },
       {
         '@type': 'Question',
-        name: '情侣飞行棋游戏有哪些模式？',
+        name: '情侣小游戏游戏有哪些模式？',
         acceptedAnswer: {
           '@type': 'Answer',
           text: '我们提供6种游戏模式：情侣破冰游戏（新手友好）、情侣升温游戏（甜蜜恋爱）、情侣互动游戏（深度交流）、情侣挑战游戏（刺激冒险）、私密成人版、随机惊喜版。每种模式都有不同的任务挑战。',
@@ -179,10 +179,10 @@ export default function StructuredData() {
       },
       {
         '@type': 'Question',
-        name: '情侣飞行棋游戏适合什么年龄段？',
+        name: '情侣小游戏游戏适合什么年龄段？',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: '情侣飞行棋游戏适合18岁以上的成年情侣。我们提供多种模式，从适合新手的情侣破冰游戏，到适合成熟情侣的深度互动模式，每个人都能找到适合自己的玩法。',
+          text: '情侣小游戏游戏适合18岁以上的成年情侣。我们提供多种模式，从适合新手的情侣破冰游戏，到适合成熟情侣的深度互动模式，每个人都能找到适合自己的玩法。',
           inLanguage: 'zh',
         },
       },
@@ -193,16 +193,16 @@ export default function StructuredData() {
   const websiteStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: '情侣飞行棋游戏全集 - 爱情飞行棋',
+    name: '情侣小游戏游戏全集 - 爱情飞行棋',
     alternateName: [
-      '情侣飞行棋手机游戏',
-      '情侣飞行棋在线游戏',
+      '情侣小游戏手机游戏',
+      '情侣小游戏在线游戏',
       'Couple Flight Chess Game',
       'カップル飛行チェス',
     ],
     url: 'https://cpflying.vercel.app',
     description:
-      '2025最新情侣飞行棋游戏全集，融合经典飞行棋+真心话大冒险+情趣挑战任务，支持手机版、电脑版免费在线玩',
+      '2025最新情侣小游戏游戏全集，融合经典飞行棋+真心话大冒险+情趣挑战任务，支持手机版、电脑版免费在线玩',
     potentialAction: {
       '@type': 'SearchAction',
       target: 'https://cpflying.vercel.app/search?q={search_term_string}',
@@ -230,8 +230,8 @@ export default function StructuredData() {
   const softwareApplicationData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: '情侣飞行棋游戏全集',
-    alternateName: ['情侣飞行棋手机游戏', '情侣飞行棋在线游戏', 'Couple Flight Chess Game'],
+    name: '情侣小游戏游戏全集',
+    alternateName: ['情侣小游戏手机游戏', '情侣小游戏在线游戏', 'Couple Flight Chess Game'],
     url: 'https://cpflying.vercel.app',
     description: '免费在线情侣互动游戏，支持手机版、电脑版，多种游戏模式任你选择',
     applicationCategory: 'GameApplication',
@@ -258,9 +258,9 @@ export default function StructuredData() {
     downloadUrl: 'https://cpflying.vercel.app',
     installUrl: 'https://cpflying.vercel.app',
     featureList: [
-      '情侣飞行棋游戏全集',
-      '情侣飞行棋手机游戏',
-      '情侣飞行棋在线游戏',
+      '情侣小游戏游戏全集',
+      '情侣小游戏手机游戏',
+      '情侣小游戏在线游戏',
       '免费在线玩',
       '多种游戏模式',
       '真心话大冒险',
@@ -275,8 +275,8 @@ export default function StructuredData() {
   const gameStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'VideoGame',
-    name: '情侣飞行棋游戏全集',
-    alternateName: ['情侣飞行棋手机游戏', '情侣飞行棋在线游戏'],
+    name: '情侣小游戏游戏全集',
+    alternateName: ['情侣小游戏手机游戏', '情侣小游戏在线游戏'],
     description: '创意情侣互动游戏，融合飞行棋+真心话大冒险+情侣挑战',
     url: 'https://cpflying.vercel.app',
     genre: ['Puzzle', 'Board Game', 'Relationship', 'Interactive'],
@@ -301,15 +301,15 @@ export default function StructuredData() {
       name: '爱情飞行棋',
     },
     datePublished: '2025-01-01',
-    keywords: '情侣飞行棋,情侣游戏,真心话大冒险,情侣互动游戏,情侣挑战游戏',
+    keywords: '情侣小游戏,情侣游戏,真心话大冒险,情侣互动游戏,情侣挑战游戏',
   };
 
   // 专题页面结构化数据
   const specialPageData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: '情侣飞行棋游戏全集 - 情侣互动游戏大全',
-    description: '最全的情侣飞行棋游戏合集，包含手机版、在线版、各种游戏模式',
+    name: '情侣小游戏游戏全集 - 情侣互动游戏大全',
+    description: '最全的情侣小游戏游戏合集，包含手机版、在线版、各种游戏模式',
     url: 'https://cpflying.vercel.app',
     mainEntity: {
       '@type': 'ItemList',
@@ -365,7 +365,7 @@ export default function StructuredData() {
         {
           '@type': 'ListItem',
           position: 2,
-          name: '情侣飞行棋游戏全集',
+          name: '情侣小游戏游戏全集',
           item: 'https://cpflying.vercel.app',
         },
       ],

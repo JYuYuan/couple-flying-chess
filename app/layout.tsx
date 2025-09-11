@@ -11,13 +11,13 @@ import KeywordsContent from '@/app/keywords-content';
 export const metadata: Metadata = {
   title: {
     default:
-      '情侣飞行棋游戏全集免费在线玩 | 情侣互动游戏手机版 | 真心话大冒险情趣桌游 - 爱情飞行棋',
+      '情侣小游戏游戏全集免费在线玩 | 情侣互动游戏手机版 | 真心话大冒险情趣桌游 - 爱情飞行棋',
     template: '%s | 爱情飞行棋 - 情侣游戏专家',
   },
   description:
-    '【2025最新】情侣飞行棋游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战任务，超多互动环节让感情迅速升温。支持手机版、电脑版在线游戏，情侣破冰神器，异地恋也能甜蜜互动！立即开玩，体验最火爆的情侣互动游戏！',
+    '【2025最新】情侣小游戏游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战任务，超多互动环节让感情迅速升温。支持手机版、电脑版在线游戏，情侣破冰神器，异地恋也能甜蜜互动！立即开玩，体验最火爆的情侣互动游戏！',
   keywords:
-    '情侣飞行棋,情侣飞行棋游戏全集,情侣飞行棋手机游戏,情侣飞行棋在线游戏,情侣互动游戏,情侣桌游,情趣情侣礼物,真心话大冒险,情侣破冰游戏,情侣升温游戏,恋爱游戏,增进感情的游戏,异地恋情侣游戏,情侣约会游戏,情侣小游戏,情侣游戏app,情侣游戏手机版,情侣游戏在线玩,双人游戏情侣,情侣互动小游戏,情侣挑战游戏,情侣任务游戏,情人节礼物,情侣礼物推荐,情侣娱乐游戏,couple flight chess,couple board game,couple interactive game,romantic couple gift,valentine gift,love game,relationship building game,long distance relationship game,couple date game,truth or dare,couple icebreaker game,couple bonding game',
+    '情侣小游戏,情侣小游戏游戏全集,情侣小游戏手机游戏,情侣小游戏在线游戏,情侣互动游戏,情侣桌游,情趣情侣礼物,真心话大冒险,情侣破冰游戏,情侣升温游戏,恋爱游戏,增进感情的游戏,异地恋情侣游戏,情侣约会游戏,情侣小游戏,情侣游戏app,情侣游戏手机版,情侣游戏在线玩,双人游戏情侣,情侣互动小游戏,情侣挑战游戏,情侣任务游戏,情人节礼物,情侣礼物推荐,情侣娱乐游戏,couple flight chess,couple board game,couple interactive game,romantic couple gift,valentine gift,love game,relationship building game,long distance relationship game,couple date game,truth or dare,couple icebreaker game,couple bonding game',
   authors: [{ name: '爱情飞行棋' }],
   creator: '爱情飞行棋',
   publisher: '爱情飞行棋',
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: '情侣飞行棋游戏全集免费在线玩 - 最火爆的情侣互动游戏 | 手机版真心话大冒险',
+    title: '情侣小游戏游戏全集免费在线玩 - 最火爆的情侣互动游戏 | 手机版真心话大冒险',
     description:
-      '【2025最新】情侣飞行棋游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战，支持手机版、电脑版，情侣破冰神器，异地恋也能甜蜜互动！立即开玩最火爆的情侣游戏！',
+      '【2025最新】情侣小游戏游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战，支持手机版、电脑版，情侣破冰神器，异地恋也能甜蜜互动！立即开玩最火爆的情侣游戏！',
     url: 'https://cpflying.vercel.app',
     siteName: '爱情飞行棋 - 情侣游戏专家',
     images: [
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
         url: 'https://cpflying.vercel.app/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: '情侣飞行棋游戏全集 - 免费在线情侣互动游戏',
+        alt: '情侣小游戏游戏全集 - 免费在线情侣互动游戏',
       },
     ],
     locale: 'zh_CN',
@@ -65,9 +65,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '情侣飞行棋游戏全集免费在线玩 - 最火爆的情侣互动游戏',
+    title: '情侣小游戏游戏全集免费在线玩 - 最火爆的情侣互动游戏',
     description:
-      '【2025最新】情侣飞行棋游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战，支持手机版、电脑版，立即开玩！',
+      '【2025最新】情侣小游戏游戏全集免费在线玩！融合经典飞行棋+真心话大冒险+情趣挑战，支持手机版、电脑版，立即开玩！',
     images: ['https://cpflying.vercel.app/images/twitter-image.jpg'],
   },
   alternates: {
