@@ -911,7 +911,7 @@ const SettingTask: React.FC = () => {
                                   <h4 className="text-sm font-medium text-purple-700 dark:text-purple-300 mb-3">
                                     系统任务列表
                                   </h4>
-                                  <div className="space-y-2">
+                                  <div className="space-y-2 max-h-[200px] overflow-y-auto">
                                     {template.tasks.map((task, taskIndex) => (
                                       <motion.div
                                         key={taskIndex}
