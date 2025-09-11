@@ -27,142 +27,151 @@ export const GameBoard = React.memo(function GameBoard({
     }));
   }, [boardPath, redPosition, bluePosition]);
   // 获取 iOS 16 风格单元格样式
-  const getCellStyle = useMemo(() => (pathCell: PathCell, isRedOnCell: boolean, isBlueOnCell: boolean) => {
-    const baseClasses = `relative z-[999] flex flex-col items-center justify-center aspect-square rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray-200/40 dark:shadow-black/30`;
+  const getCellStyle = useMemo(
+    () => (pathCell: PathCell, isRedOnCell: boolean, isBlueOnCell: boolean) => {
+      const baseClasses = `relative z-[999] flex flex-col items-center justify-center aspect-square rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl shadow-gray-200/40 dark:shadow-black/30`;
 
-    switch (pathCell.type) {
-      case 'start':
-        return `${baseClasses} bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 border-2 border-orange-300/60 shadow-orange-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
-      case 'end':
-        return `${baseClasses} bg-gradient-to-br from-emerald-400 via-green-500 to-green-600 border-2 border-green-300/60 shadow-green-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
-      case 'star':
-        return `${baseClasses} bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 border-2 border-yellow-300/60 shadow-yellow-300/50 backdrop-blur-sm`;
-      case 'trap':
-        return `${baseClasses} bg-gradient-to-br from-red-400 via-rose-500 to-red-600 border-2 border-red-300/60 shadow-red-300/50 backdrop-blur-sm`;
-      case 'path':
-        return `${baseClasses} bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 border border-blue-200/50 dark:bg-gradient-to-br dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 dark:border dark:border-slate-600/40 ${
-          isRedOnCell || isBlueOnCell ? 'ring-2 ring-blue-400/60 dark:ring-blue-500/60' : ''
-        }`;
-      default:
-        return 'transparent';
-    }
-  }, []);
+      switch (pathCell.type) {
+        case 'start':
+          return `${baseClasses} bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 border-2 border-orange-300/60 shadow-orange-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
+        case 'end':
+          return `${baseClasses} bg-gradient-to-br from-emerald-400 via-green-500 to-green-600 border-2 border-green-300/60 shadow-green-300/50 animate-[glow_2s_ease-in-out_infinite_alternate]`;
+        case 'star':
+          return `${baseClasses} bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500 border-2 border-yellow-300/60 shadow-yellow-300/50 backdrop-blur-sm`;
+        case 'trap':
+          return `${baseClasses} bg-gradient-to-br from-red-400 via-rose-500 to-red-600 border-2 border-red-300/60 shadow-red-300/50 backdrop-blur-sm`;
+        case 'path':
+          return `${baseClasses} bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 border border-blue-200/50 dark:bg-gradient-to-br dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 dark:border dark:border-slate-600/40 ${
+            isRedOnCell || isBlueOnCell ? 'ring-2 ring-blue-400/60 dark:ring-blue-500/60' : ''
+          }`;
+        default:
+          return 'transparent';
+      }
+    },
+    [],
+  );
 
   // 获取 iOS 16 风格图标颜色
-  const getIconColor = useMemo(() => (type: string) => {
-    switch (type) {
-      case 'start':
-        return 'text-orange-800 drop-shadow-sm';
-      case 'end':
-        return 'text-white drop-shadow-sm';
-      case 'star':
-        return 'text-amber-800 drop-shadow-sm';
-      case 'trap':
-        return 'text-white drop-shadow-sm';
-      case 'path':
-        return 'text-blue-600 dark:text-slate-300 drop-shadow-sm';
-      default:
-        return 'text-gray-500';
-    }
-  }, []);
+  const getIconColor = useMemo(
+    () => (type: string) => {
+      switch (type) {
+        case 'start':
+          return 'text-orange-800 drop-shadow-sm';
+        case 'end':
+          return 'text-white drop-shadow-sm';
+        case 'star':
+          return 'text-amber-800 drop-shadow-sm';
+        case 'trap':
+          return 'text-white drop-shadow-sm';
+        case 'path':
+          return 'text-blue-600 dark:text-slate-300 drop-shadow-sm';
+        default:
+          return 'text-gray-500';
+      }
+    },
+    [],
+  );
 
   // 获取连接线方向
-  const getConnectionLines = useMemo(() => (pathCell: PathCell) => {
-    if (!boardPath || pathCell.type === 'start' || pathCell.type === 'end') return null;
+  const getConnectionLines = useMemo(
+    () => (pathCell: PathCell) => {
+      if (!boardPath || pathCell.type === 'start' || pathCell.type === 'end') return null;
 
-    // 找到当前cell在路径中的位置
-    const currentIndex = boardPath.findIndex((cell) => cell.id === pathCell.id);
-    if (currentIndex === -1) return null;
+      // 找到当前cell在路径中的位置
+      const currentIndex = boardPath.findIndex((cell) => cell.id === pathCell.id);
+      if (currentIndex === -1) return null;
 
-    const connections = [];
-    const lineClass = `absolute -z-10 rounded-sm shadow-sm dark:bg-gradient-to-r dark:from-cyan-400 to-blue-500
+      const connections = [];
+      const lineClass = `absolute -z-10 rounded-sm shadow-sm dark:bg-gradient-to-r dark:from-cyan-400 to-blue-500
         bg-gradient-to-r from-blue-500 to-indigo-600
      opacity-70`;
 
-    // 连接到前一个cell
-    if (currentIndex > 0) {
-      const prevCell = boardPath[currentIndex - 1];
-      const deltaX = pathCell.x - prevCell.x;
-      const deltaY = pathCell.y - prevCell.y;
+      // 连接到前一个cell
+      if (currentIndex > 0) {
+        const prevCell = boardPath[currentIndex - 1];
+        const deltaX = pathCell.x - prevCell.x;
+        const deltaY = pathCell.y - prevCell.y;
 
-      if (deltaX === 1) {
-        // 从左边来
-        connections.push(
-          <div
-            key="from-left"
-            className={`${lineClass} w-4 h-1 absolute  left-0 top-1/2 -translate-y-0.5 -translate-x-4`}
-          />,
-        );
-      } else if (deltaX === -1) {
-        // 从右边来
-        connections.push(
-          <div
-            key="from-right"
-            className={`${lineClass} w-4 h-1 absolute  right-0 top-1/2 -translate-y-0.5 translate-x-4`}
-          />,
-        );
-      } else if (deltaY === 1) {
-        // 从上面来
-        connections.push(
-          <div
-            key="from-top"
-            className={`${lineClass} w-1 h-4 absolute  top-0 left-1/2 -translate-x-0.5 -translate-y-4`}
-          />,
-        );
-      } else if (deltaY === -1) {
-        // 从下面来
-        connections.push(
-          <div
-            key="from-bottom"
-            className={`${lineClass} w-1 h-4 absolute  bottom-0 left-1/2 -translate-x-0.5 translate-y-4`}
-          />,
-        );
+        if (deltaX === 1) {
+          // 从左边来
+          connections.push(
+            <div
+              key="from-left"
+              className={`${lineClass} w-4 h-1 absolute  left-0 top-1/2 -translate-y-0.5 -translate-x-4`}
+            />,
+          );
+        } else if (deltaX === -1) {
+          // 从右边来
+          connections.push(
+            <div
+              key="from-right"
+              className={`${lineClass} w-4 h-1 absolute  right-0 top-1/2 -translate-y-0.5 translate-x-4`}
+            />,
+          );
+        } else if (deltaY === 1) {
+          // 从上面来
+          connections.push(
+            <div
+              key="from-top"
+              className={`${lineClass} w-1 h-4 absolute  top-0 left-1/2 -translate-x-0.5 -translate-y-4`}
+            />,
+          );
+        } else if (deltaY === -1) {
+          // 从下面来
+          connections.push(
+            <div
+              key="from-bottom"
+              className={`${lineClass} w-1 h-4 absolute  bottom-0 left-1/2 -translate-x-0.5 translate-y-4`}
+            />,
+          );
+        }
       }
-    }
 
-    // 连接到下一个cell
-    if (currentIndex < boardPath.length - 1) {
-      const nextCell = boardPath[currentIndex + 1];
-      const deltaX = nextCell.x - pathCell.x;
-      const deltaY = nextCell.y - pathCell.y;
+      // 连接到下一个cell
+      if (currentIndex < boardPath.length - 1) {
+        const nextCell = boardPath[currentIndex + 1];
+        const deltaX = nextCell.x - pathCell.x;
+        const deltaY = nextCell.y - pathCell.y;
 
-      if (deltaX === 1) {
-        // 到右边去
-        connections.push(
-          <div
-            key="to-right"
-            className={`${lineClass} w-4 h-1  absolute right-0 top-1/2 -translate-y-0.5 translate-x-4`}
-          />,
-        );
-      } else if (deltaX === -1) {
-        // 到左边去
-        connections.push(
-          <div
-            key="to-left"
-            className={`${lineClass} w-4 h-1  absolute left-0 top-1/2 -translate-y-0.5 -translate-x-4`}
-          />,
-        );
-      } else if (deltaY === 1) {
-        // 到下面去
-        connections.push(
-          <div
-            key="to-bottom"
-            className={`${lineClass} w-1 h-4  absolute bottom-0 left-1/2 -translate-x-0.5 translate-y-4`}
-          />,
-        );
-      } else if (deltaY === -1) {
-        // 到上面去
-        connections.push(
-          <div
-            key="to-top"
-            className={`${lineClass} w-1 h-4  absolute top-0 left-1/2 -translate-x-0.5 -translate-y-4`}
-          />,
-        );
+        if (deltaX === 1) {
+          // 到右边去
+          connections.push(
+            <div
+              key="to-right"
+              className={`${lineClass} w-4 h-1  absolute right-0 top-1/2 -translate-y-0.5 translate-x-4`}
+            />,
+          );
+        } else if (deltaX === -1) {
+          // 到左边去
+          connections.push(
+            <div
+              key="to-left"
+              className={`${lineClass} w-4 h-1  absolute left-0 top-1/2 -translate-y-0.5 -translate-x-4`}
+            />,
+          );
+        } else if (deltaY === 1) {
+          // 到下面去
+          connections.push(
+            <div
+              key="to-bottom"
+              className={`${lineClass} w-1 h-4  absolute bottom-0 left-1/2 -translate-x-0.5 translate-y-4`}
+            />,
+          );
+        } else if (deltaY === -1) {
+          // 到上面去
+          connections.push(
+            <div
+              key="to-top"
+              className={`${lineClass} w-1 h-4  absolute top-0 left-1/2 -translate-x-0.5 -translate-y-4`}
+            />,
+          );
+        }
       }
-    }
 
-    return connections;
-  }, [boardPath]);
+      return connections;
+    },
+    [boardPath],
+  );
 
   const renderBoard = useMemo(() => {
     const boardGridSize = 7;
@@ -288,7 +297,17 @@ export const GameBoard = React.memo(function GameBoard({
       }
     }
     return cells;
-  }, [boardPath, playerPositions, getCellStyle, getIconColor, getConnectionLines, redPosition, bluePosition, currentPlayer, isMoving]);
+  }, [
+    boardPath,
+    playerPositions,
+    getCellStyle,
+    getIconColor,
+    getConnectionLines,
+    redPosition,
+    bluePosition,
+    currentPlayer,
+    isMoving,
+  ]);
 
   return (
     <div className="relative w-full aspect-square">

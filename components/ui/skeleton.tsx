@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -6,12 +6,12 @@ function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700",
-        className
+        'animate-pulse rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700',
+        className,
       )}
       style={{
         backgroundSize: '200% 100%',
-        animation: 'shimmer 1.5s ease-in-out infinite'
+        animation: 'shimmer 1.5s ease-in-out infinite',
       }}
       {...props}
     />
@@ -29,7 +29,7 @@ function GameBoardSkeleton() {
               key={index}
               className="aspect-square rounded-2xl"
               style={{
-                animationDelay: `${index * 0.02}s`
+                animationDelay: `${index * 0.02}s`,
               }}
             />
           ))}
@@ -44,13 +44,19 @@ function GameModeSkeleton() {
   return (
     <div className="space-y-4">
       {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="backdrop-blur-xl rounded-2xl p-6 bg-white/70 dark:bg-gray-900/70 border border-white/30 dark:border-gray-700/30">
+        <div
+          key={index}
+          className="backdrop-blur-xl rounded-2xl p-6 bg-white/70 dark:bg-gray-900/70 border border-white/30 dark:border-gray-700/30"
+        >
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <Skeleton className="h-6 w-32 mb-2" style={{ animationDelay: `${index * 0.1}s` }} />
               <Skeleton className="h-4 w-48" style={{ animationDelay: `${index * 0.1 + 0.05}s` }} />
             </div>
-            <Skeleton className="w-16 h-10 rounded-lg" style={{ animationDelay: `${index * 0.1 + 0.1}s` }} />
+            <Skeleton
+              className="w-16 h-10 rounded-lg"
+              style={{ animationDelay: `${index * 0.1 + 0.1}s` }}
+            />
           </div>
         </div>
       ))}
@@ -114,14 +120,18 @@ function PageSkeleton() {
           <Skeleton className="w-32 h-10 rounded-2xl" />
         </div>
       </div>
-      
+
       {/* 内容区域 */}
       <div className="p-6 space-y-6">
         <div className="max-w-4xl mx-auto">
           <Skeleton className="h-64 w-full rounded-3xl mb-6" />
           <div className="grid gap-4">
             {Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="h-20 w-full rounded-2xl" style={{ animationDelay: `${index * 0.1}s` }} />
+              <Skeleton
+                key={index}
+                className="h-20 w-full rounded-2xl"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              />
             ))}
           </div>
         </div>
@@ -130,11 +140,11 @@ function PageSkeleton() {
   );
 }
 
-export { 
-  Skeleton, 
-  GameBoardSkeleton, 
-  GameModeSkeleton, 
-  CustomModeCardSkeleton, 
-  TaskModalSkeleton, 
-  PageSkeleton 
+export {
+  Skeleton,
+  GameBoardSkeleton,
+  GameModeSkeleton,
+  CustomModeCardSkeleton,
+  TaskModalSkeleton,
+  PageSkeleton,
 };

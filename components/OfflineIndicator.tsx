@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { RefreshCw, Wifi, WifiOff } from 'lucide-react';
 
 interface OfflineIndicatorProps {
   className?: string;
@@ -16,7 +16,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className })
     const updateOnlineStatus = () => {
       const online = navigator.onLine;
       setIsOnline(online);
-      
+
       if (!online) {
         setShowIndicator(true);
       } else {
@@ -62,16 +62,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className })
           }`}
         >
           <div className="flex items-center gap-2">
-            {isOnline ? (
-              <Wifi className="w-4 h-4" />
-            ) : (
-              <WifiOff className="w-4 h-4" />
-            )}
-            <span className="text-sm font-medium">
-              {isOnline ? '网络已恢复' : '网络连接断开'}
-            </span>
+            {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+            <span className="text-sm font-medium">{isOnline ? '网络已恢复' : '网络连接断开'}</span>
           </div>
-          
+
           {!isOnline && (
             <button
               onClick={handleRetry}

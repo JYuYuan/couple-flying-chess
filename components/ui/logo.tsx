@@ -8,18 +8,15 @@ interface CoupleGameLogoProps {
   className?: string;
 }
 
-export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({ 
-  size = 192, 
+export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({
+  size = 192,
   variant = 'default',
-  className = ''
+  className = '',
 }) => {
   const borderRadius = variant === 'round' ? '50%' : variant === 'square' ? '20%' : '25%';
-  
+
   return (
-    <div 
-      className={`relative ${className}`}
-      style={{ width: size, height: size }}
-    >
+    <div className={`relative ${className}`} style={{ width: size, height: size }}>
       <svg
         width={size}
         height={size}
@@ -44,16 +41,16 @@ export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({
             <stop offset="100%" stopColor="#8B5CF6" />
           </linearGradient>
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="#000000" floodOpacity="0.1"/>
+            <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="#000000" floodOpacity="0.1" />
           </filter>
         </defs>
 
         {/* 背景 */}
-        <rect 
-          width="192" 
-          height="192" 
+        <rect
+          width="192"
+          height="192"
           rx={variant === 'round' ? '96' : variant === 'square' ? '38' : '48'}
-          fill="url(#bgGradient)" 
+          fill="url(#bgGradient)"
         />
 
         {/* 装饰性圆点 */}
@@ -76,12 +73,12 @@ export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({
 
           {/* 骰子 (右下) */}
           <g transform="translate(15, 15)">
-            <rect 
-              x="0" 
-              y="0" 
-              width="20" 
-              height="20" 
-              rx="4" 
+            <rect
+              x="0"
+              y="0"
+              width="20"
+              height="20"
+              rx="4"
               fill="url(#diceGradient)"
               filter="url(#shadow)"
             />
@@ -99,11 +96,11 @@ export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({
             {/* 男性角色 */}
             <circle cx="0" cy="-5" r="6" fill="#FFB199" stroke="#FF8E9E" strokeWidth="1" />
             <rect x="-4" y="1" width="8" height="10" rx="2" fill="#3B82F6" />
-            
+
             {/* 女性角色 */}
             <circle cx="12" cy="-5" r="6" fill="#FFB199" stroke="#FF8E9E" strokeWidth="1" />
             <rect x="8" y="1" width="8" height="10" rx="2" fill="#FF6B9D" />
-            
+
             {/* 连接的小心 */}
             <path
               d="M6 0c0-1.5 1.5-3 3-3s3 1.5 3 3-1.5 3-3 3-3-1.5-3-3z"
@@ -131,9 +128,9 @@ export const CoupleGameLogo: React.FC<CoupleGameLogoProps> = ({
 };
 
 // 简化版本用于小尺寸
-export const CoupleGameLogoSimple: React.FC<{ size?: number; className?: string }> = ({ 
-  size = 64, 
-  className = '' 
+export const CoupleGameLogoSimple: React.FC<{ size?: number; className?: string }> = ({
+  size = 64,
+  className = '',
 }) => {
   return (
     <div className={className} style={{ width: size, height: size }}>
@@ -145,22 +142,10 @@ export const CoupleGameLogoSimple: React.FC<{ size?: number; className?: string 
           </linearGradient>
         </defs>
         <rect width="64" height="64" rx="16" fill="url(#simpleBg)" />
-        <text 
-          x="32" 
-          y="40" 
-          textAnchor="middle" 
-          fontSize="32" 
-          fill="white"
-        >
+        <text x="32" y="40" textAnchor="middle" fontSize="32" fill="white">
           🎲
         </text>
-        <text 
-          x="45" 
-          y="25" 
-          textAnchor="middle" 
-          fontSize="12" 
-          fill="white"
-        >
+        <text x="45" y="25" textAnchor="middle" fontSize="12" fill="white">
           💕
         </text>
       </svg>

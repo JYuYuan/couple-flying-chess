@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { ChevronDown, Edit, Plus, Sparkles, Target, Rainbow, Drama, HeartHandshake } from 'lucide-react';
+import {
+  ChevronDown,
+  Drama,
+  Edit,
+  HeartHandshake,
+  Plus,
+  Rainbow,
+  Sparkles,
+  Target,
+} from 'lucide-react';
 import type { CustomMode, GameMode } from '@/components/game/flying/types/game';
 import { gameModeIcons } from '@/components/game/flying/constants/game-config';
 import { Translations } from '@/lib/i18n';

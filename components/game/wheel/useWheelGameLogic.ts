@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { PlayerColor, CurrentTask, TaskType } from '../flying/types/game';
+import type { CurrentTask, PlayerColor, TaskType } from '../flying/types/game';
 import { useStableCallback } from '@/hooks/use-performance';
 import { randomMs } from '@/lib/utils';
 import { defaultTimeSettings, TimeSettings } from '../flying/utils/timeManager';

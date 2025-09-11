@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Skeleton } from './skeleton';
 
@@ -56,7 +56,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {
         rootMargin: '100px', // 提前100px开始加载
         threshold: 0.1,
-      }
+      },
     );
 
     if (imgRef.current) {
@@ -91,19 +91,19 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     if (originalSrc.includes('data:') || originalSrc.includes('blob:')) {
       return originalSrc;
     }
-    
+
     // 检查浏览器是否支持WebP (仅在客户端)
     if (typeof document !== 'undefined') {
       const canvas = document.createElement('canvas');
       const supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-      
+
       if (supportsWebP && !originalSrc.includes('.webp')) {
         // 可以在这里添加转换为WebP的逻辑
         // 例如：通过图片CDN服务或者Next.js Image优化
         return originalSrc;
       }
     }
-    
+
     return originalSrc;
   };
 
@@ -144,14 +144,16 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         className={cn(
           'w-full h-full object-cover transition-opacity duration-500',
           isLoaded ? 'opacity-100' : 'opacity-0',
-          className
+          className,
         )}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
         style={{
-          imageRendering: (quality > 90 ? 'high-quality' : 'auto') as React.CSSProperties['imageRendering'],
+          imageRendering: (quality > 90
+            ? 'high-quality'
+            : 'auto') as React.CSSProperties['imageRendering'],
         }}
       />
 
@@ -159,8 +161,18 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {isError && currentSrc === fallbackSrc && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
           <div className="text-center text-gray-500 dark:text-gray-400">
-            <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg
+              className="w-8 h-8 mx-auto mb-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
             <span className="text-sm">图片加载失败</span>
           </div>

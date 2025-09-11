@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ListTodo, Play, Volume2, VolumeX, Zap,Clock } from 'lucide-react';
+import { ArrowLeft, Clock, ListTodo, Play, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { soundConfig, SoundKey } from '@/contexts/config/sounds';
 

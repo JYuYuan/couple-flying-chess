@@ -42,32 +42,38 @@ export function useGameLogic(
   }, []);
 
   // 确定任务执行者
-  const determineExecutor = useCallback((type: TaskType, playerOnCell: PlayerColor): PlayerColor => {
-    if (type === 'trap') {
-      return playerOnCell; // 陷阱：当前玩家执行
-    } else {
-      // 星星或碰撞：对方玩家执行
-      return playerOnCell === 'red' ? 'blue' : 'red';
-    }
-  }, []);
+  const determineExecutor = useCallback(
+    (type: TaskType, playerOnCell: PlayerColor): PlayerColor => {
+      if (type === 'trap') {
+        return playerOnCell; // 陷阱：当前玩家执行
+      } else {
+        // 星星或碰撞：对方玩家执行
+        return playerOnCell === 'red' ? 'blue' : 'red';
+      }
+    },
+    [],
+  );
 
   // 计算任务持续时间
-  const calculateTaskDuration = useCallback((taskDescription: string): number | undefined => {
-    if (taskDescription.indexOf('$time') === -1) return undefined;
-    
-    if (timeSettings.enableAutoTime) {
-      // 根据关键词匹配时间
-      for (const [keyword, time] of Object.entries(timeSettings.keywordTimes)) {
-        if (taskDescription.indexOf(keyword) > -1) {
-          return time;
+  const calculateTaskDuration = useCallback(
+    (taskDescription: string): number | undefined => {
+      if (taskDescription.indexOf('$time') === -1) return undefined;
+
+      if (timeSettings.enableAutoTime) {
+        // 根据关键词匹配时间
+        for (const [keyword, time] of Object.entries(timeSettings.keywordTimes)) {
+          if (taskDescription.indexOf(keyword) > -1) {
+            return time;
+          }
         }
+        return undefined;
+      } else {
+        // 随机生成时间
+        return randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
       }
-      return undefined;
-    } else {
-      // 随机生成时间
-      return randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
-    }
-  }, [timeSettings]);
+    },
+    [timeSettings],
+  );
 
   const triggerTask = useCallback(
     (type: TaskType, playerOnCell: PlayerColor, translations?: Translations) => {
@@ -93,7 +99,14 @@ export function useGameLogic(
       });
       setGameState('task');
     },
-    [taskQueue, setTaskQueue, setCurrentTask, setGameState, determineExecutor, calculateTaskDuration],
+    [
+      taskQueue,
+      setTaskQueue,
+      setCurrentTask,
+      setGameState,
+      determineExecutor,
+      calculateTaskDuration,
+    ],
   );
 
   const checkSpecialEvents = useCallback(
@@ -156,9 +169,12 @@ export function useGameLogic(
   }, []);
 
   // 获取玩家当前位置
-  const getPlayerPosition = useCallback((player: PlayerColor) => {
-    return player === 'red' ? redPosition : bluePosition;
-  }, [redPosition, bluePosition]);
+  const getPlayerPosition = useCallback(
+    (player: PlayerColor) => {
+      return player === 'red' ? redPosition : bluePosition;
+    },
+    [redPosition, bluePosition],
+  );
 
   // 获取玩家移动消息
   const getMovementMessage = useCallback(
@@ -166,14 +182,16 @@ export function useGameLogic(
       if (steps === 0) {
         return player === 'red' ? translations.toast.redStay : translations.toast.blueStay;
       } else if (steps > 0) {
-        const template = player === 'red' ? translations.toast.redForward : translations.toast.blueForward;
+        const template =
+          player === 'red' ? translations.toast.redForward : translations.toast.blueForward;
         return template.replace('{steps}', steps.toString());
       } else {
-        const template = player === 'red' ? translations.toast.redBackward : translations.toast.blueBackward;
+        const template =
+          player === 'red' ? translations.toast.redBackward : translations.toast.blueBackward;
         return template.replace('{steps}', Math.abs(steps).toString());
       }
     },
-    []
+    [],
   );
 
   // 处理碰撞任务结果
@@ -182,15 +200,16 @@ export function useGameLogic(
       isCompleted: boolean,
       executorPlayer: PlayerColor,
       translations: Translations,
-      onShowToast: (message: string, type: 'success' | 'error') => void
+      onShowToast: (message: string, type: 'success' | 'error') => void,
     ) => {
       let toastMessage = '';
       let toastType: 'success' | 'error';
 
       if (!isCompleted) {
-        toastMessage = executorPlayer === 'red' 
-          ? translations.toast.redFailedToStart 
-          : translations.toast.blueFailedToStart;
+        toastMessage =
+          executorPlayer === 'red'
+            ? translations.toast.redFailedToStart
+            : translations.toast.blueFailedToStart;
         toastType = 'error';
         setCurrentTask(null);
         setTaskType(null);
@@ -199,9 +218,10 @@ export function useGameLogic(
         switchTurn();
         return { resetToStart: true, player: executorPlayer };
       } else {
-        toastMessage = executorPlayer === 'red'
-          ? translations.toast.redCompleted
-          : translations.toast.blueCompleted;
+        toastMessage =
+          executorPlayer === 'red'
+            ? translations.toast.redCompleted
+            : translations.toast.blueCompleted;
         toastType = 'success';
         setCurrentTask(null);
         setTaskType(null);
@@ -211,7 +231,7 @@ export function useGameLogic(
         return { resetToStart: false };
       }
     },
-    [setCurrentTask, setTaskType, setGameState, switchTurn]
+    [setCurrentTask, setTaskType, setGameState, switchTurn],
   );
 
   const handleTaskComplete = useCallback(
@@ -233,7 +253,7 @@ export function useGameLogic(
 
       if (taskType === 'star' || taskType === 'trap') {
         const steps = calculateSteps(isCompleted);
-        
+
         if (steps >= 0) {
           // 处理前进或原地不动
           let newPosition = currentPosition + steps;
@@ -249,7 +269,7 @@ export function useGameLogic(
           finalPosition = Math.max(currentPosition + steps, 0);
           toastType = 'error';
         }
-        
+
         toastMessage = getMovementMessage(activePlayer, steps, translations);
       } else if (taskType === 'collision') {
         return handleCollisionTaskResult(isCompleted, activePlayer, translations, onShowToast);

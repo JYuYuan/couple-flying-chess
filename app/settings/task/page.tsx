@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import Link from 'next/link';
 import {
   ArrowLeft,
   Calendar,
