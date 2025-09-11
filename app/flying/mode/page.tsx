@@ -6,8 +6,6 @@ import { useTaskManagement } from '@/components/game/flying/hooks/useTaskManagem
 import { useAITaskGeneration } from '@/components/game/flying/hooks/useAITaskGeneration';
 import { useGamePersistence } from '@/components/game/flying/hooks/useGamePersistence';
 import { GameModeSelector } from '@/components/game/flying/components/GameModeSelector/GameModeSelector';
-import { CustomModeCreator } from '@/components/game/flying/components/CustomModeCreator/CustomModeCreator';
-import { AITasksSection } from '@/components/game/flying/components/AITasksSection/AITasksSection';
 import { ContinueGameModal } from '@/components/game/flying/components/ContinueGameModal/ContinueGameModal';
 import { GameMode } from '@/components/game/flying/types/game';
 import LanguageSelector from '@/components/language-selector';
@@ -15,7 +13,7 @@ import { useGlobal } from '@/contexts/GlobalContext';
 import { useRouter } from 'next/navigation';
 
 const GameModePage: React.FC = () => {
-  const { language, translations, playSound, stopSound, getAudioRef, showToast } = useGlobal();
+  const { translations, playSound, stopSound, getAudioRef, showToast } = useGlobal();
   const persistence = useGamePersistence();
   const router = useRouter();
 
@@ -25,10 +23,6 @@ const GameModePage: React.FC = () => {
   // 任务管理
   const taskManagement = useTaskManagement();
 
-  // AI任务生成
-  const aiTasks = useAITaskGeneration();
-
-  const [manualTask, setManualTask] = useState('');
   const [showContinueModal, setShowContinueModal] = useState(false);
   const [isClosingModal, setIsClosingModal] = useState(false);
 
@@ -202,95 +196,6 @@ const GameModePage: React.FC = () => {
             }}
           />
         </div>
-
-        {/* 自定义模式创建器 */}
-        {customModes.showCustomModeCreator && (
-          <CustomModeCreator
-            newCustomMode={customModes.newCustomMode}
-            setNewCustomMode={customModes.setNewCustomMode}
-            manualTask={manualTask}
-            setManualTask={setManualTask}
-            availableModeTasks={taskManagement.availableModeTasks}
-            isLoadingTasks={taskManagement.isLoadingTasks}
-            onClose={() => {
-              customModes.setShowCustomModeCreator(false);
-              customModes.setNewCustomMode({
-                name: '',
-                description: '',
-                type: 'custom',
-                tasks: [],
-              });
-              setManualTask('');
-            }}
-            onCreateMode={() => {
-              const success = customModes.createCustomMode(customModes.newCustomMode, () => {
-                showToast(
-                  translations?.customMode.messages.createSuccess || '自定义模式创建成功！',
-                  'success',
-                );
-              });
-              if (success) {
-                setManualTask('');
-              }
-            }}
-            onLoadAllTasks={() => taskManagement.loadAllTasksForSelection(language)}
-            onAddManualTask={() => {
-              if (
-                manualTask.trim() &&
-                !customModes.newCustomMode.tasks.includes(manualTask.trim())
-              ) {
-                customModes.setNewCustomMode((prev) => ({
-                  ...prev,
-                  tasks: [...prev.tasks, manualTask.trim()],
-                }));
-                setManualTask('');
-              }
-            }}
-            onRemoveTask={(index) => {
-              customModes.setNewCustomMode((prev) => ({
-                ...prev,
-                tasks: prev.tasks.filter((_, i) => i !== index),
-              }));
-            }}
-            aiTasksSection={
-              <AITasksSection
-                deepSeekApi={aiTasks.deepSeekApi}
-                newCustomMode={customModes.newCustomMode}
-                isGeneratingTasks={aiTasks.isGeneratingTasks}
-                onApiKeyChange={aiTasks.saveDeepSeekApiKey}
-                onApiConfigChange={(updates) => {
-                  aiTasks.setDeepSeekApi((prev) => ({ ...prev, ...updates }));
-                }}
-                onGenerateTasks={() => {
-                  aiTasks.generateAITasks(
-                    customModes.newCustomMode,
-                    translations,
-                    () =>
-                      showToast(
-                        translations?.customMode.ai.tasksGenerated ||
-                          'Tasks generated successfully',
-                        'success',
-                      ),
-                    (error) => showToast(error, 'error'),
-                  );
-                }}
-                onToggleTask={(task) => {
-                  if (customModes.newCustomMode.tasks.includes(task)) {
-                    customModes.setNewCustomMode((prev) => ({
-                      ...prev,
-                      tasks: prev.tasks.filter((t) => t !== task),
-                    }));
-                  } else {
-                    customModes.setNewCustomMode((prev) => ({
-                      ...prev,
-                      tasks: [...prev.tasks, task],
-                    }));
-                  }
-                }}
-              />
-            }
-          />
-        )}
       </div>
 
       {/* 继续游戏模态框 */}

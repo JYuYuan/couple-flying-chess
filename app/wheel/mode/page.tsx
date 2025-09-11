@@ -25,13 +25,6 @@ const GameModePage: React.FC = () => {
   // 任务管理
   const taskManagement = useTaskManagement();
 
-  // AI任务生成
-  const aiTasks = useAITaskGeneration();
-
-  const [manualTask, setManualTask] = useState('');
-  const [showContinueModal, setShowContinueModal] = useState(false);
-  const [isClosingModal, setIsClosingModal] = useState(false);
-
   const [pendingGameStart, setPendingGameStart] = useState<{
     mode: GameMode;
     customModeId?: string;
@@ -90,11 +83,8 @@ const GameModePage: React.FC = () => {
   };
 
   const handleCloseModal = useCallback(() => {
-    setIsClosingModal(true);
     // 给动画时间执行（300ms）
     setTimeout(() => {
-      setShowContinueModal(false);
-      setIsClosingModal(false);
       setPendingGameStart(null);
     }, 300);
   }, []);
