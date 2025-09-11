@@ -262,7 +262,7 @@ export default function Settings() {
               <Link href={'/settings/task'}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ListTodo className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <ListTodo className="w-6 h-6 text-sky-600 dark:text-sky-400" />
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                       {t?.taskTemplate?.title || '任务模板设置'}
                     </h2>
@@ -287,7 +287,7 @@ export default function Settings() {
               <Link href={'/settings/time'}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Clock className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <Clock className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                       {t?.flying?.title}
                     </h2>
