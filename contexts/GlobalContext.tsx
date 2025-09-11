@@ -146,6 +146,10 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     localStorage.setItem('isMuted', String(isMuted));
   }, [isMuted]);
 
+  useEffect(()=>{
+    playSound("bgm");
+  },[playSound])
+
   const toggleMute = () => setIsMuted((prev) => !prev);
 
   // -------- Theme 初始化 --------
