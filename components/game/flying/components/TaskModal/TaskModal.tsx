@@ -10,15 +10,10 @@ interface TaskModalProps {
   currentTask: CurrentTask;
   taskType: TaskType;
   onTaskComplete: (isCompleted: boolean) => void;
-  isExec?: boolean;
+  noExec?: boolean;
 }
 
-export function TaskModal({
-  currentTask,
-  taskType,
-  onTaskComplete,
-  isExec = true,
-}: TaskModalProps) {
+export function TaskModal({ currentTask, taskType, onTaskComplete, noExec }: TaskModalProps) {
   const { translations } = useGlobal();
   // 禁用外层滚动
   useEffect(() => {
@@ -123,31 +118,30 @@ export function TaskModal({
             {/* iOS 16 风格内容区域 */}
             <div className="p-8 space-y-8">
               {/* iOS 16 风格执行者 */}
-              {isExec && (
-                <div className="text-center">
+
+              <div className="text-center">
+                <div
+                  className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg backdrop-blur-sm"
+                  style={{
+                    background:
+                      currentTask.executor === 'red'
+                        ? 'linear-gradient(135deg, rgba(254, 202, 202, 0.9), rgba(252, 165, 165, 0.9))'
+                        : 'linear-gradient(135deg, rgba(191, 219, 254, 0.9), rgba(147, 197, 253, 0.9))',
+                    color: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
+                    border: `2px solid ${currentTask.executor === 'red' ? '#fecaca' : '#bfdbfe'}`,
+                  }}
+                >
                   <div
-                    className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-sm transition-all duration-300 shadow-lg backdrop-blur-sm"
+                    className="w-3 h-3 rounded-full mr-3 shadow-sm"
                     style={{
-                      background:
-                        currentTask.executor === 'red'
-                          ? 'linear-gradient(135deg, rgba(254, 202, 202, 0.9), rgba(252, 165, 165, 0.9))'
-                          : 'linear-gradient(135deg, rgba(191, 219, 254, 0.9), rgba(147, 197, 253, 0.9))',
-                      color: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
-                      border: `2px solid ${currentTask.executor === 'red' ? '#fecaca' : '#bfdbfe'}`,
+                      backgroundColor: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
                     }}
-                  >
-                    <div
-                      className="w-3 h-3 rounded-full mr-3 shadow-sm"
-                      style={{
-                        backgroundColor: currentTask.executor === 'red' ? '#dc2626' : '#2563eb',
-                      }}
-                    ></div>
-                    {currentTask.executor === 'red'
-                      ? translations?.tasks.redExecute
-                      : translations?.tasks.blueExecute}
-                  </div>
+                  ></div>
+                  {currentTask.executor === 'red'
+                    ? translations?.tasks.redExecute
+                    : translations?.tasks.blueExecute}
                 </div>
-              )}
+              </div>
 
               {/* 任务描述 */}
               <div
@@ -180,32 +174,35 @@ export function TaskModal({
               </div>
 
               {/* 奖励信息 */}
-              <div
-                className={`p-4 rounded-xl border transition-colors duration-500 ${'bg-gray-50/60 border-gray-200/20 dark:bg-gray-800/20 dark:border-gray-700/20'}`}
-              >
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle size={16} className="text-green-500" />
-                    <span
-                      className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
-                    >
-                      {taskType === 'collision'
-                        ? translations?.tasks.collisionCompletedReward
-                        : translations?.tasks.completedReward}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <XCircle size={16} className="text-red-500" />
-                    <span
-                      className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
-                    >
-                      {taskType === 'collision'
-                        ? translations?.tasks.collisionFailedPenalty
-                        : translations?.tasks.failedPenalty}
-                    </span>
+
+              {!noExec && (
+                <div
+                  className={`p-4 rounded-xl border transition-colors duration-500 ${'bg-gray-50/60 border-gray-200/20 dark:bg-gray-800/20 dark:border-gray-700/20'}`}
+                >
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle size={16} className="text-green-500" />
+                      <span
+                        className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
+                      >
+                        {taskType === 'collision'
+                          ? translations?.tasks.collisionCompletedReward
+                          : translations?.tasks.completedReward}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <XCircle size={16} className="text-red-500" />
+                      <span
+                        className={`text-sm transition-colors duration-500 ${'text-gray-600 dark:text-gray-300'}`}
+                      >
+                        {taskType === 'collision'
+                          ? translations?.tasks.collisionFailedPenalty
+                          : translations?.tasks.failedPenalty}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* 计时器 */}
               {currentTask?.durationMs && (

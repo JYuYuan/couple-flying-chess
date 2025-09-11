@@ -1,31 +1,26 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useCallback } from 'react';
-import { Star, Bomb } from 'lucide-react';
+import React, { useMemo, useRef, useState } from 'react';
+import { Bomb, Star, Zap } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useOptimizedState, useStableCallback } from '@/hooks/use-performance';
 
 interface WheelSection {
   id: number;
   label: string;
-  color: string;
-  textColor: string;
-  task?: string;
   type: 'normal' | 'star' | 'trap';
 }
 
 interface WheelGameProps {
-  taskQueue: string[];
   onTaskTriggered?: (type: 'normal' | 'star' | 'trap') => void;
   onSpinComplete?: () => void;
   isDisabled?: boolean;
   currentPlayer: 'red' | 'blue';
 }
 
-const totalSections = 18;
+const totalSections = 12;
 
 const WheelGame: React.FC<WheelGameProps> = ({
-  taskQueue,
   onTaskTriggered,
   onSpinComplete,
   isDisabled = false,
@@ -40,60 +35,40 @@ const WheelGame: React.FC<WheelGameProps> = ({
   const [rotation, setRotation] = useOptimizedState(0);
   const [selectedSection, setSelectedSection] = useState<WheelSection | null>(null);
 
-  // 创建36格转盘配置
+  // 创建12格转盘配置
   const wheelSections = useMemo((): WheelSection[] => {
     const sections: WheelSection[] = [];
 
-
-    // iOS 16 风格的颜色方案
-    const normalColors = ['#007AFF', '#34C759', '#5856D6', '#FF9500', '#FF3B30', '#00C7BE'];
-    const starColor = '#FFD700';
-    const trapColor = '#FF3B30';
-
     // 特殊格子位置配置（均匀分布）
-    const starPositions = [3, 9, 15, 21, 27, 33]; // 6个星星，每6格一个
-    const trapPositions = [6, 12, 18, 24, 30, 35]; // 6个炸弹，每6格一个
+    const starPositions = [2, 6, 10]; // 3个星星
+    const trapPositions = [4, 8, 11]; // 3个炸弹
 
     for (let i = 0; i < totalSections; i++) {
       let type: 'normal' | 'star' | 'trap' = 'normal';
-      let color = normalColors[i % normalColors.length];
       let label = '';
-      let textColor = '#FFFFFF';
 
       if (starPositions.includes(i)) {
         type = 'star';
-        color = starColor;
-        label = 'star'; // 用于标识，实际渲染时会用图标
-        textColor = '#333333';
+        label = 'star';
       } else if (trapPositions.includes(i)) {
         type = 'trap';
-        color = trapColor;
-        label = 'bomb'; // 用于标识，实际渲染时会用图标
-        textColor = '#FFFFFF';
+        label = 'bomb';
       } else {
-        // 普通格子显示数字
         label = String(i + 1);
-        // 调整某些颜色的文字颜色以提高对比度
-        if (color === '#34C759' || color === '#FF9500' || color === '#00C7BE') {
-          textColor = '#000000';
-        }
       }
 
       sections.push({
         id: i,
         label,
-        color,
-        textColor,
-        task: taskQueue[i % Math.max(taskQueue.length, 1)] || '休息一下',
         type,
       });
     }
 
     return sections;
-  }, [taskQueue]);
+  }, []);
 
   // 每个扇区的角度
-  const sectionAngle = 360 / totalSections; // 10度每格
+  const sectionAngle = 360 / totalSections; // 30度每格
 
   // 预计算扇形路径和图标位置
   const sectionPaths = useMemo(() => {
@@ -102,7 +77,7 @@ const WheelGame: React.FC<WheelGameProps> = ({
       const endAngle = ((index + 1) * sectionAngle - 90) * (Math.PI / 180);
 
       const outerRadius = 180;
-      const innerRadius = 40; // 内圆半径
+      const innerRadius = 60; // 内圆半径
 
       // 外圆弧点
       const x1 = 200 + outerRadius * Math.cos(startAngle);
@@ -128,27 +103,52 @@ const WheelGame: React.FC<WheelGameProps> = ({
       `;
 
       // 文本/图标位置（在扇形中心）
-      const textRadius = (outerRadius + innerRadius) / 2 + 20;
+      const textRadius = (outerRadius + innerRadius) / 2 + 10;
       const midAngle = (startAngle + endAngle) / 2;
       const textX = 200 + textRadius * Math.cos(midAngle);
       const textY = 200 + textRadius * Math.sin(midAngle);
       const textRotation = midAngle * (180 / Math.PI) + 90;
-
-      // 图标位置（稍微靠内一点）
-      const iconRadius = textRadius - 5;
-      const iconX = 200 + iconRadius * Math.cos(midAngle);
-      const iconY = 200 + iconRadius * Math.sin(midAngle);
 
       return {
         pathData,
         textX,
         textY,
         textRotation,
-        iconX,
-        iconY,
+        midAngle: midAngle * (180 / Math.PI),
+        sectionStartAngle: (index * sectionAngle - 90 + 360) % 360,
+        sectionEndAngle: ((index + 1) * sectionAngle - 90 + 360) % 360,
       };
     });
   }, [wheelSections, sectionAngle]);
+
+  // 根据最终旋转角度计算指针指向的扇区
+  const getPointedSection = (finalRotation: number) => {
+    // 标准化角度到 0-360 范围
+    const normalizedRotation = ((finalRotation % 360) + 360) % 360;
+
+    // 指针在顶部（相当于270度位置，因为我们的坐标系中-90度是顶部）
+    // 计算指针相对于转盘当前位置的角度
+    const pointerAngle = (270 - normalizedRotation + 360) % 360;
+
+    // 找到包含指针角度的扇区
+    for (let i = 0; i < wheelSections.length; i++) {
+      const { sectionStartAngle, sectionEndAngle } = sectionPaths[i];
+
+      // 处理跨越0度的情况
+      if (sectionStartAngle > sectionEndAngle) {
+        if (pointerAngle >= sectionStartAngle || pointerAngle <= sectionEndAngle) {
+          return wheelSections[i];
+        }
+      } else {
+        if (pointerAngle >= sectionStartAngle && pointerAngle <= sectionEndAngle) {
+          return wheelSections[i];
+        }
+      }
+    }
+
+    // 如果没有找到，返回第一个扇区作为默认值
+    return wheelSections[0];
+  };
 
   // 转盘旋转逻辑
   const spinWheel = useStableCallback(() => {
@@ -163,14 +163,10 @@ const WheelGame: React.FC<WheelGameProps> = ({
     setIsSpinning(true);
     setSelectedSection(null);
 
-    // 随机选择一个扇区
-    const randomIndex = Math.floor(Math.random() * wheelSections.length);
-    const selectedSectionData = wheelSections[randomIndex];
-
-    // 计算目标角度
-    const targetAngle = 360 - randomIndex * sectionAngle - sectionAngle / 2;
-    const spinRotations = 2160 + Math.random() * 1440; // 6-10圈
-    const finalRotation = rotation + spinRotations + targetAngle;
+    // 随机旋转圈数和角度
+    const spinRotations = 1800 + Math.random() * 1800; // 5-10圈
+    const randomAngle = Math.random() * 360;
+    const finalRotation = rotation + spinRotations + randomAngle;
 
     // 应用旋转
     if (wheelRef.current) {
@@ -180,18 +176,20 @@ const WheelGame: React.FC<WheelGameProps> = ({
 
     // 动画完成后的处理
     spinTimeoutRef.current = setTimeout(() => {
+      const pointedSection = getPointedSection(finalRotation);
+
       setIsSpinning(false);
-      setSelectedSection(selectedSectionData);
+      setSelectedSection(pointedSection);
       playSound('stepDice');
 
       if (onTaskTriggered) {
-        onTaskTriggered(selectedSectionData.type);
+        onTaskTriggered(pointedSection.type);
       }
 
       if (onSpinComplete) {
         onSpinComplete();
       }
-    }, 4000); // 增加到4秒以适应更多圈数
+    }, 4000);
   });
 
   // 清理定时器
@@ -209,179 +207,183 @@ const WheelGame: React.FC<WheelGameProps> = ({
     return {
       primary: isRed ? '#FF3B30' : '#007AFF',
       secondary: isRed ? '#FF6B6B' : '#5AC8FA',
-      gradient: isRed
-        ? 'linear-gradient(135deg, #FF3B30, #FF6B6B)'
-        : 'linear-gradient(135deg, #007AFF, #5AC8FA)',
-      shadow: isRed ? 'rgba(255, 59, 48, 0.3)' : 'rgba(0, 122, 255, 0.3)',
+      shadow: isRed ? 'rgba(255, 59, 48, 0.4)' : 'rgba(0, 122, 255, 0.4)',
     };
   }, [currentPlayer]);
-
-  // 获取图标颜色类名
-  const getIconColor = (type: 'star' | 'trap') => {
-    if (type === 'star') return 'text-yellow-500';
-    if (type === 'trap') return 'text-red-500';
-    return 'text-gray-600';
-  };
 
   // 获取任务类型的显示信息
   const getTypeDisplay = (type: 'normal' | 'star' | 'trap') => {
     switch (type) {
       case 'star':
-        return { text: '幸运任务', color: '#FFD700' };
+        return { text: '幸运任务', icon: Star, color: '#FFD700' };
       case 'trap':
-        return { text: '惩罚任务', color: '#FF3B30' };
+        return { text: '惩罚任务', icon: Bomb, color: '#FF3B30' };
       default:
-        return { text: '普通任务', color: '#34C759' };
+        return { text: '普通任务', icon: null, color: '#34C759' };
     }
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6">
+    <div className="flex flex-col items-center justify-center space-y-6 p-4 sm:p-8 w-full max-w-2xl mx-auto">
       {/* 转盘容器 */}
-      <div className="relative">
+      <div className="relative w-full max-w-md sm:max-w-lg">
         {/* 顶部指针 */}
         <div
           className="absolute z-30 pointer-events-none"
           style={{
-            top: '-12px',
+            top: '-16px',
             left: '50%',
             transform: 'translateX(-50%)',
           }}
         >
           <div
-            className="relative"
+            className={`relative ${isSpinning ? '' : 'animate-bounce'}`}
             style={{
-              filter: `drop-shadow(0 4px 12px ${playerStyles.shadow})`,
+              filter: `drop-shadow(0 6px 16px ${playerStyles.shadow})`,
+              animationDuration: '1.5s',
             }}
           >
             {/* 指针主体 */}
             <div
+              className="pointer-triangle"
               style={{
                 width: '0',
                 height: '0',
-                borderLeft: '16px solid transparent',
-                borderRight: '16px solid transparent',
-                borderBottom: `32px solid ${playerStyles.primary}`,
+                borderLeft: '20px solid transparent',
+                borderRight: '20px solid transparent',
+                borderBottom: `40px solid ${playerStyles.primary}`,
               }}
             />
-            {/* 指针装饰 */}
+            {/* 指针装饰圆点 */}
             <div
-              className="absolute top-6 left-1/2 transform -translate-x-1/2"
+              className="absolute top-8 left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white shadow-lg"
               style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                backgroundColor: '#FFFFFF',
+                boxShadow: '0 0 15px rgba(255,255,255,0.9)',
               }}
             />
           </div>
         </div>
 
-        {/* 转盘主体 */}
-        <div className="relative w-80 h-80 sm:w-96 sm:h-96">
+        {/* 转盘主体 - 响应式尺寸 */}
+        <div className="relative w-full aspect-square max-w-80 sm:max-w-96 lg:max-w-[28rem] mx-auto">
+          {/* 背景容器 */}
+          <div
+            className="absolute inset-0 rounded-full backdrop-blur-xl border-2 border-white/30 bg-white/10 shadow-2xl"
+            style={{
+              boxShadow: `0 20px 60px ${playerStyles.shadow}`,
+            }}
+          />
+
           <svg
             ref={wheelRef}
-            className="w-full h-full"
+            className="w-full h-full relative z-10"
             style={{
               transform: `rotate(${rotation}deg)`,
-              transition: isSpinning ? 'transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
+              transition: isSpinning ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none',
               willChange: isSpinning ? 'transform' : 'auto',
             }}
             viewBox="0 0 400 400"
           >
             <defs>
-              {/* iOS 风格的阴影 */}
-              <filter id="wheelShadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-                <feOffset dx="0" dy="2" result="offsetblur" />
-                <feFlood floodColor="#000000" floodOpacity="0.1" />
-                <feComposite in2="offsetblur" operator="in" />
+              {/* 现代阴影效果 */}
+              <filter id="modernShadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow
+                  dx="0"
+                  dy="4"
+                  stdDeviation="8"
+                  floodColor={playerStyles.shadow}
+                  floodOpacity="0.3"
+                />
+              </filter>
+
+              {/* 发光效果 */}
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
                 <feMerge>
-                  <feMergeNode />
+                  <feMergeNode in="coloredBlur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
 
               {/* 渐变效果 */}
               <radialGradient id="centerGradient">
-                <stop offset="0%" stopColor="#FFFFFF" />
-                <stop offset="100%" stopColor="#F2F2F7" />
+                <stop offset="0%" stopColor="rgba(255,255,255,0.9)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.6)" />
               </radialGradient>
             </defs>
 
-            {/* 外圆背景 */}
-            <circle cx="200" cy="200" r="185" fill="#F2F2F7" filter="url(#wheelShadow)" />
-
             {/* 扇形区域 */}
             {wheelSections.map((section, index) => {
-              const { pathData, textX, textY, textRotation, iconX, iconY } = sectionPaths[index];
+              const { pathData, textX, textY, textRotation } = sectionPaths[index];
               const isSelected = selectedSection?.id === section.id;
 
               return (
                 <g key={section.id}>
-                  {/* 扇形 */}
+                  {/* 扇形区域 */}
                   <path
                     d={pathData}
-                    fill={section.color}
-                    stroke="#FFFFFF"
-                    strokeWidth="1"
-                    opacity={isSelected ? 1 : isSpinning ? 0.9 : 0.95}
+                    fill={isSelected ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.15)'}
+                    stroke={isSelected ? playerStyles.primary : 'rgba(255,255,255,0.3)'}
+                    strokeWidth={isSelected ? '3' : '2'}
+                    className={`transition-all duration-500 ${isSelected ? 'brightness-125' : ''}`}
                     style={{
-                      filter: isSelected ? 'brightness(1.15)' : 'none',
-                      transition: 'all 0.3s ease',
+                      filter: isSelected ? 'url(#glow)' : 'none',
                     }}
                   />
 
-                  {/* 根据类型渲染内容 */}
+                  {/* 内容渲染 */}
                   {section.type === 'star' ? (
-                    // Star 图标
                     <foreignObject
-                      x={iconX - 12}
-                      y={iconY - 12}
-                      width="24"
-                      height="24"
+                      x={textX - 14}
+                      y={textY - 14}
+                      width="28"
+                      height="28"
                       className="pointer-events-none"
-                      transform={`rotate(${textRotation} ${iconX} ${iconY})`}
+                      transform={`rotate(${textRotation} ${textX} ${textY})`}
                     >
                       <Star
-                        size={20}
-                        className="text-yellow-600 fill-yellow-500"
-                        style={{
-                          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))',
-                        }}
+                        size={24}
+                        className={`text-yellow-400 fill-yellow-300 drop-shadow-lg transition-all duration-300 ${
+                          isSelected ? 'scale-125 brightness-125' : ''
+                        }`}
                       />
                     </foreignObject>
                   ) : section.type === 'trap' ? (
-                    // Bomb 图标
                     <foreignObject
-                      x={iconX - 12}
-                      y={iconY - 12}
-                      width="24"
-                      height="24"
+                      x={textX - 14}
+                      y={textY - 14}
+                      width="28"
+                      height="28"
                       className="pointer-events-none"
-                      transform={`rotate(${textRotation} ${iconX} ${iconY})`}
+                      transform={`rotate(${textRotation} ${textX} ${textY})`}
                     >
                       <Bomb
-                        size={20}
-                        className="text-white"
-                        style={{
-                          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))',
-                        }}
+                        size={24}
+                        className={`text-red-400 drop-shadow-lg transition-all duration-300 ${
+                          isSelected ? 'scale-125 brightness-125' : ''
+                        }`}
                       />
                     </foreignObject>
                   ) : (
-                    // 普通数字
                     <text
                       x={textX}
                       y={textY}
                       textAnchor="middle"
                       dominantBaseline="middle"
-                      fill={section.textColor}
-                      fontSize="11"
-                      fontWeight="600"
+                      fill="currentColor"
+                      fontSize={isSelected ? '24' : '20'}
+                      fontWeight="800"
                       fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
-                      className="pointer-events-none select-none"
+                      className={`pointer-events-none select-none text-gray-800 dark:text-white drop-shadow-lg transition-all duration-300 ${
+                        isSelected ? 'brightness-125' : ''
+                      }`}
                       transform={`rotate(${textRotation} ${textX} ${textY})`}
+                      style={{
+                        textShadow: isSelected
+                          ? '0 0 15px rgba(255,255,255,1), 0 2px 8px rgba(255,255,255,0.8)'
+                          : '0 2px 8px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.5)',
+                        filter: 'url(#glow)',
+                      }}
                     >
                       {section.label}
                     </text>
@@ -394,14 +396,15 @@ const WheelGame: React.FC<WheelGameProps> = ({
             <circle
               cx="200"
               cy="200"
-              r="40"
+              r="60"
               fill="url(#centerGradient)"
-              stroke={playerStyles.primary}
-              strokeWidth="3"
-              filter="url(#wheelShadow)"
+              stroke="rgba(255,255,255,0.6)"
+              strokeWidth="4"
+              filter="url(#modernShadow)"
+              className="backdrop-blur-sm"
             />
 
-            {/* 中心装饰 */}
+            {/* 中心文字 */}
             <text
               x="200"
               y="200"
@@ -409,71 +412,55 @@ const WheelGame: React.FC<WheelGameProps> = ({
               dominantBaseline="middle"
               fill={playerStyles.primary}
               fontSize="24"
-              fontWeight="bold"
+              fontWeight="900"
               fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
+              className="drop-shadow-lg"
+              style={{
+                textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                filter: 'url(#glow)',
+              }}
             >
-              {isSpinning ? '...' : 'GO'}
+              {isSpinning ? '🎯' : 'GO'}
             </text>
           </svg>
 
-          {/* 旋转时的光晕效果 */}
+          {/* 旋转时的动态效果 */}
           {isSpinning && (
             <div
-              className="absolute inset-0 rounded-full pointer-events-none"
+              className="absolute inset-0 rounded-full pointer-events-none animate-pulse opacity-50"
               style={{
-                background: `radial-gradient(circle, transparent 40%, ${playerStyles.shadow} 100%)`,
-                animation: 'pulse 2s ease-in-out infinite',
+                background: `conic-gradient(from 0deg, transparent, ${playerStyles.shadow}, transparent)`,
+                animation: 'spin 2s linear infinite',
               }}
             />
           )}
         </div>
       </div>
 
-      {/* 控制按钮 */}
+      {/* 控制按钮 - 响应式调整 */}
       <button
         onClick={spinWheel}
         disabled={isSpinning || isDisabled}
-        className="relative px-12 py-4 rounded-2xl font-semibold text-white text-lg transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="relative px-8 sm:px-12 py-4 rounded-3xl font-bold text-base sm:text-lg transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md border-2 border-white/30 bg-white/20 text-gray-800 dark:text-white shadow-2xl hover:scale-105 hover:bg-white/30 w-full max-w-xs"
         style={{
-          background: playerStyles.gradient,
-          boxShadow: `0 8px 24px ${playerStyles.shadow}`,
-          WebkitTapHighlightColor: 'transparent',
-          touchAction: 'manipulation',
+          boxShadow: `0 10px 30px ${playerStyles.shadow}`,
         }}
       >
-        {/* 按钮光效 */}
-        <div
-          className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.2), transparent)',
-          }}
-        />
+        {/* 按钮内部高光 */}
+        <div className="absolute inset-0 rounded-3xl opacity-30 bg-gradient-to-br from-white/50 to-transparent" />
 
         <span className="relative z-10 flex items-center justify-center gap-3">
           {isSpinning ? (
             <>
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
+              <div className="animate-spin">
+                <Zap size={20} className="text-yellow-400" />
+              </div>
               <span>转动中...</span>
             </>
           ) : (
             <>
-              <span>🎯</span>
-              <span>开始转动</span>
+              <Zap size={20} className="text-yellow-400" />
+              <span>开始转盘</span>
             </>
           )}
         </span>
@@ -481,42 +468,26 @@ const WheelGame: React.FC<WheelGameProps> = ({
 
       {/* 结果展示 */}
       {selectedSection && !isSpinning && (
-        <div
-          className="w-full max-w-sm opacity-0 animate-slideUp"
-          style={{
-            animationDelay: '0.2s',
-            animationFillMode: 'forwards',
-          }}
-        >
-          {/* 结果卡片 */}
-          <div
-            className="rounded-2xl p-6 backdrop-blur-lg"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)',
-              border: '1px solid rgba(0, 0, 0, 0.05)',
-            }}
-          >
+        <div className="w-full max-w-sm animate-slideUp">
+          <div className="rounded-3xl p-6 sm:p-8 backdrop-blur-md border-2 border-white/30 bg-white/20 shadow-2xl">
             {/* 类型标签 */}
-            <div className="flex items-center justify-center mb-4">
-              <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-                style={{
-                  backgroundColor: `${getTypeDisplay(selectedSection.type).color}15`,
-                  border: `2px solid ${getTypeDisplay(selectedSection.type).color}`,
-                }}
-              >
-                {selectedSection.type === 'star' && (
-                  <Star size={20} className={getIconColor('star')} />
-                )}
-                {selectedSection.type === 'trap' && (
-                  <Bomb size={20} className={getIconColor('trap')} />
-                )}
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl backdrop-blur-sm bg-white/30 border border-white/40">
+                {getTypeDisplay(selectedSection.type).icon &&
+                  React.createElement(getTypeDisplay(selectedSection.type).icon!, {
+                    size: 20,
+                    className:
+                      selectedSection.type === 'star'
+                        ? 'text-yellow-400 fill-yellow-300'
+                        : selectedSection.type === 'trap'
+                          ? 'text-red-400'
+                          : 'text-green-400',
+                  })}
                 {selectedSection.type === 'normal' && (
-                  <span className="text-green-500 text-xl">✓</span>
+                  <span className="text-green-400 text-xl sm:text-2xl">✓</span>
                 )}
                 <span
-                  className="font-semibold"
+                  className="font-bold text-base sm:text-lg"
                   style={{ color: getTypeDisplay(selectedSection.type).color }}
                 >
                   {getTypeDisplay(selectedSection.type).text}
@@ -524,9 +495,17 @@ const WheelGame: React.FC<WheelGameProps> = ({
               </div>
             </div>
 
-            {/* 格子号 */}
-            <div className="text-center mb-2">
-              <span className="text-gray-500 text-sm">格子 #{selectedSection.id + 1}</span>
+            {/* 结果信息 */}
+            <div className="text-center space-y-3 sm:space-y-4 text-gray-800 dark:text-white">
+              <div className="font-semibold text-lg sm:text-xl text-gray-600 dark:text-gray-300">
+                {selectedSection.type === 'normal' && `格子 #${selectedSection.label}`}
+                {selectedSection.type === 'star' && '🌟 幸运格子'}
+                {selectedSection.type === 'trap' && '💣 陷阱格子'}
+              </div>
+
+              <div className="h-px bg-gradient-to-r from-transparent via-current to-transparent opacity-30" />
+
+              <div className="font-medium text-base sm:text-lg">🎯 指针指向了这个格子！</div>
             </div>
           </div>
         </div>
@@ -536,21 +515,11 @@ const WheelGame: React.FC<WheelGameProps> = ({
         @keyframes slideUp {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 0.3;
-          }
-          50% {
-            opacity: 0.6;
           }
         }
 
@@ -564,11 +533,15 @@ const WheelGame: React.FC<WheelGameProps> = ({
         }
 
         .animate-slideUp {
-          animation: slideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        .animate-spin {
-          animation: spin 1s linear infinite;
+        @media (max-width: 640px) {
+          .pointer-triangle {
+            border-left-width: 16px !important;
+            border-right-width: 16px !important;
+            border-bottom-width: 32px !important;
+          }
         }
       `}</style>
     </div>

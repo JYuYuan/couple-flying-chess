@@ -34,8 +34,6 @@ const GamePlayPage: React.FC = () => {
   const { playSound, translations, language, showToast } = useGlobal();
   const router = useRouter();
 
-  const persistence = useGamePersistence();
-
   // 游戏状态
   const gameState = useGameState();
 
@@ -152,7 +150,7 @@ const GamePlayPage: React.FC = () => {
         }}
       />
       {/* iOS 16 风格头部导航 */}
-      <div className="sticky top-0 z-10 backdrop-blur-2xl border-b shadow-2xl transition-all duration-500 bg-white/70 border-white/20 shadow-gray-200/30 dark:bg-gray-900/70 dark:border-gray-700/20 dark:shadow-black/30">
+      <div className="sticky top-0 z-50 backdrop-blur-2xl border-b shadow-2xl transition-all duration-500 bg-white/70 border-white/20 shadow-gray-200/30 dark:bg-gray-900/70 dark:border-gray-700/20 dark:shadow-black/30">
         {/* 动态渐变叠加层 */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -223,7 +221,6 @@ const GamePlayPage: React.FC = () => {
         {/* 大转盘游戏区域 */}
         <div className="backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl border transition-all duration-500 max-w-4xl mx-auto hover:shadow-3xl bg-white/80 border-white/30 shadow-gray-300/40 dark:bg-gray-900/80 dark:border-gray-700/30 dark:shadow-black/40">
           <WheelGame
-            taskQueue={taskManagement.taskQueue}
             currentPlayer={gameState.currentPlayer}
             onTaskTriggered={wheelGameLogic.handleWheelResult}
             isDisabled={gameState.gameState === 'task' || taskManagement.isLoadingTasks}
@@ -233,10 +230,10 @@ const GamePlayPage: React.FC = () => {
 
       {gameState.gameState === 'task' && gameState.currentTask && (
         <TaskModal
+          noExec
           taskType={gameState.taskType!}
           currentTask={gameState.currentTask}
           onTaskComplete={handleTaskComplete}
-          isExec={false}
         />
       )}
 

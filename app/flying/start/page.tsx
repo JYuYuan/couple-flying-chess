@@ -367,7 +367,7 @@ const GamePlayPage: React.FC = () => {
         }}
       />
       {/* iOS 16 风格头部导航 */}
-      <div className="sticky top-0 z-10 backdrop-blur-2xl border-b shadow-2xl transition-all duration-500 bg-white/70 border-white/20 shadow-gray-200/30 dark:bg-gray-900/70 dark:border-gray-700/20 dark:shadow-black/30">
+      <div className="sticky top-0 z-50 backdrop-blur-2xl border-b shadow-2xl transition-all duration-500 bg-white/70 border-white/20 shadow-gray-200/30 dark:bg-gray-900/70 dark:border-gray-700/20 dark:shadow-black/30">
         {/* 动态渐变叠加层 */}
         <div
           className="absolute inset-0 pointer-events-none"

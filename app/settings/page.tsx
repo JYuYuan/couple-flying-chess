@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ListTodo, Play, Volume2, VolumeX, Zap } from 'lucide-react';
+import { ArrowLeft, ListTodo, Play, Volume2, VolumeX, Zap,Clock } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { soundConfig, SoundKey } from '@/contexts/config/sounds';
 
@@ -78,7 +78,7 @@ export default function Settings() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* 顶部导航 */}
         <motion.div
-          className="flex justify-between items-center p-6 sm:p-8"
+          className="sticky top-0 z-50 flex justify-between items-center p-6 sm:p-8 backdrop-blur-2xl bg-white/70 dark:bg-gray-900/70 border-b border-white/20 dark:border-gray-700/20"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -287,7 +287,7 @@ export default function Settings() {
               <Link href={'/settings/time'}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ListTodo className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+                    <Clock className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
                       {t?.flying?.title}
                     </h2>
