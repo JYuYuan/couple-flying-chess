@@ -125,7 +125,7 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return soundsRef.current;
   }, [soundsRef.current]);
 
-  const playSound = (key: SoundKey) => {
+  const playSound = useCallback((key: SoundKey) => {
     const config = {...soundConfig[key],...soundSettings[key]};
     if (!config) {
       console.warn(`Sound ${key} not found in config`);
@@ -144,10 +144,11 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     audio.volume = config.volume ?? 1;
     audio.muted = isMuted?isMuted:!config.enabled;
     audio.currentTime = 0;
+
     audio.play().catch((e) => {
       console.warn(`Audio play blocked: ${key}`, e);
     });
-  };
+  },[soundsRef.current]);
 
 
   const stopSound = (key: SoundKey) => {

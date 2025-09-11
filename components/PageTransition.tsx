@@ -3,11 +3,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
+import { useGlobal } from '@/contexts/GlobalContext';
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const {playSound} = useGlobal()
   const isFirstRender = useRef(true);
+  const isFirstClick = useRef(true);
   const [direction, setDirection] = useState<'forward' | 'back'>('forward');
   const prevPathname = useRef(pathname);
 
@@ -21,7 +23,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     const isGoingBack = pathname === '/' || pathname.length < prevPathname.current.length;
     setDirection(isGoingBack ? 'back' : 'forward');
     prevPathname.current = pathname;
-
   }, [pathname]);
 
   // App切换风格的动画配置
@@ -47,7 +48,11 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950 relative">
+    <div onClick={(e)=>{
+       if(!isFirstClick.current) return;
+       isFirstClick.current = false;
+       playSound("bgm")
+    }} className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950 relative">
       {/* 动态背景叠加层 */}
       <div
         className="absolute inset-0 pointer-events-none"
