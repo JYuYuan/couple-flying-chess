@@ -4,12 +4,39 @@ import React from 'react';
 import Link from 'next/link';
 import LanguageSelector from '@/components/language-selector';
 import { motion } from 'framer-motion';
-import { Settings } from 'lucide-react';
+import { ChevronRight, Gamepad2, Plane, Settings, Sparkles, Target } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 
 export default function Home() {
   const { translations: allTranslations } = useGlobal();
   const translations = { ...allTranslations?.home };
+
+  const gameOptions = [
+    {
+      title: translations.title,
+      subtitle: translations.subtitle,
+      description: '体验策略与运气的完美结合',
+      icon: Plane, // 使用 lucide-react 图标组件
+      href: '/flying/mode',
+      gradient: 'from-blue-500 via-blue-600 to-purple-600',
+      shadowColor: 'shadow-blue-500/25',
+      hoverShadow: 'hover:shadow-blue-500/40',
+      bgGradient: 'from-blue-50 to-purple-50 dark:from-blue-950/50 dark:to-purple-950/50',
+      iconBg: 'from-blue-500 to-purple-600',
+    },
+    {
+      title: '幸运转盘',
+      subtitle: '趣味互动挑战',
+      description: '转动命运的齿轮，迎接未知',
+      icon: Target, // 使用 lucide-react 图标组件
+      href: '/wheel/mode',
+      gradient: 'from-amber-500 via-orange-500 to-red-500',
+      shadowColor: 'shadow-amber-500/25',
+      hoverShadow: 'hover:shadow-amber-500/40',
+      bgGradient: 'from-amber-50 to-orange-50 dark:from-amber-950/50 dark:to-orange-950/50',
+      iconBg: 'from-amber-500 to-red-500',
+    },
+  ];
 
   return (
     <div className="min-h-screen overflow-hidden relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
@@ -114,15 +141,15 @@ export default function Home() {
 
         {/* iOS 16 风格主要内容区域 */}
         <div className="flex-1 flex items-center justify-center px-6 sm:px-8 pb-8">
-          <div className="w-full max-w-lg mx-auto text-center">
+          <div className="w-full max-w-2xl mx-auto text-center">
             {/* iOS 16 风格主标题区域 */}
             <motion.div
-              className="mb-12"
+              className="mb-16"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
             >
-              {/* 飞行棋图标 */}
+              {/* 游戏图标 */}
               <motion.div
                 className="mb-8 flex justify-center"
                 whileHover={{ scale: 1.05 }}
@@ -130,7 +157,7 @@ export default function Home() {
               >
                 <div className="relative">
                   <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-2xl shadow-blue-500/30 dark:shadow-blue-500/20 flex items-center justify-center">
-                    <div className="text-5xl sm:text-6xl">🎲</div>
+                    <Gamepad2 size={56} className="text-white" />
                   </div>
                   {/* iOS 16 风格光泽效果 */}
                   <div className="absolute top-4 left-4 w-8 h-8 bg-white/30 rounded-full blur-sm"></div>
@@ -149,60 +176,136 @@ export default function Home() {
               </p>
             </motion.div>
 
-            {/* iOS 16 风格开始游戏按钮 */}
+            {/* iOS 16 风格游戏选择卡片 */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
+              className="space-y-4 sm:space-y-6"
             >
-              {/* 飞行棋按钮 */}
-              <Link href="/flying/mode">
-                <motion.button
-                  className="w-full sm:w-auto px-12 py-5 rounded-3xl font-black text-xl tracking-wide text-white shadow-2xl hover:shadow-3xl transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 border border-blue-500/30"
-                  whileHover={{
-                    scale: 1.02,
-                    y: -2,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span className="flex items-center justify-center gap-3">
-                    <span>🚀</span>
-                    <span>{translations.cta?.startGame}</span>
-                  </span>
-                </motion.button>
-              </Link>
-              
-              {/* 大转盘按钮 */}
-              <Link href="/wheel/mode">
-                <motion.button
-                  className="w-full sm:w-auto px-12 py-5 rounded-3xl font-black text-xl tracking-wide text-white shadow-2xl hover:shadow-3xl transition-all duration-300 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 border border-amber-400/30"
-                  whileHover={{
-                    scale: 1.02,
-                    y: -2,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span className="flex items-center justify-center gap-3">
-                    <span>🎡</span>
-                    <span>幸运转盘</span>
-                  </span>
-                </motion.button>
-              </Link>
+              {gameOptions.map((game, index) => {
+                const IconComponent = game.icon; // 获取图标组件
+
+                return (
+                  <motion.div
+                    key={game.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                  >
+                    <Link href={game.href}>
+                      <motion.div
+                        className={`
+                          group relative overflow-hidden rounded-3xl backdrop-blur-xl border-2 border-white/30 
+                          bg-gradient-to-br ${game.bgGradient} 
+                          shadow-xl ${game.shadowColor} ${game.hoverShadow}
+                          transition-all duration-500 cursor-pointer
+                        `}
+                        whileHover={{
+                          scale: 1.02,
+                          y: -4,
+                          transition: { duration: 0.2 },
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {/* 背景光效 */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* 内容区域 */}
+                        <div className="relative p-6 sm:p-8 flex items-center">
+                          {/* 左侧图标区域 */}
+                          <div className="flex-shrink-0 mr-6">
+                            <div
+                              className={`
+                              relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl
+                              bg-gradient-to-br ${game.iconBg}
+                              shadow-lg shadow-black/20
+                              flex items-center justify-center
+                              transform group-hover:scale-110 group-hover:rotate-3
+                              transition-all duration-300
+                            `}
+                            >
+                              {/* 使用 lucide-react 图标 */}
+                              <motion.div
+                                whileHover={{
+                                  transition: { duration: 0.5 },
+                                  rotate: game.title?.includes('转盘') ? 180 : 0,
+                                }}
+                              >
+                                <IconComponent size={32} className="text-white drop-shadow-lg" />
+                              </motion.div>
+
+                              {/* 图标光泽效果 */}
+                              <div className="absolute top-2 left-2 w-4 h-4 bg-white/40 rounded-full blur-sm" />
+                              <div className="absolute bottom-2 right-2 w-2 h-2 bg-white/30 rounded-full blur-sm" />
+                            </div>
+                          </div>
+
+                          {/* 中间文字区域 */}
+                          <div className="flex-1 text-left">
+                            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-1 group-hover:text-white transition-colors duration-300">
+                              {game.title}
+                            </h3>
+                            <p className="text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300 mb-2 group-hover:text-white/90 transition-colors duration-300">
+                              {game.subtitle}
+                            </p>
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/70 transition-colors duration-300">
+                              {game.description}
+                            </p>
+                          </div>
+
+                          {/* 右侧箭头 */}
+                          <div className="flex-shrink-0 ml-4">
+                            <div className="w-10 h-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-all duration-300 group-hover:scale-110">
+                              <ChevronRight
+                                size={20}
+                                className="text-gray-600 dark:text-gray-300 group-hover:text-white transform group-hover:translate-x-1 transition-all duration-300"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 底部渐变条 */}
+                        <div
+                          className={`
+                          absolute bottom-0 left-0 right-0 h-1 
+                          bg-gradient-to-r ${game.gradient}
+                          transform scale-x-0 group-hover:scale-x-100
+                          transition-transform duration-500 origin-left
+                        `}
+                        />
+
+                        {/* 悬浮时的边框光效 */}
+                        <div
+                          className={`
+                          absolute inset-0 rounded-3xl border-2 border-transparent
+                          bg-gradient-to-r ${game.gradient} opacity-0 group-hover:opacity-20
+                          transition-opacity duration-500 pointer-events-none
+                        `}
+                          style={{
+                            mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                            maskComposite: 'subtract',
+                          }}
+                        />
+                      </motion.div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {/* iOS 16 风格底部提示 */}
             <motion.div
-              className="mt-8"
+              className="mt-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.6 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.8 }}
             >
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                {translations.cta?.subtext}
-              </p>
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
+                <Sparkles size={16} className="text-yellow-500" />
+                <span>{translations.cta?.subtext || '选择你喜欢的游戏模式开始吧'}</span>
+                <Sparkles size={16} className="text-yellow-500" />
+              </div>
             </motion.div>
           </div>
         </div>
