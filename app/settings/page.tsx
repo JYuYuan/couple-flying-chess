@@ -108,7 +108,7 @@ export default function Settings() {
         </motion.div>
 
         {/* 设置内容 */}
-        <div className="flex-1 px-6 sm:px-8 pb-8">
+        <div className="flex-1 px-6 sm:px-8 pb-8 pt-8">
           <div className="max-w-2xl mx-auto space-y-6">
             {/* 全局静音控制 */}
             <motion.div
