@@ -219,7 +219,7 @@ const WheelGame: React.FC<WheelGameProps> = ({
       case 'trap':
         return { text: '惩罚任务', icon: Bomb, color: '#FF3B30' };
       default:
-        return { text: '普通任务', icon: null, color: '#34C759' };
+        return { text: '无任务', icon: null, color: '#34C759' };
     }
   };
 
@@ -334,44 +334,48 @@ const WheelGame: React.FC<WheelGameProps> = ({
                   {/* 内容渲染 */}
                   {section.type === 'star' ? (
                     <foreignObject
-                      x={textX - 14}
-                      y={textY - 14}
-                      width="28"
-                      height="28"
+                      x={textX - 16}
+                      y={textY - 16}
+                      width="32"
+                      height="32"
                       className="pointer-events-none"
                       transform={`rotate(${textRotation} ${textX} ${textY})`}
                     >
-                      <Star
-                        size={24}
-                        className={`text-yellow-400 fill-yellow-300 drop-shadow-lg transition-all duration-300 ${
-                          isSelected ? 'scale-125 brightness-125' : ''
-                        }`}
-                      />
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Star
+                          size={20}
+                          className={`wheel-icon text-yellow-400 fill-yellow-300 drop-shadow-lg transition-all duration-300 ${
+                            isSelected ? 'scale-125 brightness-125' : ''
+                          }`}
+                        />
+                      </div>
                     </foreignObject>
                   ) : section.type === 'trap' ? (
                     <foreignObject
-                      x={textX - 14}
-                      y={textY - 14}
-                      width="28"
-                      height="28"
+                      x={textX - 16}
+                      y={textY - 16}
+                      width="32"
+                      height="32"
                       className="pointer-events-none"
                       transform={`rotate(${textRotation} ${textX} ${textY})`}
                     >
-                      <Bomb
-                        size={24}
-                        className={`text-red-400 drop-shadow-lg transition-all duration-300 ${
-                          isSelected ? 'scale-125 brightness-125' : ''
-                        }`}
-                      />
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Bomb
+                          size={20}
+                          className={`wheel-icon text-red-400 drop-shadow-lg transition-all duration-300 ${
+                            isSelected ? 'scale-125 brightness-125' : ''
+                          }`}
+                        />
+                      </div>
                     </foreignObject>
                   ) : (
                     <text
                       x={textX}
                       y={textY}
                       textAnchor="middle"
-                      dominantBaseline="middle"
+                      dominantBaseline="central"
                       fill="currentColor"
-                      fontSize={isSelected ? '24' : '20'}
+                      fontSize={isSelected ? '22' : '18'}
                       fontWeight="800"
                       fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
                       className={`pointer-events-none select-none text-gray-800 dark:text-white drop-shadow-lg transition-all duration-300 ${
@@ -541,6 +545,13 @@ const WheelGame: React.FC<WheelGameProps> = ({
             border-left-width: 16px !important;
             border-right-width: 16px !important;
             border-bottom-width: 32px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          /* 小屏幕下进一步优化图标尺寸 */
+          .wheel-icon {
+            transform: scale(0.9);
           }
         }
       `}</style>
