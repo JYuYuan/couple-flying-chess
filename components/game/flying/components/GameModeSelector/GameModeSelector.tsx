@@ -5,6 +5,7 @@ import { gameModeEmojis, gameModeIcons } from '@/components/game/flying/constant
 import { Translations } from '@/lib/i18n';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useGlobal } from '@/contexts/GlobalContext';
+import Link from 'next/link';
 
 interface GameModeSelectorProps {
   customModes: CustomMode[];
@@ -430,7 +431,7 @@ export function GameModeSelector({
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                   {
                     translations?.modeCategories[
-                    categoryKey as keyof Translations['modeCategories']
+                      categoryKey as keyof Translations['modeCategories']
                     ]
                   }
                 </h3>
@@ -439,8 +440,9 @@ export function GameModeSelector({
                 </span>
               </div>
               <motion.div
-                className={`transition-transform duration-500 ease-out ${expandedCategories[categoryKey] ? 'rotate-180' : ''
-                  }`}
+                className={`transition-transform duration-500 ease-out ${
+                  expandedCategories[categoryKey] ? 'rotate-180' : ''
+                }`}
                 animate={{
                   rotate: expandedCategories[categoryKey] ? 180 : 0,
                 }}
@@ -487,8 +489,9 @@ export function GameModeSelector({
                             delay: 0.15 + index * 0.05,
                           }}
                           onClick={() => !isLoadingTasks && onStartGame(modeKey as GameMode)}
-                          className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${styles.bg} ${isLoading ? 'pointer-events-none' : ''
-                            } border-white/50 dark:border-gray-700/50`}
+                          className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl border ${styles.bg} ${
+                            isLoading ? 'pointer-events-none' : ''
+                          } border-white/50 dark:border-gray-700/50`}
                         >
                           {/* 装饰性背景 - 更柔和的效果 */}
                           <div className="absolute inset-0 opacity-5">
@@ -548,6 +551,67 @@ export function GameModeSelector({
             </AnimatePresence>
           </motion.div>
         ))}
+
+        {/* 创建自定义模式卡片 */}
+        <Link href={'/settings/task'}>
+          <div
+            className={`group relative overflow-hidden rounded-2xl border-2 border-dashed transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer shadow-lg hover:shadow-2xl ${
+              isDarkMode
+                ? 'bg-gradient-to-br from-slate-800 via-gray-800 to-gray-800 hover:from-slate-700 hover:to-gray-700 border-slate-600 hover:border-slate-500'
+                : 'bg-gradient-to-br from-slate-50 via-white to-gray-50 hover:from-slate-100 hover:to-gray-100 border-slate-300 hover:border-slate-400'
+            }`}
+          >
+            {/* 装饰性背景 */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-1/2 left-1/2 w-20 h-20 bg-gradient-to-br from-slate-400 to-gray-400 rounded-full blur-xl transform -translate-x-1/2 -translate-y-1/2"></div>
+            </div>
+
+            <div className="relative p-6 h-full flex flex-col items-center justify-center text-center">
+              {/* 图标区域 */}
+              <div
+                className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
+                  isDarkMode
+                    ? 'bg-gradient-to-br from-slate-700 to-gray-700 group-hover:from-slate-600 group-hover:to-gray-600'
+                    : 'bg-gradient-to-br from-slate-100 to-gray-200 group-hover:from-slate-200 group-hover:to-gray-300'
+                }`}
+              >
+                <Plus
+                  size={28}
+                  className={`transition-all duration-300 ${
+                    isDarkMode
+                      ? 'text-slate-400 group-hover:text-gray-400'
+                      : 'text-slate-600 group-hover:text-gray-600'
+                  }`}
+                />
+              </div>
+
+              {/* emoji */}
+              <div className="text-3xl mb-3 group-hover:animate-bounce">
+                {gameModeEmojis.custom}
+              </div>
+
+              {/* 标题和描述 */}
+              <h3
+                className={`text-lg font-bold mb-2 transition-colors duration-300 ${
+                  isDarkMode
+                    ? 'text-gray-100 group-hover:text-slate-300'
+                    : 'text-gray-800 group-hover:text-slate-700'
+                }`}
+              >
+                {translations?.customMode.title}
+              </h3>
+              <p
+                className={`text-sm leading-relaxed ${
+                  isDarkMode
+                    ? 'text-gray-400 group-hover:text-gray-300'
+                    : 'text-gray-600 group-hover:text-gray-700'
+                }`}
+              >
+                {translations?.customMode.description}
+              </p>
+            </div>
+          </div>
+        </Link>
 
         {/* 自定义模式区域 */}
         {(customModes.length > 0 || true) && (

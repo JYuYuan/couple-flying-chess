@@ -13,9 +13,6 @@ import { GameMode } from '@/components/game/flying/types/game';
 import LanguageSelector from '@/components/language-selector';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Settings } from 'lucide-react';
 
 const GameModePage: React.FC = () => {
   const { language, translations, playSound, stopSound, getAudioRef, showToast } = useGlobal();
