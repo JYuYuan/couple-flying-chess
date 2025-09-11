@@ -69,8 +69,8 @@ export function useWheelGameLogic(
         return undefined;
       } else {
         // 随机生成时间
-        const defaultTime = timeSettings?.defaultTaskTime || 60;
-        return randomMs(5 * 1000, defaultTime * 1000);
+        const defaultTime = timeSettings?.defaultTaskTime || 1;
+        return randomMs(5 * 1000, defaultTime * 60 * 1000);
       }
     },
     [timeSettings],

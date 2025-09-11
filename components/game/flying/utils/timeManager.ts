@@ -144,7 +144,7 @@ export const getSuggestedTaskTime = (
   const timeSettings = loadTimeSettings();
   const min = 5,
     max = timeSettings.defaultTaskTime;
-  let maxTime = Math.floor(randomMs(min * 1000, max * 1000) / 1000);
+  let maxTime = Math.floor(randomMs(min * 1000, max * 60 * 1000) / 1000);
   let matchedKeywords: string[] = [];
   let reason = `使用默认随机时间${min}秒~${max}秒`;
 

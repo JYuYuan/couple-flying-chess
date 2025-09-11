@@ -69,7 +69,7 @@ export function useGameLogic(
         return undefined;
       } else {
         // 随机生成时间
-        return randomMs(5 * 1000, timeSettings.defaultTaskTime * 1000);
+        return randomMs(5 * 1000, timeSettings.defaultTaskTime * 60 * 1000);
       }
     },
     [timeSettings],

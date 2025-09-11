@@ -83,21 +83,8 @@ const GameModePage: React.FC = () => {
 
   // 事件处理
   const startGame = async (mode: GameMode, customMode?: any) => {
-    const customModeId = customMode?.id;
-
     // 尝试播放背景音乐（如果还没有播放）
     if (getAudioRef('bgm')?.paused) playSound('bgm');
-
-    // 检查是否有保存的游戏状态
-    if (hasGameSave(mode, customModeId)) {
-      // 先获取存档数据用于弹窗显示
-      const savedData = persistence.loadGame(mode, customModeId);
-
-      setPendingGameStart({ mode, customModeId, customMode, savedData });
-      setShowContinueModal(true);
-      return;
-    }
-
     // 直接开始新游戏
     redirectStartGame(mode, customMode, true);
   };
@@ -201,122 +188,9 @@ const GameModePage: React.FC = () => {
             onStartCustomGame={(mode) => {
               return startGame('custom', mode);
             }}
-            onCreateCustomMode={() => {
-              customModes.setShowCustomModeCreator(true);
-            }}
-            onDeleteCustomMode={customModes.deleteCustomMode}
           />
         </div>
-
-        {/* 自定义模式创建器 */}
-        {customModes.showCustomModeCreator && (
-          <CustomModeCreator
-            newCustomMode={customModes.newCustomMode}
-            setNewCustomMode={customModes.setNewCustomMode}
-            manualTask={manualTask}
-            setManualTask={setManualTask}
-            availableModeTasks={taskManagement.availableModeTasks}
-            isLoadingTasks={taskManagement.isLoadingTasks}
-            onClose={() => {
-              customModes.setShowCustomModeCreator(false);
-              customModes.setNewCustomMode({
-                name: '',
-                description: '',
-                type: 'custom',
-                tasks: [],
-              });
-              setManualTask('');
-            }}
-            onCreateMode={() => {
-              const success = customModes.createCustomMode(customModes.newCustomMode, () => {
-                showToast(
-                  translations?.customMode.messages.createSuccess || '自定义模式创建成功！',
-                  'success',
-                );
-              });
-              if (success) {
-                setManualTask('');
-              }
-            }}
-            onLoadAllTasks={() => taskManagement.loadAllTasksForSelection(language)}
-            onAddManualTask={() => {
-              if (
-                manualTask.trim() &&
-                !customModes.newCustomMode.tasks.includes(manualTask.trim())
-              ) {
-                customModes.setNewCustomMode((prev) => ({
-                  ...prev,
-                  tasks: [...prev.tasks, manualTask.trim()],
-                }));
-                setManualTask('');
-              }
-            }}
-            onRemoveTask={(index) => {
-              customModes.setNewCustomMode((prev) => ({
-                ...prev,
-                tasks: prev.tasks.filter((_, i) => i !== index),
-              }));
-            }}
-            aiTasksSection={
-              <AITasksSection
-                deepSeekApi={aiTasks.deepSeekApi}
-                newCustomMode={customModes.newCustomMode}
-                isGeneratingTasks={aiTasks.isGeneratingTasks}
-                onApiKeyChange={aiTasks.saveDeepSeekApiKey}
-                onApiConfigChange={(updates) => {
-                  aiTasks.setDeepSeekApi((prev) => ({ ...prev, ...updates }));
-                }}
-                onGenerateTasks={() => {
-                  aiTasks.generateAITasks(
-                    customModes.newCustomMode,
-                    translations,
-                    () =>
-                      showToast(
-                        translations?.customMode.ai.tasksGenerated ||
-                          'Tasks generated successfully',
-                        'success',
-                      ),
-                    (error) => showToast(error, 'error'),
-                  );
-                }}
-                onToggleTask={(task) => {
-                  if (customModes.newCustomMode.tasks.includes(task)) {
-                    customModes.setNewCustomMode((prev) => ({
-                      ...prev,
-                      tasks: prev.tasks.filter((t) => t !== task),
-                    }));
-                  } else {
-                    customModes.setNewCustomMode((prev) => ({
-                      ...prev,
-                      tasks: [...prev.tasks, task],
-                    }));
-                  }
-                }}
-              />
-            }
-          />
-        )}
       </div>
-
-      {/* 继续游戏模态框 */}
-      {showContinueModal && pendingGameStart && (
-        <ContinueGameModal
-          onContinue={continueGame}
-          onClose={handleCloseModal}
-          gameMode={pendingGameStart.mode}
-          isVisible={showContinueModal && !isClosingModal}
-          customModeName={pendingGameStart.customMode?.name}
-          redPosition={pendingGameStart.savedData?.redPosition || 0}
-          bluePosition={pendingGameStart.savedData?.bluePosition || 0}
-          currentPlayer={pendingGameStart.savedData?.currentPlayer || 'red'}
-          onNewGame={() => {
-            if (pendingGameStart) {
-              handleCloseModal();
-              redirectStartGame(pendingGameStart.mode, pendingGameStart.customMode, true);
-            }
-          }}
-        />
-      )}
     </div>
   );
 };

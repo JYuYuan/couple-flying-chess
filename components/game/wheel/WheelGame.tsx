@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useRef, useState } from 'react';
-import { Bomb, Star, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import { useGlobal } from '@/contexts/GlobalContext';
 import { useOptimizedState, useStableCallback } from '@/hooks/use-performance';
 
@@ -103,7 +103,7 @@ const WheelGame: React.FC<WheelGameProps> = ({
       `;
 
       // 文本/图标位置（在扇形中心）
-      const textRadius = (outerRadius + innerRadius) / 2 + 10;
+      const textRadius = (outerRadius + innerRadius) / 2;
       const midAngle = (startAngle + endAngle) / 2;
       const textX = 200 + textRadius * Math.cos(midAngle);
       const textY = 200 + textRadius * Math.sin(midAngle);
@@ -215,11 +215,11 @@ const WheelGame: React.FC<WheelGameProps> = ({
   const getTypeDisplay = (type: 'normal' | 'star' | 'trap') => {
     switch (type) {
       case 'star':
-        return { text: '幸运任务', icon: Star, color: '#FFD700' };
+        return { text: '幸运任务', emoji: '⭐', color: '#FFD700' };
       case 'trap':
-        return { text: '惩罚任务', icon: Bomb, color: '#FF3B30' };
+        return { text: '惩罚任务', emoji: '💣', color: '#FF3B30' };
       default:
-        return { text: '无任务', icon: null, color: '#34C759' };
+        return { text: '无任务', emoji: '✓', color: '#34C759' };
     }
   };
 
@@ -331,67 +331,33 @@ const WheelGame: React.FC<WheelGameProps> = ({
                     }}
                   />
 
-                  {/* 内容渲染 */}
-                  {section.type === 'star' ? (
-                    <foreignObject
-                      x={textX - 16}
-                      y={textY - 16}
-                      width="32"
-                      height="32"
-                      className="pointer-events-none"
-                      transform={`rotate(${textRotation} ${textX} ${textY})`}
-                    >
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Star
-                          size={20}
-                          className={`wheel-icon text-yellow-400 fill-yellow-300 drop-shadow-lg transition-all duration-300 ${
-                            isSelected ? 'scale-125 brightness-125' : ''
-                          }`}
-                        />
-                      </div>
-                    </foreignObject>
-                  ) : section.type === 'trap' ? (
-                    <foreignObject
-                      x={textX - 16}
-                      y={textY - 16}
-                      width="32"
-                      height="32"
-                      className="pointer-events-none"
-                      transform={`rotate(${textRotation} ${textX} ${textY})`}
-                    >
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Bomb
-                          size={20}
-                          className={`wheel-icon text-red-400 drop-shadow-lg transition-all duration-300 ${
-                            isSelected ? 'scale-125 brightness-125' : ''
-                          }`}
-                        />
-                      </div>
-                    </foreignObject>
-                  ) : (
-                    <text
-                      x={textX}
-                      y={textY}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      fill="currentColor"
-                      fontSize={isSelected ? '22' : '18'}
-                      fontWeight="800"
-                      fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
-                      className={`pointer-events-none select-none text-gray-800 dark:text-white drop-shadow-lg transition-all duration-300 ${
-                        isSelected ? 'brightness-125' : ''
-                      }`}
-                      transform={`rotate(${textRotation} ${textX} ${textY})`}
-                      style={{
-                        textShadow: isSelected
-                          ? '0 0 15px rgba(255,255,255,1), 0 2px 8px rgba(255,255,255,0.8)'
-                          : '0 2px 8px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.5)',
-                        filter: 'url(#glow)',
-                      }}
-                    >
-                      {section.label}
-                    </text>
-                  )}
+                  {/* 内容渲染 - 统一使用text元素 */}
+                  <text
+                    x={textX}
+                    y={textY}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    fill="currentColor"
+                    fontSize={isSelected ? (section.type === 'normal' ? '22' : '26') : (section.type === 'normal' ? '18' : '22')}
+                    fontWeight={section.type === 'normal' ? '800' : '400'}
+                    fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif"
+                    className={`pointer-events-none select-none ${
+                      section.type === 'normal' 
+                        ? 'text-gray-800 dark:text-white' 
+                        : ''
+                    } drop-shadow-lg transition-all duration-300 ${
+                      isSelected ? 'brightness-125' : ''
+                    }`}
+                    transform={`rotate(${textRotation} ${textX} ${textY})`}
+                    style={{
+                      textShadow: isSelected
+                        ? '0 0 15px rgba(255,255,255,1), 0 2px 8px rgba(255,255,255,0.8)'
+                        : '0 2px 8px rgba(255,255,255,0.8), 0 0 10px rgba(255,255,255,0.5)',
+                      filter: section.type === 'normal' ? 'url(#glow)' : 'none',
+                    }}
+                  >
+                    {section.type === 'star' ? '⭐' : section.type === 'trap' ? '💣' : section.label}
+                  </text>
                 </g>
               );
             })}
@@ -477,19 +443,9 @@ const WheelGame: React.FC<WheelGameProps> = ({
             {/* 类型标签 */}
             <div className="flex items-center justify-center mb-4 sm:mb-6">
               <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl backdrop-blur-sm bg-white/30 border border-white/40">
-                {getTypeDisplay(selectedSection.type).icon &&
-                  React.createElement(getTypeDisplay(selectedSection.type).icon!, {
-                    size: 20,
-                    className:
-                      selectedSection.type === 'star'
-                        ? 'text-yellow-400 fill-yellow-300'
-                        : selectedSection.type === 'trap'
-                          ? 'text-red-400'
-                          : 'text-green-400',
-                  })}
-                {selectedSection.type === 'normal' && (
-                  <span className="text-green-400 text-xl sm:text-2xl">✓</span>
-                )}
+                <span className="text-xl sm:text-2xl">
+                  {getTypeDisplay(selectedSection.type).emoji}
+                </span>
                 <span
                   className="font-bold text-base sm:text-lg"
                   style={{ color: getTypeDisplay(selectedSection.type).color }}
@@ -545,13 +501,6 @@ const WheelGame: React.FC<WheelGameProps> = ({
             border-left-width: 16px !important;
             border-right-width: 16px !important;
             border-bottom-width: 32px !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          /* 小屏幕下进一步优化图标尺寸 */
-          .wheel-icon {
-            transform: scale(0.9);
           }
         }
       `}</style>
