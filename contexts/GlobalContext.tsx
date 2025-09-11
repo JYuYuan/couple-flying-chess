@@ -144,11 +144,11 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     audio.volume = config.volume ?? 1;
     audio.muted = isMuted?isMuted:!config.enabled;
     audio.currentTime = 0;
-
+    
     audio.play().catch((e) => {
       console.warn(`Audio play blocked: ${key}`, e);
     });
-  },[soundsRef.current]);
+  },[soundsRef.current,soundSettings]);
 
 
   const stopSound = (key: SoundKey) => {
@@ -179,13 +179,8 @@ export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   // -------- Theme 初始化 --------
   useEffect(() => {
     Object.entries(soundConfig).forEach(([key,config]:any)=>{
-      const setting= ((soundSettings as any)[key]);
-      console.log(setting)
       const audio = new Audio(config.src);
       audio.preload = 'auto';
-      audio.loop = config.loop ?? false;
-      audio.volume = setting.volume ?? 1;
-      audio.muted = true;
       audio.addEventListener("loadedmetadata", () => {
         console.log(key+"：元数据已加载，时长:", audio.duration);
       });
