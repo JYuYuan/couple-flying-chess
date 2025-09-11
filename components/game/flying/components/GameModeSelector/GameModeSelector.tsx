@@ -404,7 +404,7 @@ export function GameModeSelector({
         {/* 分类模式展示 */}
         {Object.entries(modeCategories).map(([categoryKey, category], categoryIndex) => (
           <motion.div
-            key={categoryKey}
+            key={`${categoryKey}-${categoryIndex}`}
             className="mb-8"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -614,7 +614,7 @@ export function GameModeSelector({
         </Link>
 
         {/* 自定义模式区域 */}
-        {(customModes.length > 0 || true) && (
+        {customModes.length > 0 && (
           <motion.div
             className="space-y-6"
             initial={{ opacity: 0, y: 30 }}
@@ -646,7 +646,7 @@ export function GameModeSelector({
               {/* 已创建的自定义模式卡片 */}
               {customModes.map((mode, index) => (
                 <motion.div
-                  key={mode.id}
+                  key={`customModes-${mode.id}-${index}`}
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{
