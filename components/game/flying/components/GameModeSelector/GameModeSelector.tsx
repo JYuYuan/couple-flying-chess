@@ -461,16 +461,10 @@ export function GameModeSelector({
             <AnimatePresence>
               {expandedCategories[categoryKey] && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                   className="overflow-hidden"
                 >
                   <motion.div
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    exit={{ y: -20 }}
                     transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 }}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4 sm:gap-6"
                   >
@@ -485,9 +479,6 @@ export function GameModeSelector({
                       return (
                         <motion.div
                           key={modeKey}
-                          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -20, scale: 0.9 }}
                           transition={{
                             duration: 0.3,
                             ease: 'easeOut',

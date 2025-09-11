@@ -63,9 +63,9 @@ const GameModePage: React.FC = () => {
     <div className="min-h-screen relative overflow-hidden transition-colors duration-500 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 dark:from-gray-950 dark:via-slate-900 dark:to-gray-950">
       {/* iOS 16 风格背景装饰 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl animate-pulse transition-all duration-700 bg-gradient-to-br from-blue-200/20 to-indigo-300/30 dark:bg-gradient-to-br dark:from-blue-600/10 dark:to-indigo-700/15"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl animate-pulse delay-1000 transition-all duration-700 bg-gradient-to-br from-purple-200/25 to-pink-300/35 dark:bg-gradient-to-br dark:from-purple-600/12 dark:to-pink-700/18"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-2xl animate-pulse delay-500 transition-all duration-700 bg-gradient-to-br from-cyan-200/20 to-blue-300/30 dark:bg-gradient-to-br dark:from-cyan-600/8 dark:to-blue-700/12"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl transition-all duration-700 bg-gradient-to-br from-blue-200/20 to-indigo-300/30 dark:bg-gradient-to-br dark:from-blue-600/10 dark:to-indigo-700/15"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl transition-all duration-700 bg-gradient-to-br from-purple-200/25 to-pink-300/35 dark:bg-gradient-to-br dark:from-purple-600/12 dark:to-pink-700/18"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-2xl transition-all duration-700 bg-gradient-to-br from-cyan-200/20 to-blue-300/30 dark:bg-gradient-to-br dark:from-cyan-600/8 dark:to-blue-700/12"></div>
       </div>
 
       {/* iOS 16 风格头部区域 */}
