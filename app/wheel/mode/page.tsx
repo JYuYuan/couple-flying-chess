@@ -126,7 +126,7 @@ const GameModePage: React.FC = () => {
                   大转盘
                 </h1>
                 <p className="text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed px-4 sm:px-8 lg:px-16 xl:px-24 text-gray-700 dark:text-gray-300">
-                  大转盘按钮，点击开始游戏。
+                  大转盘是专为情侣设计的互动游戏工具
                 </p>
               </div>
 
